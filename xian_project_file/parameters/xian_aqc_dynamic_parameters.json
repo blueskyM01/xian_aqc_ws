@@ -2,5 +2,6 @@
     "xian_tcp_server_heart_beat": 0,
     "xian_tcp_client_heart_beat": 0,
     "xian_aqc_dynamic_param_node_heart_beat": 0,
-    "xian_manuel_auto_mode_flag": 0
+    "xian_manuel_auto_mode_flag": 0,
+    "xian_server_simulation_node_heart_beat": 0
 }
