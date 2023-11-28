@@ -42,14 +42,16 @@ cd /xxxx/xian_aqc_ws
 catkin_make
 ```
 
-
+## 4. TCP variable list 
+- For client: note that **write** first, then **read**.
+- For server: note that **read** first, then **write**.
 ```
 struct RetractableBoxToServer
 {
-    int tcp_client_heart_beat_tl;    // tcp client heart beat
-    int tcp_client_heart_beat_tr;
-    int tcp_client_heart_beat_bl;
-    int tcp_client_heart_beat_br;
+    int tcp_retrable_box_heart_beat_tl;    // tcp client heart beat
+    int tcp_retrable_box_heart_beat_tr;
+    int tcp_retrable_box_heart_beat_bl;
+    int tcp_retrable_box_heart_beat_br;
     int retractable_motion_flag_tl;  // 0: stop 1: in processing
     int retractable_motion_flag_tr;
     int retractable_motion_flag_bl;
@@ -58,7 +60,7 @@ struct RetractableBoxToServer
     int retractable_box_status_tr;
     int retractable_box_status_bl;
     int retractable_box_status_br;
-    int error_code_tl;               // 9001: 
+    int error_code_tl;               // 9001: approximated switch error; 
     int error_code_tr;
     int error_code_bl;
     int error_code_br;
@@ -66,10 +68,9 @@ struct RetractableBoxToServer
 ```
 
 ```
-struct RetractableBoxReadFromServer
+struct ServerToRetractableBox
 {
     int tcp_server_heart_beat;       // heart beat
     int auto_manual_switch_flag;     // 0: auto; 1:manual
-    int PLC_retractable_order;       // 0: extent, 1: retract
 };
 ```

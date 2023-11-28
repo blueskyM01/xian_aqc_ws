@@ -100,34 +100,78 @@ public:
 
     void handle_client(int client_socket) 
     {
-        char buffer[BUFFER_SIZE];
+        // char buffer[BUFFER_SIZE];
         ssize_t bytes_received;
         int tcp_server_heart_beat = 0;
         while (true) 
         {
-            usleep(50*1000);
+            usleep(30*1000);
+            if(tcp_server_heart_beat > 1000)
+            {
+                tcp_server_heart_beat = 0;
+            }
+            tcp_server_heart_beat ++;
             // Receive data from the client
             // bytes_received = recv(client_socket, buffer, sizeof(buffer), 0);
-            RetractableBox retract_pkg_read_from_sensor_box;
-            bytes_received = read(client_socket, &retract_pkg_read_from_sensor_box, sizeof(retract_pkg_read_from_sensor_box));
 
+            RetractableBoxToServer read_from_retractable_box;
+            bytes_received = read(client_socket, &read_from_retractable_box, sizeof(read_from_retractable_box));
             if (bytes_received <= 0) {
                 // Connection closed or error, break the loop
                 break;
             }
-            std::cout << "recevie from box:" << std::endl;
-            std::cout << "retract_pkg_read_from_sensor_box.heart_beat: " << retract_pkg_read_from_sensor_box.heart_beat << std::endl;
-            std::cout << "retract_pkg_read_from_sensor_box.auto_manual_switch_flag: " << retract_pkg_read_from_sensor_box.auto_manual_switch_flag << std::endl;
-            std::cout << "retract_pkg_read_from_sensor_box.PLC_retractable_order: " << retract_pkg_read_from_sensor_box.PLC_retractable_order << std::endl;
+            
+            int tcp_retrable_box_heart_beat_tl = read_from_retractable_box.tcp_retrable_box_heart_beat_tl;
+            int tcp_retrable_box_heart_beat_tr = read_from_retractable_box.tcp_retrable_box_heart_beat_tr;
+            int tcp_retrable_box_heart_beat_bl = read_from_retractable_box.tcp_retrable_box_heart_beat_bl;
+            int tcp_retrable_box_heart_beat_br = read_from_retractable_box.tcp_retrable_box_heart_beat_br;
+            int retractable_motion_flag_tl = read_from_retractable_box.retractable_motion_flag_tl;
+            int retractable_motion_flag_tr = read_from_retractable_box.retractable_motion_flag_tr;
+            int retractable_motion_flag_bl = read_from_retractable_box.retractable_motion_flag_bl;
+            int retractable_motion_flag_br = read_from_retractable_box.retractable_motion_flag_br;
+            int retractable_box_status_tl = read_from_retractable_box.retractable_box_status_tl;
+            int retractable_box_status_tr = read_from_retractable_box.retractable_box_status_tr;
+            int retractable_box_status_bl = read_from_retractable_box.retractable_box_status_bl;
+            int retractable_box_status_br = read_from_retractable_box.retractable_box_status_br;
+            int error_code_tl = read_from_retractable_box.error_code_tl;
+            int error_code_tr = read_from_retractable_box.error_code_tr;
+            int error_code_bl = read_from_retractable_box.error_code_bl;
+            int error_code_br = read_from_retractable_box.error_code_br;
 
 
             int iWriteCount = 0;
-            RetractableBox retract_pkg_send_to_plc;
-            retract_pkg_send_to_plc.heart_beat = tcp_server_heart_beat;
-            retract_pkg_send_to_plc.auto_manual_switch_flag = 111;
-            retract_pkg_send_to_plc.PLC_retractable_order = 112;
-            iWriteCount = write(client_socket, &retract_pkg_send_to_plc, sizeof(retract_pkg_send_to_plc));    
-            tcp_server_heart_beat ++;
+            ServerToRetractableBox send_to_retractable_box;
+            send_to_retractable_box.tcp_server_heart_beat = tcp_server_heart_beat;
+            ros::param::get("/xian_aqc_dynamic_parameters_server/auto_manual_switch_flag", auto_manual_switch_flag); // 自行替换
+            send_to_retractable_box.auto_manual_switch_flag = auto_manual_switch_flag;
+
+            iWriteCount = write(client_socket, &send_to_retractable_box, sizeof(send_to_retractable_box));    
+
+            if(tcp_server_heart_beat % 30 == 0)
+            {
+                printf("tcp_retrable_box_heart_beat_tl: %d \n", tcp_retrable_box_heart_beat_tl);
+                printf("tcp_retrable_box_heart_beat_tr: %d \n", tcp_retrable_box_heart_beat_tr);
+                printf("tcp_retrable_box_heart_beat_bl: %d \n", tcp_retrable_box_heart_beat_bl);
+                printf("tcp_retrable_box_heart_beat_br: %d \n", tcp_retrable_box_heart_beat_br);
+                printf("retractable_motion_flag_tl: %d \n", retractable_motion_flag_tl);
+                printf("retractable_motion_flag_tr: %d \n", retractable_motion_flag_tr);
+                printf("retractable_motion_flag_bl: %d \n", retractable_motion_flag_bl);
+                printf("retractable_motion_flag_br: %d \n", retractable_motion_flag_br);
+                printf("retractable_box_status_tl: %d \n", retractable_box_status_tl);
+                printf("retractable_box_status_tr: %d \n", retractable_box_status_tr);
+                printf("retractable_box_status_bl: %d \n", retractable_box_status_bl);
+                printf("retractable_box_status_br: %d \n", retractable_box_status_br);
+                printf("error_code_tl: %d \n", error_code_tl);
+                printf("error_code_tr: %d \n", error_code_tr);
+                printf("error_code_bl: %d \n", error_code_bl);
+                printf("error_code_br: %d \n", error_code_br);
+                printf("tcp_server_heart_beat: %d \n", send_to_retractable_box.tcp_server_heart_beat);
+                printf("auto_manual_switch_flag: %d \n", send_to_retractable_box.auto_manual_switch_flag);
+                printf("--------------------------------------------------------------------");
+            }
+
+
+            
         }
 
         // Close the socket when the client disconnects
@@ -154,21 +198,39 @@ public:
 private:
     int counter = 0;
     int xian_server_simulation_node_heart_beat = 0;
+    int auto_manual_switch_flag = 0;
 
     int server_socket, client_socket;
     sockaddr_in server_address, client_address;
     socklen_t client_address_len = sizeof(client_address);
     int PORT = 2820;
-    int BUFFER_SIZE = 1024;
+    // int BUFFER_SIZE = 1024;
 
-    struct RetractableBox
+    struct RetractableBoxToServer
     {
-        int heart_beat; // heart beat
-        int auto_manual_switch_flag; // 0: auto; 1:manual
-        int PLC_retractable_order;    // 0: extent, 1: retract
+        int tcp_retrable_box_heart_beat_tl = 0;    // tcp client heart beat
+        int tcp_retrable_box_heart_beat_tr = 0;
+        int tcp_retrable_box_heart_beat_bl = 0;
+        int tcp_retrable_box_heart_beat_br = 0;
+        int retractable_motion_flag_tl = 0;  // 0: stop 1: in processing
+        int retractable_motion_flag_tr = 0;
+        int retractable_motion_flag_bl = 0;
+        int retractable_motion_flag_br = 0;
+        int retractable_box_status_tl = 0;   // 0: extent, 1: retract
+        int retractable_box_status_tr = 0;
+        int retractable_box_status_bl = 0;
+        int retractable_box_status_br = 0;
+        int error_code_tl = 9000;               // 9001: 
+        int error_code_tr = 9000;
+        int error_code_bl = 9000;
+        int error_code_br = 9000;
     };
 
-    
+    struct ServerToRetractableBox
+    {
+        int tcp_server_heart_beat = 0;       // heart beat
+        int auto_manual_switch_flag = 0;     // 0: auto; 1:manual
+    };
 
         
 };
