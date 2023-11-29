@@ -121,22 +121,10 @@ public:
                 break;
             }
             
-            int tcp_retrable_box_heart_beat_tl = read_from_retractable_box.tcp_retrable_box_heart_beat_tl;
-            int tcp_retrable_box_heart_beat_tr = read_from_retractable_box.tcp_retrable_box_heart_beat_tr;
-            int tcp_retrable_box_heart_beat_bl = read_from_retractable_box.tcp_retrable_box_heart_beat_bl;
-            int tcp_retrable_box_heart_beat_br = read_from_retractable_box.tcp_retrable_box_heart_beat_br;
-            int retractable_motion_flag_tl = read_from_retractable_box.retractable_motion_flag_tl;
-            int retractable_motion_flag_tr = read_from_retractable_box.retractable_motion_flag_tr;
-            int retractable_motion_flag_bl = read_from_retractable_box.retractable_motion_flag_bl;
-            int retractable_motion_flag_br = read_from_retractable_box.retractable_motion_flag_br;
-            int retractable_box_status_tl = read_from_retractable_box.retractable_box_status_tl;
-            int retractable_box_status_tr = read_from_retractable_box.retractable_box_status_tr;
-            int retractable_box_status_bl = read_from_retractable_box.retractable_box_status_bl;
-            int retractable_box_status_br = read_from_retractable_box.retractable_box_status_br;
-            int error_code_tl = read_from_retractable_box.error_code_tl;
-            int error_code_tr = read_from_retractable_box.error_code_tr;
-            int error_code_bl = read_from_retractable_box.error_code_bl;
-            int error_code_br = read_from_retractable_box.error_code_br;
+            int tcp_retrable_box_heart_beat = read_from_retractable_box.tcp_retrable_box_heart_beat;
+            int retractable_motion_flag = read_from_retractable_box.retractable_motion_flag;
+            int retractable_box_status = read_from_retractable_box.retractable_box_status;
+            int error_code = read_from_retractable_box.error_code;
 
 
             int iWriteCount = 0;
@@ -149,22 +137,11 @@ public:
 
             if(tcp_server_heart_beat % 30 == 0)
             {
-                printf("tcp_retrable_box_heart_beat_tl: %d \n", tcp_retrable_box_heart_beat_tl);
-                printf("tcp_retrable_box_heart_beat_tr: %d \n", tcp_retrable_box_heart_beat_tr);
-                printf("tcp_retrable_box_heart_beat_bl: %d \n", tcp_retrable_box_heart_beat_bl);
-                printf("tcp_retrable_box_heart_beat_br: %d \n", tcp_retrable_box_heart_beat_br);
-                printf("retractable_motion_flag_tl: %d \n", retractable_motion_flag_tl);
-                printf("retractable_motion_flag_tr: %d \n", retractable_motion_flag_tr);
-                printf("retractable_motion_flag_bl: %d \n", retractable_motion_flag_bl);
-                printf("retractable_motion_flag_br: %d \n", retractable_motion_flag_br);
-                printf("retractable_box_status_tl: %d \n", retractable_box_status_tl);
-                printf("retractable_box_status_tr: %d \n", retractable_box_status_tr);
-                printf("retractable_box_status_bl: %d \n", retractable_box_status_bl);
-                printf("retractable_box_status_br: %d \n", retractable_box_status_br);
-                printf("error_code_tl: %d \n", error_code_tl);
-                printf("error_code_tr: %d \n", error_code_tr);
-                printf("error_code_bl: %d \n", error_code_bl);
-                printf("error_code_br: %d \n", error_code_br);
+                printf("tcp_retrable_box_heart_beat: %d \n", tcp_retrable_box_heart_beat);
+                printf("retractable_motion_flag: %d \n", retractable_motion_flag);
+                printf("retractable_box_status: %d \n", retractable_box_status);
+                printf("error_code: %d \n", error_code);
+
                 printf("tcp_server_heart_beat: %d \n", send_to_retractable_box.tcp_server_heart_beat);
                 printf("auto_manual_switch_flag: %d \n", send_to_retractable_box.auto_manual_switch_flag);
                 printf("--------------------------------------------------------------------");
@@ -208,22 +185,10 @@ private:
 
     struct RetractableBoxToServer
     {
-        int tcp_retrable_box_heart_beat_tl = 0;    // tcp client heart beat
-        int tcp_retrable_box_heart_beat_tr = 0;
-        int tcp_retrable_box_heart_beat_bl = 0;
-        int tcp_retrable_box_heart_beat_br = 0;
-        int retractable_motion_flag_tl = 0;  // 0: stop 1: in processing
-        int retractable_motion_flag_tr = 0;
-        int retractable_motion_flag_bl = 0;
-        int retractable_motion_flag_br = 0;
-        int retractable_box_status_tl = 0;   // 0: extent, 1: retract
-        int retractable_box_status_tr = 0;
-        int retractable_box_status_bl = 0;
-        int retractable_box_status_br = 0;
-        int error_code_tl = 9000;               // 9001: 
-        int error_code_tr = 9000;
-        int error_code_bl = 9000;
-        int error_code_br = 9000;
+        int tcp_retrable_box_heart_beat = 0;    // tcp client heart beat
+        int retractable_motion_flag = 0;  // 0: stop 1: in processing
+        int retractable_box_status = 0;   // 0: extent, 1: retract
+        int error_code = 9000;               // 9001: approximated switch error
     };
 
     struct ServerToRetractableBox

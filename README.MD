@@ -48,22 +48,10 @@ catkin_make
 ```
 struct RetractableBoxToServer
 {
-    int tcp_retrable_box_heart_beat_tl;    // tcp client heart beat
-    int tcp_retrable_box_heart_beat_tr;
-    int tcp_retrable_box_heart_beat_bl;
-    int tcp_retrable_box_heart_beat_br;
-    int retractable_motion_flag_tl;  // 0: stop 1: in processing
-    int retractable_motion_flag_tr;
-    int retractable_motion_flag_bl;
-    int retractable_motion_flag_br;
-    int retractable_box_status_tl;   // 0: extent, 1: retract
-    int retractable_box_status_tr;
-    int retractable_box_status_bl;
-    int retractable_box_status_br;
-    int error_code_tl;               // 9001: approximated switch error; 
-    int error_code_tr;
-    int error_code_bl;
-    int error_code_br;
+    int tcp_retrable_box_heart_beat = 0;    // tcp client heart beat
+    int retractable_motion_flag = 0;        // 0: stop 1: in processing
+    int retractable_box_status = 0;         // 0: extent, 1: retract
+    int error_code = 9000;                  // 9001: approximated switch error
 };
 ```
 
