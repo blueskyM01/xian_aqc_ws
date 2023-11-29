@@ -2,6 +2,23 @@
     "xian_tcp_server_heart_beat": 0,
     "xian_tcp_client_heart_beat": 0,
     "xian_aqc_dynamic_param_node_heart_beat": 0,
-    "xian_server_simulation_node_heart_beat": 0,
-    "auto_manual_switch_flag": 0
+    "xian_server_simulation_tl_node_heart_beat": 0,
+    "auto_manual_switch_flag": 0,
+    "tcp_retrable_box_heart_beat_tl": 0,
+    "tcp_retrable_box_heart_beat_tr": 0,
+    "tcp_retrable_box_heart_beat_bl": 0,
+    "tcp_retrable_box_heart_beat_br": 0,
+    "retractable_motion_flag_tl": 0,
+    "retractable_motion_flag_tr": 0,
+    "retractable_motion_flag_bl": 0,
+    "retractable_motion_flag_br": 0,
+    "retractable_box_status_tl": 0,
+    "retractable_box_status_tr": 0,
+    "retractable_box_status_bl": 0,
+    "retractable_box_status_br": 0,
+    "retractable_box_error_code_tl": 0,
+    "retractable_box_error_code_tr": 0,
+    "retractable_box_error_code_bl": 0,
+    "retractable_box_error_code_br": 0
+
 }

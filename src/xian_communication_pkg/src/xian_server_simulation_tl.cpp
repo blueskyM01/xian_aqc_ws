@@ -40,10 +40,10 @@ public:
     }
     void m_timer_HeartBeat_f(const ros::WallTimerEvent& event)
     {
-        ros::param::get("/xian_aqc_dynamic_parameters_server/xian_server_simulation_node_heart_beat", xian_server_simulation_node_heart_beat); // 自行替换
+        ros::param::get("/xian_aqc_dynamic_parameters_server/xian_server_simulation_tl_node_heart_beat", xian_server_simulation_tl_node_heart_beat); // 自行替换
         counter = counter > 1000 ? 0 : (counter + 1);
-        std::cout << "counter standalone: " << xian_server_simulation_node_heart_beat << std::endl;
-        ros::param::set("/xian_aqc_dynamic_parameters_server/xian_server_simulation_node_heart_beat", counter);  // 自行替换
+        std::cout << "counter standalone: " << xian_server_simulation_tl_node_heart_beat << std::endl;
+        ros::param::set("/xian_aqc_dynamic_parameters_server/xian_server_simulation_tl_node_heart_beat", counter);  // 自行替换
     }
 
     void init()
@@ -125,6 +125,10 @@ public:
             int retractable_motion_flag = read_from_retractable_box.retractable_motion_flag;
             int retractable_box_status = read_from_retractable_box.retractable_box_status;
             int error_code = read_from_retractable_box.error_code;
+            ros::param::set("/xian_aqc_dynamic_parameters_server/tcp_retrable_box_heart_beat_tl", tcp_retrable_box_heart_beat);
+            ros::param::set("/xian_aqc_dynamic_parameters_server/retractable_motion_flag_tl", retractable_motion_flag);
+            ros::param::set("/xian_aqc_dynamic_parameters_server/retractable_box_status_tl", retractable_box_status);
+            ros::param::set("/xian_aqc_dynamic_parameters_server/retractable_box_error_code_tl", error_code);
 
 
             int iWriteCount = 0;
@@ -174,7 +178,7 @@ public:
 
 private:
     int counter = 0;
-    int xian_server_simulation_node_heart_beat = 0;
+    int xian_server_simulation_tl_node_heart_beat = 0;
     int auto_manual_switch_flag = 0;
 
     int server_socket, client_socket;
