@@ -204,11 +204,8 @@ include_directories(
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
-add_executable(xian_server_simulation_tl
-             src/xian_server_simulation_tl.cpp
-            )
+
+add_executable(xian_server_simulation_tl src/xian_server_simulation_tl.cpp)
 add_dependencies(xian_server_simulation_tl ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-target_link_libraries(xian_server_simulation_tl
-                    ${catkin_LIBRARIES}
-                     )
-add_dependencies(xian_server_simulation_tl ${PROJECT_NAME}_gencfg)
+target_link_libraries(xian_server_simulation_tl ${catkin_LIBRARIES})
+# add_dependencies(xian_server_simulation_tl ${PROJECT_NAME}_gencfg)

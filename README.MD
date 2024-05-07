@@ -46,6 +46,7 @@
         - apt update && apt install -y libsm6 libxext6
         - apt-get install -y libxrender-dev
         - apt-get install libglib2.0-0
+        - apt install libgl1-mesa-glx
         - pip install -r requirements.txt
     - 测试可视化是否成功  
         ```
@@ -86,7 +87,71 @@
 
     - [ROS Installation](https://wiki.ros.org/noetic/Installation/Ubuntu)
 
-    - Related Lib
+    - TensorRT Installation
+        - 下载[Tensorrt](https://developer.nvidia.com/nvidia-tensorrt-8x-download)，如下图所示：
+
+            ![](figure/1.png)
+        - [安装Tensorrt](https://docs.nvidia.com/deeplearning/tensorrt/install-guide/index.html#installing-tar)
+        - 将下载好的Tenosrrt的.tar.gz压缩包先解压再拷贝到镜像中的/root目录下，如下图所示：
+
+            ![](figure/2.png)
+        - 解压Tenosrrt的.tar.gz压缩包
+            ```
+            $ tar -xzvf TensorRT-8.4.1.5.Linux.x86_64-gnu.cuda-11.6.cudnn8.4.tar.gz
+            ```
+        - 解压后的Tensorrt文件构成如下图所示：
+
+            ![](figure/3.png)
+
+        - 添加环境变量：在~/.bashrc中加入如下代码：
+            ```
+            $ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/root/TensorRT-8.4.1.5/targets/x86_64-linux-gnu/lib
+            ```
+        - 安装Python TensorRT wheel（选择对应的python版本），指令如下：
+            ```
+            $ cd /root/TensorRT-8.4.1.5/python
+            $ python -m pip install tensorrt-8.4.1.5-cp37-none-linux_x86_64.whl #如果出现 Certificate verification failed报错，可以用下面指令替换
+            $ python -m pip --trusted-host pypi.python.org --trusted-host pypi.tuna.tsinghua.edu.cn install tensorrt-8.4.1.5-cp37-none-linux_x86_64.whl -i https://pypi.tuna.tsinghua.edu.cn/simple/
+            ```
+        - 安装UFF wheel，指令如下：
+            ```
+            $ cd .. 
+            $ cd uff
+            $ python -m pip --trusted-host pypi.python.org --trusted-host pypi.tuna.tsinghua.edu.cn install uff-0.6.9-py2.py3-none-any.whl -i https://pypi.tuna.tsinghua.edu.cn/simple/
+            ```
+        - 安装graphsurgeon wheel，指令如下：
+            ```
+            $ cd .. 
+            $ cd graphsurgeon
+            $ python -m pip --trusted-host pypi.python.org --trusted-host pypi.tuna.tsinghua.edu.cn install graphsurgeon-0.4.6-py2.py3-none-any.whl -i https://pypi.tuna.tsinghua.edu.cn/simple/
+            ```
+        - 安装onnx-graphsurgeon wheel，指令如下：
+            ```
+            $ cd .. 
+            $ cd onnx_graphsurgeon
+            $ python -m pip --trusted-host pypi.python.org --trusted-host pypi.tuna.tsinghua.edu.cn install onnx_graphsurgeon-0.3.12-py2.py3-none-any.whl -i https://pypi.tuna.tsinghua.edu.cn/simple/
+            ```
+
+        - 安装cuda-python(注意：python>=3.7)，指令如下：
+            ```
+            $ pip --trusted-host pypi.python.org --trusted-host pypi.tuna.tsinghua.edu.cn install cuda-python -i https://pypi.tuna.tsinghua.edu.cn/simple/
+            ```
+        - 安装pycuda
+            ```
+            $ pip --trusted-host pypi.python.org --trusted-host pypi.tuna.tsinghua.edu.cn install pycuda -i https://pypi.tuna.tsinghua.edu.cn/simple/
+
+            若报src/cpp/cuda.hpp:14:10: fatal error: cuda.h: No such file or directory错误，解决方法：在~/.bashrc中添加export PATH=/usr/local/cuda-11.6/bin:$PATH。添加完成后，记得source ~/.bashrc
+            ```
+        - 安装opencv-python， 指令如下：
+            ```
+            $ pip --trusted-host pypi.python.org --trusted-host pypi.tuna.tsinghua.edu.cn install opencv-python -i https://pypi.tuna.tsinghua.edu.cn/simple/
+            ``` 
+
+        - 运行trt部署代码若出现如下错误：
+            ![](figure/4.png)
+            - 解决：找到`/usr/local/lib/python3.8/dist-packages/tensorrt/__init__.py`,将line 166的`bool: np.bool`修改为`bool: bool`
+
+
     - rosbridge_suite
         ```
         apt-get update
@@ -95,31 +160,35 @@
 
     - cv_control lib
 
-    - 
+    - Related Lib
 
-## 2. Compile
-```
-cd /xxxx/xian_aqc_ws
-catkin_make
-```
+## 2. RUN
+- compile 
+    ```
+    cd /xxxx/xian_aqc_ws
+    catkin_make
+    ```
+
 
 ## 4. TCP variable list 
 - For client: note that **write** first, then **read**.
 - For server: note that **read** first, then **write**.
-```
-struct RetractableBoxToServer
-{
-    int tcp_retrable_box_heart_beat = 0;    // tcp client heart beat
-    int retractable_motion_flag = 0;        // 0: stop 1: in processing
-    int retractable_box_status = 0;         // 0: extent, 1: retract
-    int error_code = 9000;                  // 9001: approximated switch error
-};
-```
+    ```
+    struct RetractableBoxToServer
+    {
+        int tcp_retrable_box_heart_beat = 0;    // tcp client heart beat
+        int retractable_motion_flag = 0;        // 0: stop 1: in processing
+        int retractable_box_status = 0;         // 0: extent, 1: retract
+        int error_code = 9000;                  // 9001: approximated switch error
+    };
+    ```
 
-```
-struct ServerToRetractableBox
-{
-    int tcp_server_heart_beat;       // heart beat
-    int auto_manual_switch_flag;     // 0: auto; 1:manual
-};
-```
+    ```
+    struct ServerToRetractableBox
+    {
+        int tcp_server_heart_beat;       // heart beat
+        int auto_manual_switch_flag;     // 0: auto; 1:manual
+    };
+    ```
+
+
