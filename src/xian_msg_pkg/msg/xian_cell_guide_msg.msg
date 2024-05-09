@@ -1,0 +1,15 @@
+sensor_msgs/Image tl_image
+sensor_msgs/Image tr_image
+sensor_msgs/Image bl_image
+sensor_msgs/Image br_image
+int32 xian_target_point_tl_x
+int32 xian_target_point_tl_y
+int32 xian_target_point_tr_x
+int32 xian_target_point_tr_y
+int32 xian_target_point_bl_x
+int32 xian_target_point_bl_y
+int32 xian_target_point_br_x
+int32 xian_target_point_br_y
+float32 xian_gantry_pixel_error
+float32 xian_trolley_pixel_error
+float32 xian_rotate_pixel_error
