@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(xian_msg_pkg)
+project(xian_sensor_pkg)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 # add_compile_options(-std=c++11)
@@ -8,13 +8,17 @@ project(xian_msg_pkg)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
-  message_generation
-  message_runtime
+  cv_bridge
+  image_transport
   roscpp
   rospy
   std_msgs
-  sensor_msgs
 )
+find_package(OpenCV REQUIRED)
+set(LIB_CONTROL_CV_DIR "/root/code/xian_aqc_ws/xian_project_file/include") 
+set(LIB_CONTROL_CV_LINK_DIR "/root/code/xian_aqc_ws/xian_project_file/lib")
+include_directories(${LIB_CONTROL_CV_DIR})
+link_directories(${LIB_CONTROL_CV_LINK_DIR})
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -50,12 +54,11 @@ find_package(catkin REQUIRED COMPONENTS
 ##   * add every package in MSG_DEP_SET to generate_messages(DEPENDENCIES ...)
 
 ## Generate messages in the 'msg' folder
-add_message_files(
-  FILES
-  xian_cell_guide_msg.msg
-  xian_spreader_images_msg.msg
-  xian_container_corner_crop_image_msg.msg
-)
+# add_message_files(
+#   FILES
+#   Message1.msg
+#   Message2.msg
+# )
 
 ## Generate services in the 'srv' folder
 # add_service_files(
@@ -72,11 +75,10 @@ add_message_files(
 # )
 
 ## Generate added messages and services with any dependencies listed here
-generate_messages(
-  DEPENDENCIES
-  std_msgs
-  sensor_msgs
-)
+# generate_messages(
+#   DEPENDENCIES
+#   std_msgs
+# )
 
 ################################################
 ## Declare ROS dynamic reconfigure parameters ##
@@ -109,8 +111,8 @@ generate_messages(
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
 #  INCLUDE_DIRS include
-#  LIBRARIES xian_msg_pkg
-#  CATKIN_DEPENDS message_generation message_runtime roscpp rospy std_msgs
+#  LIBRARIES xian_sensor_pkg
+#  CATKIN_DEPENDS cv_bridge image_transport roscpp rospy std_msgs
 #  DEPENDS system_lib
 )
 
@@ -121,13 +123,13 @@ catkin_package(
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 include_directories(
-# include
+  include ../../devel/include
   ${catkin_INCLUDE_DIRS}
 )
 
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}
-#   src/${PROJECT_NAME}/xian_msg_pkg.cpp
+#   src/${PROJECT_NAME}/xian_sensor_pkg.cpp
 # )
 
 ## Add cmake target dependencies of the library
@@ -138,7 +140,7 @@ include_directories(
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-# add_executable(${PROJECT_NAME}_node src/xian_msg_pkg_node.cpp)
+# add_executable(${PROJECT_NAME}_node src/xian_sensor_pkg_node.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -202,10 +204,14 @@ include_directories(
 #############
 
 ## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_xian_msg_pkg.cpp)
+# catkin_add_gtest(${PROJECT_NAME}-test test/test_xian_sensor_pkg.cpp)
 # if(TARGET ${PROJECT_NAME}-test)
 #   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
 # endif()
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
+
+add_executable(xian_camera_driver src/xian_camera_driver.cpp )
+add_dependencies(xian_camera_driver ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(xian_camera_driver zpmc_cv_control ${OpenCV_LIBRARIES} ${catkin_LIBRARIES} )

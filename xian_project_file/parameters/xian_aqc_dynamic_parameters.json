@@ -15,5 +15,18 @@
     "xian_retrable_box_state1": 0,
     "xian_retrable_box_state2": 0,
     "xian_retrable_box_state3": 0,
-    "xian_accs_ip": "10.28.137.11"
+    "xian_accs_ip": "10.28.137.11",
+    "xian_camera_driver_heat_beat": 0,
+    "xian_is_calibrate_flag": 0,
+    "xian_camera_sensor_fps": 0,
+    "xian_tl_container_point_x": 633,
+    "xian_tl_container_point_y": 171,
+    "xian_tr_container_point_x": 427,
+    "xian_tr_container_point_y": 186,
+    "xian_bl_container_point_x": 635,
+    "xian_bl_container_point_y": 1115,
+    "xian_br_container_point_x": 427,
+    "xian_br_container_point_y": 1109,
+    "xian_container_corner_cop_process_heart_beat": 0,
+    "xian_container_corner_cop_process_fps": 0
 }

@@ -168,7 +168,11 @@
     cd /xxxx/xian_aqc_ws
     catkin_make
     ```
+## 3. Output
 
+| Output Topic | Message Type |
+|:--- |:---  |
+| aqc_cell_detection_resuls | xian_msg_pkg/xian_cell_guide_msg |
 
 ## 4. TCP variable list 
 - For client: note that **write** first, then **read**.
