@@ -65,10 +65,10 @@ class Xian_ContainerCornerCopProcess
 
  
         cv::Mat tl_image, tr_image, bl_image, br_image;
-        // cv::Mat tl_preprocessed_image, tr_preprocessed_image, bl_preprocessed_image, br_preprocessed_image;
-        // sensor_msgs::ImagePtr zpmc_tl_preprocess_image, zpmc_tr_preprocess_image, zpmc_bl_preprocess_image, zpmc_br_preprocess_image;
-        // zpmc_unloading_interface_pkg::ZpmcLockHolePreprocessImages zpmc_corner_line_preprocess_images;
-
+        cv::Mat tl_image_crop, tr_image_crop, bl_image_crop, br_image_crop;
+        cv::Mat tl_image_crop_resize, tr_image_crop_resize, bl_image_crop_resize, br_image_crop_resize;
+        sensor_msgs::ImagePtr tl_crop_image, tr_crop_image, bl_crop_image, br_crop_image;
+        xian_msg_pkg::xian_container_corner_crop_image_msg crop_images;
 
         void command_callback(const xian_msg_pkg::xian_spreader_images_msgConstPtr& xian_spreader_images)
         {
@@ -95,56 +95,69 @@ class Xian_ContainerCornerCopProcess
             int src_h = tl_image.rows;
 
             cv::Point* tl_xy = zpmc::crop_area(xian_tl_container_point_x, xian_tl_container_point_y, crop_w, crop_h, src_w, src_h);
-            cv::rectangle(tl_image, *(tl_xy+0), *(tl_xy+1), cv::Scalar(0, 0, 255), 4); 
-
+            cv::Point tl_xy0 = *(tl_xy+0);
+            cv::Point tl_xy1 = *(tl_xy+1);
+            tl_image_crop = tl_image(cv::Rect(tl_xy0.x, tl_xy0.y, crop_w, crop_h)).clone();
+            
             cv::Point* tr_xy = zpmc::crop_area(xian_tr_container_point_x, xian_tr_container_point_y, crop_w, crop_h, src_w, src_h);
-            cv::rectangle(tr_image, *(tr_xy+0), *(tr_xy+1), cv::Scalar(0, 0, 255), 4); 
+            cv::Point tr_xy0 = *(tr_xy+0);
+            cv::Point tr_xy1 = *(tr_xy+1);
+            tr_image_crop = tr_image(cv::Rect(tr_xy0.x, tr_xy0.y, crop_w, crop_h)).clone();
 
             cv::Point* bl_xy = zpmc::crop_area(xian_bl_container_point_x, xian_bl_container_point_y, crop_w, crop_h, src_w, src_h);
-            cv::rectangle(bl_image, *(bl_xy+0), *(bl_xy+1), cv::Scalar(0, 0, 255), 4); 
+            cv::Point bl_xy0 = *(bl_xy+0);
+            cv::Point bl_xy1 = *(bl_xy+1);
+            bl_image_crop = bl_image(cv::Rect(bl_xy0.x, bl_xy0.y, crop_w, crop_h)).clone();
 
             cv::Point* br_xy = zpmc::crop_area(xian_br_container_point_x, xian_br_container_point_y, crop_w, crop_h, src_w, src_h);
-            cv::rectangle(br_image, *(br_xy+0), *(br_xy+1), cv::Scalar(0, 0, 255), 4); 
+            cv::Point br_xy0 = *(br_xy+0);
+            cv::Point br_xy1 = *(br_xy+1);
+            br_image_crop = br_image(cv::Rect(br_xy0.x, br_xy0.y, crop_w, crop_h)).clone();
+
+            cv::resize(tl_image_crop, tl_image_crop_resize, cv::Size(550, 550), 2);
+            cv::resize(tr_image_crop, tr_image_crop_resize, cv::Size(550, 550), 2);
+            cv::resize(bl_image_crop, bl_image_crop_resize, cv::Size(550, 550), 2);
+            cv::resize(br_image_crop, br_image_crop_resize, cv::Size(550, 550), 2);
+
+            tl_crop_image = cv_bridge::CvImage(std_msgs::Header(), "bgr8", tl_image_crop_resize).toImageMsg();
+            tr_crop_image = cv_bridge::CvImage(std_msgs::Header(), "bgr8", tr_image_crop_resize).toImageMsg();
+            bl_crop_image = cv_bridge::CvImage(std_msgs::Header(), "bgr8", bl_image_crop_resize).toImageMsg();
+            br_crop_image = cv_bridge::CvImage(std_msgs::Header(), "bgr8", br_image_crop_resize).toImageMsg();
+
+            crop_images.tl_image = xian_spreader_images->tl_image;
+            crop_images.tr_image = xian_spreader_images->tr_image;
+            crop_images.bl_image = xian_spreader_images->bl_image;
+            crop_images.br_image = xian_spreader_images->br_image;
+
+            crop_images.tl_container_corner_crop_image = *tl_crop_image;
+            crop_images.tr_container_corner_crop_image = *tr_crop_image;
+            crop_images.bl_container_corner_crop_image = *bl_crop_image;
+            crop_images.br_container_corner_crop_image = *br_crop_image;
+
+            command_publisher_.publish(crop_images);
 
 
+            // cv::rectangle(tl_image, tl_xy0, tl_xy1, cv::Scalar(0, 0, 255), 4); 
+            // cv::rectangle(tr_image, tr_xy0, tr_xy1, cv::Scalar(0, 0, 255), 4); 
+            // cv::rectangle(bl_image, bl_xy0, bl_xy1, cv::Scalar(0, 0, 255), 4); 
+            // cv::rectangle(br_image, br_xy0, br_xy1, cv::Scalar(0, 0, 255), 4); 
 
-            int tl_xc0 = xian_tl_container_point_x - 100;
-            int tl_yc0 = xian_tl_container_point_y + 300;
-            cv::Point* tl_xy0 = zpmc::crop_area(tl_xc0, tl_yc0, crop_w, crop_h, src_w, src_h);
-            cv::rectangle(tl_image, *(tl_xy0+0), *(tl_xy0+1), cv::Scalar(255, 0, 0), 4);
+            // cv::Mat src_merge_col_0 = zpmc::zpmc_images_merge_row(tl_image, bl_image);
+            // cv::Mat src_merge_col_1 = zpmc::zpmc_images_merge_row(tr_image, br_image);
+            // cv::Mat merge_log = zpmc::zpmc_images_merge_col(src_merge_col_0, src_merge_col_1);
+            // cv::resize(merge_log, merge_log, cv::Size(merge_log.cols/3, merge_log.rows/3), 2);
 
-
-
-            cv::Mat src_merge_col_0 = zpmc::zpmc_images_merge_row(tl_image, bl_image);
-            cv::Mat src_merge_col_1 = zpmc::zpmc_images_merge_row(tr_image, br_image);
-            cv::Mat merge_log = zpmc::zpmc_images_merge_col(src_merge_col_0, src_merge_col_1);
-            cv::resize(merge_log, merge_log, cv::Size(merge_log.cols/3, merge_log.rows/3), 2);
-
-            cv::imshow("images:", merge_log);
-            cv::waitKey(1);
-
-            // cv::resize(tl_image, tl_preprocessed_image, cv::Size(550, 550), 2);
-            // cv::resize(tr_image, tr_preprocessed_image, cv::Size(550, 550), 2);
-            // cv::resize(bl_image, bl_preprocessed_image, cv::Size(550, 550), 2);
-            // cv::resize(br_image, br_preprocessed_image, cv::Size(550, 550), 2);
-
-
-            // zpmc_tl_preprocess_image = cv_bridge::CvImage(std_msgs::Header(), "bgr8", tl_preprocessed_image).toImageMsg();
-            // zpmc_tr_preprocess_image = cv_bridge::CvImage(std_msgs::Header(), "bgr8", tr_preprocessed_image).toImageMsg();
-            // zpmc_bl_preprocess_image = cv_bridge::CvImage(std_msgs::Header(), "bgr8", bl_preprocessed_image).toImageMsg();
-            // zpmc_br_preprocess_image = cv_bridge::CvImage(std_msgs::Header(), "bgr8", br_preprocessed_image).toImageMsg();
-
-            // zpmc_corner_line_preprocess_images.tl_image = xian_spreader_images->tl_image;
-            // zpmc_corner_line_preprocess_images.tr_image = xian_spreader_images->tr_image;
-            // zpmc_corner_line_preprocess_images.bl_image = xian_spreader_images->bl_image;
-            // zpmc_corner_line_preprocess_images.br_image = xian_spreader_images->br_image;
-
-            // zpmc_corner_line_preprocess_images.tl_preprocess_image = *zpmc_tl_preprocess_image;
-            // zpmc_corner_line_preprocess_images.tr_preprocess_image = *zpmc_tr_preprocess_image;
-            // zpmc_corner_line_preprocess_images.bl_preprocess_image = *zpmc_bl_preprocess_image;
-            // zpmc_corner_line_preprocess_images.br_preprocess_image = *zpmc_br_preprocess_image;
-
-            // command_publisher_.publish(zpmc_corner_line_preprocess_images);
+            // cv::Mat crop_col_0 = zpmc::zpmc_images_merge_row(tl_image_crop, bl_image_crop);
+            // cv::Mat crop_col_1 = zpmc::zpmc_images_merge_row(tr_image_crop, br_image_crop);
+            // cv::Mat merge_crop = zpmc::zpmc_images_merge_col(crop_col_0, crop_col_1);
+            // cv::imshow("merge_crop:", merge_crop);
+            // cv::imshow("images:", merge_log);
+            // cv::waitKey(1);
+            
+            // int tl_xc0 = xian_tl_container_point_x - 100;
+            // int tl_yc0 = xian_tl_container_point_y + 300;
+            // cv::Point* tl_xy0 = zpmc::crop_area(tl_xc0, tl_yc0, crop_w, crop_h, src_w, src_h);
+            // cv::rectangle(tl_image, *(tl_xy0+0), *(tl_xy0+1), cv::Scalar(255, 0, 0), 4);
 
             elapsedTimeP = std::chrono::duration_cast<std::chrono::milliseconds>(cur_time - pre_time);
             timediff = elapsedTimeP.count();

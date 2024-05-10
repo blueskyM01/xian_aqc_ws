@@ -163,10 +163,20 @@
     - Related Lib
 
 ## 2. RUN
+- 获取读写权限
+    ```
+    chomd 777 src/xian_ai_pkg/src/xian_cell_guide_recognition.py
+    chmod 777 src/xian_ai_pkg/src/xian_container_corner_recognition.py
+    ```
 - compile 
     ```
     cd /xxxx/xian_aqc_ws
     catkin_make
+    ```
+- vim ~/.bashrc (source ~/.bashrc)
+    ```
+    加入如下代码
+    source /root/code/xian_aqc_ws/devel/setup.bash
     ```
 ## 3. Output
 

@@ -150,7 +150,7 @@ int main(int argc, char** argv)
     spinner.start();
 
     xian_camera_driver_node.m_timer_HeartBeat = nh_2.createWallTimer(ros::WallDuration(1), &Xian_CameraDriver::m_timer_HeartBeat_f, &xian_camera_driver_node);
-    xian_camera_driver_node.m_timer_Main_Func = nh_2.createWallTimer(ros::WallDuration(0.05), &Xian_CameraDriver::m_timer_Main_Func_f, &xian_camera_driver_node);
+    xian_camera_driver_node.m_timer_Main_Func = nh_2.createWallTimer(ros::WallDuration(0.1), &Xian_CameraDriver::m_timer_Main_Func_f, &xian_camera_driver_node);
     ros::waitForShutdown();
     return 0;
 }
