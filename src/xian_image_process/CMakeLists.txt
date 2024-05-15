@@ -213,6 +213,6 @@ include_directories(
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
 
-add_executable(xian_container_corner_cop_process src/xian_container_corner_cop_process.cpp )
-add_dependencies(xian_container_corner_cop_process ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-target_link_libraries(xian_container_corner_cop_process zpmc_cv_control ${OpenCV_LIBRARIES} ${catkin_LIBRARIES})
+add_executable(xian_image_cop_process src/xian_image_cop_process.cpp )
+add_dependencies(xian_image_cop_process ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(xian_image_cop_process zpmc_cv_control ${OpenCV_LIBRARIES} ${catkin_LIBRARIES})

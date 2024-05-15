@@ -1,0 +1,16 @@
+sensor_msgs/Image tl_image
+sensor_msgs/Image tr_image
+sensor_msgs/Image bl_image
+sensor_msgs/Image br_image
+sensor_msgs/Image tl_container_corner_crop_image
+sensor_msgs/Image tr_container_corner_crop_image
+sensor_msgs/Image bl_container_corner_crop_image
+sensor_msgs/Image br_container_corner_crop_image
+sensor_msgs/Image tl_cell_guide_crop_image1
+sensor_msgs/Image tr_cell_guide_crop_image1
+sensor_msgs/Image bl_cell_guide_crop_image1
+sensor_msgs/Image br_cell_guide_crop_image1
+sensor_msgs/Image tl_cell_guide_crop_image2
+sensor_msgs/Image tr_cell_guide_crop_image2
+sensor_msgs/Image bl_cell_guide_crop_image2
+sensor_msgs/Image br_cell_guide_crop_image2
