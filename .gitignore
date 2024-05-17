@@ -1,3 +1,5 @@
 /build
 /devel
 /.vscode
+/xian_project_file/onnx
+/xian_project_file/trt

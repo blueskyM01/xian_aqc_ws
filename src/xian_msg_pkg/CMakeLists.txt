@@ -55,6 +55,7 @@ add_message_files(
   xian_cell_guide_msg.msg
   xian_spreader_images_msg.msg
   xian_crop_image_msg.msg
+  xian_keypoints.msg
 )
 
 ## Generate services in the 'srv' folder

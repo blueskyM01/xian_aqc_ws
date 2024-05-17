@@ -166,7 +166,7 @@
 - 获取读写权限
     ```
     chomd 777 src/xian_ai_pkg/src/xian_cell_guide_recognition.py
-    chmod 777 src/xian_ai_pkg/src/xian_container_corner_recognition.py
+    chmod 777 src/xian_ai_pkg/src/xian_keypoints_recognition.py
     ```
 - compile 
     ```

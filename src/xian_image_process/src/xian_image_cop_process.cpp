@@ -22,7 +22,7 @@ class Xian_ContainerCornerCopProcess
             // 创建一个ROS节点句柄
             ros::NodeHandle nh;
 
-            command_publisher_ = nh.advertise<xian_msg_pkg::xian_crop_image_msg>("xian_container_corner_crop_images", 1);
+            command_publisher_ = nh.advertise<xian_msg_pkg::xian_crop_image_msg>("xian_crop_images", 1);
             command_subscribe_ = nh.subscribe<xian_msg_pkg::xian_spreader_images_msg>("xian_aqc_spreader_images", 1, &Xian_ContainerCornerCopProcess::command_callback, this);
 
         }
@@ -262,35 +262,62 @@ class Xian_ContainerCornerCopProcess
             crop_images.bl_cell_guide_crop_image2 = *bl_cell_guide_crop_image2;
             crop_images.br_cell_guide_crop_image2 = *br_cell_guide_crop_image2;
 
+            crop_images.container_corner_tl_x0 = tl_xy0.x;
+            crop_images.container_corner_tl_y0 = tl_xy0.y;
+            crop_images.container_corner_tr_x0 = tr_xy0.x;
+            crop_images.container_corner_tr_y0 = tr_xy0.y;
+            crop_images.container_corner_bl_x0 = bl_xy0.x;
+            crop_images.container_corner_bl_y0 = bl_xy0.y;
+            crop_images.container_corner_br_x0 = br_xy0.x;
+            crop_images.container_corner_br_y0 = br_xy0.y;
+            
+            crop_images.clip1_cell_guide_tl_x = clip1_cell_guide_tl_xy0.x;
+            crop_images.clip1_cell_guide_tl_y = clip1_cell_guide_tl_xy0.y;
+            crop_images.clip1_cell_guide_tr_x = clip1_cell_guide_tr_xy0.x;
+            crop_images.clip1_cell_guide_tr_y = clip1_cell_guide_tr_xy0.y;
+            crop_images.clip1_cell_guide_bl_x = clip1_cell_guide_bl_xy0.x;
+            crop_images.clip1_cell_guide_bl_y = clip1_cell_guide_bl_xy0.y;
+            crop_images.clip1_cell_guide_br_x = clip1_cell_guide_br_xy0.x;
+            crop_images.clip1_cell_guide_br_y = clip1_cell_guide_br_xy0.y;
+
+            crop_images.clip2_cell_guide_tl_x = clip2_cell_guide_tl_xy0.x;
+            crop_images.clip2_cell_guide_tl_y = clip2_cell_guide_tl_xy0.y;
+            crop_images.clip2_cell_guide_tr_x = clip2_cell_guide_tr_xy0.x;
+            crop_images.clip2_cell_guide_tr_y = clip2_cell_guide_tr_xy0.y;
+            crop_images.clip2_cell_guide_bl_x = clip2_cell_guide_bl_xy0.x;
+            crop_images.clip2_cell_guide_bl_y = clip2_cell_guide_bl_xy0.y;
+            crop_images.clip2_cell_guide_br_x = clip2_cell_guide_br_xy0.x;
+            crop_images.clip2_cell_guide_br_y = clip2_cell_guide_br_xy0.y;
+
             command_publisher_.publish(crop_images);
 
 
-            cv::rectangle(tl_image, tl_xy0, tl_xy1, cv::Scalar(0, 0, 255), 4); 
-            cv::rectangle(tr_image, tr_xy0, tr_xy1, cv::Scalar(0, 0, 255), 4); 
-            cv::rectangle(bl_image, bl_xy0, bl_xy1, cv::Scalar(0, 0, 255), 4); 
-            cv::rectangle(br_image, br_xy0, br_xy1, cv::Scalar(0, 0, 255), 4); 
+            // cv::rectangle(tl_image, tl_xy0, tl_xy1, cv::Scalar(0, 0, 255), 4); 
+            // cv::rectangle(tr_image, tr_xy0, tr_xy1, cv::Scalar(0, 0, 255), 4); 
+            // cv::rectangle(bl_image, bl_xy0, bl_xy1, cv::Scalar(0, 0, 255), 4); 
+            // cv::rectangle(br_image, br_xy0, br_xy1, cv::Scalar(0, 0, 255), 4); 
 
-            cv::rectangle(tl_image, clip1_cell_guide_tl_xy0, clip1_cell_guide_tl_xy1, cv::Scalar(0, 0, 255), 4); 
-            cv::rectangle(tr_image, clip1_cell_guide_tr_xy0, clip1_cell_guide_tr_xy1, cv::Scalar(0, 0, 255), 4); 
-            cv::rectangle(bl_image, clip1_cell_guide_bl_xy0, clip1_cell_guide_bl_xy1, cv::Scalar(0, 0, 255), 4); 
-            cv::rectangle(br_image, clip1_cell_guide_br_xy0, clip1_cell_guide_br_xy1, cv::Scalar(0, 0, 255), 4); 
+            // cv::rectangle(tl_image, clip1_cell_guide_tl_xy0, clip1_cell_guide_tl_xy1, cv::Scalar(0, 0, 255), 4); 
+            // cv::rectangle(tr_image, clip1_cell_guide_tr_xy0, clip1_cell_guide_tr_xy1, cv::Scalar(0, 0, 255), 4); 
+            // cv::rectangle(bl_image, clip1_cell_guide_bl_xy0, clip1_cell_guide_bl_xy1, cv::Scalar(0, 0, 255), 4); 
+            // cv::rectangle(br_image, clip1_cell_guide_br_xy0, clip1_cell_guide_br_xy1, cv::Scalar(0, 0, 255), 4); 
 
-            cv::rectangle(tl_image, clip2_cell_guide_tl_xy0, clip2_cell_guide_tl_xy1, cv::Scalar(0, 0, 255), 4); 
-            cv::rectangle(tr_image, clip2_cell_guide_tr_xy0, clip2_cell_guide_tr_xy1, cv::Scalar(0, 0, 255), 4); 
-            cv::rectangle(bl_image, clip2_cell_guide_bl_xy0, clip2_cell_guide_bl_xy1, cv::Scalar(0, 0, 255), 4); 
-            cv::rectangle(br_image, clip2_cell_guide_br_xy0, clip2_cell_guide_br_xy1, cv::Scalar(0, 0, 255), 4); 
+            // cv::rectangle(tl_image, clip2_cell_guide_tl_xy0, clip2_cell_guide_tl_xy1, cv::Scalar(0, 0, 255), 4); 
+            // cv::rectangle(tr_image, clip2_cell_guide_tr_xy0, clip2_cell_guide_tr_xy1, cv::Scalar(0, 0, 255), 4); 
+            // cv::rectangle(bl_image, clip2_cell_guide_bl_xy0, clip2_cell_guide_bl_xy1, cv::Scalar(0, 0, 255), 4); 
+            // cv::rectangle(br_image, clip2_cell_guide_br_xy0, clip2_cell_guide_br_xy1, cv::Scalar(0, 0, 255), 4); 
 
-            cv::Mat src_merge_col_0 = zpmc::zpmc_images_merge_row(tl_image, bl_image);
-            cv::Mat src_merge_col_1 = zpmc::zpmc_images_merge_row(tr_image, br_image);
-            cv::Mat merge_log = zpmc::zpmc_images_merge_col(src_merge_col_0, src_merge_col_1);
-            cv::resize(merge_log, merge_log, cv::Size(merge_log.cols/4, merge_log.rows/4), 2);
+            // cv::Mat src_merge_col_0 = zpmc::zpmc_images_merge_row(tl_image, bl_image);
+            // cv::Mat src_merge_col_1 = zpmc::zpmc_images_merge_row(tr_image, br_image);
+            // cv::Mat merge_log = zpmc::zpmc_images_merge_col(src_merge_col_0, src_merge_col_1);
+            // cv::resize(merge_log, merge_log, cv::Size(merge_log.cols/4, merge_log.rows/4), 2);
 
-            // cv::Mat crop_col_0 = zpmc::zpmc_images_merge_row(tl_image_crop, bl_image_crop);
-            // cv::Mat crop_col_1 = zpmc::zpmc_images_merge_row(tr_image_crop, br_image_crop);
-            // cv::Mat merge_crop = zpmc::zpmc_images_merge_col(crop_col_0, crop_col_1);
-            // cv::imshow("merge_crop:", merge_crop);
-            cv::imshow("images:", merge_log);
-            cv::waitKey(1);
+            // // cv::Mat crop_col_0 = zpmc::zpmc_images_merge_row(tl_image_crop, bl_image_crop);
+            // // cv::Mat crop_col_1 = zpmc::zpmc_images_merge_row(tr_image_crop, br_image_crop);
+            // // cv::Mat merge_crop = zpmc::zpmc_images_merge_col(crop_col_0, crop_col_1);
+            // // cv::imshow("merge_crop:", merge_crop);
+            // cv::imshow("images:", merge_log);
+            // cv::waitKey(1);
             
             // int tl_xc0 = xian_tl_container_point_x - 100;
             // int tl_yc0 = xian_tl_container_point_y + 300;
