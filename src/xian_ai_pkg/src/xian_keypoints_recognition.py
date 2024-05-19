@@ -596,6 +596,9 @@ class xian_aqc_keypoints_recognition:
         self.xian_keypoints_msg.tl_cell_guide_crop1_x = tl_identifed_cell_guide1_x
         self.xian_keypoints_msg.tl_cell_guide_crop1_y = tl_identifed_cell_guide1_y
         
+        print('clip1_cell_guide_tl_x:', clip1_cell_guide_tl_x)
+        print('clip1_cell_guide_tl_y:', clip1_cell_guide_tl_y)
+        
         # tr导轨crop1
         tr_cell_guide_crop1_result = results[5]
         if tr_cell_guide_crop1_result is None:
@@ -611,6 +614,9 @@ class xian_aqc_keypoints_recognition:
             tr_identifed_cell_guide1_y = tr_cell_guide_crop1[1]
         self.xian_keypoints_msg.tr_cell_guide_crop1_x = tr_identifed_cell_guide1_x
         self.xian_keypoints_msg.tr_cell_guide_crop1_y = tr_identifed_cell_guide1_y
+        
+        print('clip1_cell_guide_tr_x:', clip1_cell_guide_tr_x)
+        print('clip1_cell_guide_tr_y:', clip1_cell_guide_tr_y)
         
         # bl导轨crop1
         bl_cell_guide_crop1_result = results[6]

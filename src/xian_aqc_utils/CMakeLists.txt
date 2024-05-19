@@ -8,10 +8,18 @@ project(xian_aqc_utils)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
+  cv_bridge
+  image_transport
   roscpp
   rospy
   std_msgs
 )
+
+find_package(OpenCV REQUIRED)
+set(LIB_CONTROL_CV_DIR "/root/code/xian_aqc_ws/xian_project_file/include") 
+set(LIB_CONTROL_CV_LINK_DIR "/root/code/xian_aqc_ws/xian_project_file/lib")
+include_directories(${LIB_CONTROL_CV_DIR})
+link_directories(${LIB_CONTROL_CV_LINK_DIR})
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -116,7 +124,7 @@ catkin_package(
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 include_directories(
-# include
+  include ../../devel/include
   ${catkin_INCLUDE_DIRS}
 )
 
@@ -204,3 +212,12 @@ include_directories(
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
+
+add_executable(xian_keypoints_recognition_show src/xian_keypoints_recognition_show.cpp )
+add_dependencies(xian_keypoints_recognition_show ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(xian_keypoints_recognition_show zpmc_cv_control ${OpenCV_LIBRARIES} ${catkin_LIBRARIES})
+
+add_executable(xian_image_cop_process_show src/xian_image_cop_process_show.cpp )
+add_dependencies(xian_image_cop_process_show ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(xian_image_cop_process_show zpmc_cv_control ${OpenCV_LIBRARIES} ${catkin_LIBRARIES})
+
