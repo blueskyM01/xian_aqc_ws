@@ -10,6 +10,14 @@ int32 bl_container_corner_x
 int32 bl_container_corner_y
 int32 br_container_corner_x
 int32 br_container_corner_y
+int32 tl_cell_guide_crop0_x
+int32 tl_cell_guide_crop0_y
+int32 tr_cell_guide_crop0_x
+int32 tr_cell_guide_crop0_y
+int32 bl_cell_guide_crop0_x
+int32 bl_cell_guide_crop0_y
+int32 br_cell_guide_crop0_x
+int32 br_cell_guide_crop0_y
 int32 tl_cell_guide_crop1_x
 int32 tl_cell_guide_crop1_y
 int32 tr_cell_guide_crop1_x

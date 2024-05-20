@@ -60,6 +60,14 @@ class Xian_KeypointsRecognitionShow
         int bl_container_corner_y = 0;
         int br_container_corner_x = 0;
         int br_container_corner_y = 0;
+        int tl_cell_guide_crop0_x = 0;
+        int tl_cell_guide_crop0_y = 0;
+        int tr_cell_guide_crop0_x = 0;
+        int tr_cell_guide_crop0_y = 0;
+        int bl_cell_guide_crop0_x = 0;
+        int bl_cell_guide_crop0_y = 0;
+        int br_cell_guide_crop0_x = 0;
+        int br_cell_guide_crop0_y = 0;
         int tl_cell_guide_crop1_x = 0;
         int tl_cell_guide_crop1_y = 0;
         int tr_cell_guide_crop1_x = 0;
@@ -86,6 +94,11 @@ class Xian_KeypointsRecognitionShow
         cv::Point tr_container_corner_identified = cv::Point(0,0);
         cv::Point bl_container_corner_identified = cv::Point(0,0);
         cv::Point br_container_corner_identified = cv::Point(0,0);
+
+        cv::Point tl_cell_guide_crop0 = cv::Point(0,0);
+        cv::Point tr_cell_guide_crop0 = cv::Point(0,0);
+        cv::Point bl_cell_guide_crop0 = cv::Point(0,0);
+        cv::Point br_cell_guide_crop0 = cv::Point(0,0);
 
         cv::Point tl_cell_guide_crop1 = cv::Point(0,0);
         cv::Point tr_cell_guide_crop1 = cv::Point(0,0);
@@ -127,6 +140,16 @@ class Xian_KeypointsRecognitionShow
             bl_container_corner_y = data->bl_container_corner_y;
             br_container_corner_x = data->br_container_corner_x;
             br_container_corner_y = data->br_container_corner_y;
+
+            tl_cell_guide_crop0_x = data->tl_cell_guide_crop0_x;
+            tl_cell_guide_crop0_y = data->tl_cell_guide_crop0_y;
+            tr_cell_guide_crop0_x = data->tr_cell_guide_crop0_x;
+            tr_cell_guide_crop0_y = data->tr_cell_guide_crop0_y;
+            bl_cell_guide_crop0_x = data->bl_cell_guide_crop0_x;
+            bl_cell_guide_crop0_y = data->bl_cell_guide_crop0_y;
+            br_cell_guide_crop0_x = data->br_cell_guide_crop0_x;
+            br_cell_guide_crop0_y = data->br_cell_guide_crop0_y;
+
             tl_cell_guide_crop1_x = data->tl_cell_guide_crop1_x;
             tl_cell_guide_crop1_y = data->tl_cell_guide_crop1_y;
             tr_cell_guide_crop1_x = data->tr_cell_guide_crop1_x;
@@ -135,6 +158,7 @@ class Xian_KeypointsRecognitionShow
             bl_cell_guide_crop1_y = data->bl_cell_guide_crop1_y;
             br_cell_guide_crop1_x = data->br_cell_guide_crop1_x;
             br_cell_guide_crop1_y = data->br_cell_guide_crop1_y;
+
             tl_cell_guide_crop2_x = data->tl_cell_guide_crop2_x;
             tl_cell_guide_crop2_y = data->tl_cell_guide_crop2_y;
             tr_cell_guide_crop2_x = data->tr_cell_guide_crop2_x;
@@ -162,6 +186,15 @@ class Xian_KeypointsRecognitionShow
             br_container_corner_identified.x = br_container_corner_x;
             br_container_corner_identified.y = br_container_corner_y;
 
+            tl_cell_guide_crop0.x = tl_cell_guide_crop0_x;
+            tl_cell_guide_crop0.y = tl_cell_guide_crop0_y;
+            tr_cell_guide_crop0.x = tr_cell_guide_crop0_x;
+            tr_cell_guide_crop0.y = tr_cell_guide_crop0_y;
+            bl_cell_guide_crop0.x = bl_cell_guide_crop0_x;
+            bl_cell_guide_crop0.y = bl_cell_guide_crop0_y;
+            br_cell_guide_crop0.x = br_cell_guide_crop0_x;
+            br_cell_guide_crop0.y = br_cell_guide_crop0_y;
+
             tl_cell_guide_crop1.x = tl_cell_guide_crop1_x;
             tl_cell_guide_crop1.y = tl_cell_guide_crop1_y;
             tr_cell_guide_crop1.x = tr_cell_guide_crop1_x;
@@ -184,11 +217,16 @@ class Xian_KeypointsRecognitionShow
             cv::circle(tr_image, tr_container_corner_calibrated, 8, cv::Scalar(0, 0, 255), -1);
             cv::circle(bl_image, bl_container_corner_calibrated, 8, cv::Scalar(0, 0, 255), -1);
             cv::circle(br_image, br_container_corner_calibrated, 8, cv::Scalar(0, 0, 255), -1);
-
+            
             cv::circle(tl_image, tl_container_corner_identified, 8, cv::Scalar(255, 0, 0), -1);
             cv::circle(tr_image, tr_container_corner_identified, 8, cv::Scalar(255, 0, 0), -1);
             cv::circle(bl_image, bl_container_corner_identified, 8, cv::Scalar(255, 0, 0), -1);
             cv::circle(br_image, br_container_corner_identified, 8, cv::Scalar(255, 0, 0), -1);
+
+            cv::circle(tl_image, tl_cell_guide_crop0, 8, cv::Scalar(255, 255, 255), -1);
+            cv::circle(tr_image, tr_cell_guide_crop0, 8, cv::Scalar(255, 255, 255), -1);
+            cv::circle(bl_image, bl_cell_guide_crop0, 8, cv::Scalar(255, 255, 255), -1);
+            cv::circle(br_image, br_cell_guide_crop0, 8, cv::Scalar(255, 255, 255), -1);
 
             cv::circle(tl_image, tl_cell_guide_crop1, 8, cv::Scalar(0, 255, 255), -1);
             cv::circle(tr_image, tr_cell_guide_crop1, 8, cv::Scalar(0, 255, 255), -1);

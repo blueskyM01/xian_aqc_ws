@@ -451,7 +451,7 @@ class xian_aqc_keypoints_recognition:
         heat_map = trt_outputs[1].reshape(trt_outputs_shape[0])
         p_w_h = trt_outputs[0].reshape(trt_outputs_shape[1])
         
-        outputs_ = decode_bbox(heat_map, p_w_h, 0.3, False)
+        outputs_ = decode_bbox(heat_map, p_w_h, 0.6, False)
         results = postprocess(outputs_, image_shape, input_shape, False, 0.3)
         
         container_corner_tl_x0 = data.container_corner_tl_x0
@@ -481,6 +481,7 @@ class xian_aqc_keypoints_recognition:
         clip2_cell_guide_br_x = data.clip2_cell_guide_br_x
         clip2_cell_guide_br_y = data.clip2_cell_guide_br_y
         
+        #---------------------------------------------------------------------------------------------------------------------------
         # tl集装箱箱脚点识别
         tl_container_corner_result = results[0]
         tl_identifed_container_corner = get_final_container_corner_keypoint(tl_container_corner_result, image_shape, 1,
@@ -516,7 +517,37 @@ class xian_aqc_keypoints_recognition:
                                                                             identifed_container_corner_distance) # cls_idx:0-cell_guide_point; 1-container corner  
         self.xian_keypoints_msg.br_container_corner_x = br_identifed_container_corner[0]
         self.xian_keypoints_msg.br_container_corner_y = br_identifed_container_corner[1]
-
+        
+        #---------------------------------------------------------------------------------------------------------------------------
+        # tl导轨crop0（同上面集装箱箱角cropimage）
+        tl_cell_guide_crop0_result = results[0]
+        tl_identifed_cell_guide0 = get_final_cell_guide_keypoint(tl_cell_guide_crop0_result, image_shape, 0,
+                                                                 container_corner_tl_x0, container_corner_tl_y0) # cls_idx:0-cell_guide_point; 1-container corner
+        self.xian_keypoints_msg.tl_cell_guide_crop0_x = tl_identifed_cell_guide0[0]
+        self.xian_keypoints_msg.tl_cell_guide_crop0_y = tl_identifed_cell_guide0[1]
+        
+        # tr导轨crop0（同上面集装箱箱角cropimage）
+        tr_cell_guide_crop0_result = results[1]
+        tr_identifed_cell_guide0 = get_final_cell_guide_keypoint(tr_cell_guide_crop0_result, image_shape, 0,
+                                                                 container_corner_tr_x0, container_corner_tr_y0) # cls_idx:0-cell_guide_point; 1-container corner
+        self.xian_keypoints_msg.tr_cell_guide_crop0_x = tr_identifed_cell_guide0[0]
+        self.xian_keypoints_msg.tr_cell_guide_crop0_y = tr_identifed_cell_guide0[1]
+        
+        # bl导轨crop0（同上面集装箱箱角cropimage）
+        bl_cell_guide_crop0_result = results[2]
+        bl_identifed_cell_guide0 = get_final_cell_guide_keypoint(bl_cell_guide_crop0_result, image_shape, 0,
+                                                                 container_corner_bl_x0, container_corner_bl_y0) # cls_idx:0-cell_guide_point; 1-container corner
+        self.xian_keypoints_msg.bl_cell_guide_crop0_x = bl_identifed_cell_guide0[0]
+        self.xian_keypoints_msg.bl_cell_guide_crop0_y = bl_identifed_cell_guide0[1]
+        
+        # br导轨crop0（同上面集装箱箱角cropimage）
+        br_cell_guide_crop0_result = results[3]
+        br_identifed_cell_guide0 = get_final_cell_guide_keypoint(br_cell_guide_crop0_result, image_shape, 0,
+                                                                 container_corner_br_x0, container_corner_br_y0) # cls_idx:0-cell_guide_point; 1-container corner
+        self.xian_keypoints_msg.br_cell_guide_crop0_x = br_identifed_cell_guide0[0]
+        self.xian_keypoints_msg.br_cell_guide_crop0_y = br_identifed_cell_guide0[1]
+        
+        #---------------------------------------------------------------------------------------------------------------------------
         # tl导轨crop1
         tl_cell_guide_crop1_result = results[4]
         tl_identifed_cell_guide1 = get_final_cell_guide_keypoint(tl_cell_guide_crop1_result, image_shape, 0,
@@ -545,7 +576,7 @@ class xian_aqc_keypoints_recognition:
         self.xian_keypoints_msg.br_cell_guide_crop1_x = br_identifed_cell_guide1[0]
         self.xian_keypoints_msg.br_cell_guide_crop1_y = br_identifed_cell_guide1[1]
         
-        
+        #---------------------------------------------------------------------------------------------------------------------------
         # tl导轨crop2
         tl_cell_guide_crop2_result = results[8]
         tl_identifed_cell_guide2 = get_final_cell_guide_keypoint(tl_cell_guide_crop2_result, image_shape, 0,
