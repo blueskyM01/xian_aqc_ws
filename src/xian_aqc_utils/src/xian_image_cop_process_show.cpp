@@ -194,53 +194,145 @@ class Xian_ImageCropProcessShow
             cv::circle(bl_image, bl_container_corner_calibrated, 16, red, -1);
             cv::circle(br_image, br_container_corner_calibrated, 16, red, -1);
 
-            int tl_cell_guide_crop1_x = tl_cell_guide_crop1.x + 256;
-            int tl_cell_guide_crop1_y = tl_cell_guide_crop1.y + 256;
-            int tr_cell_guide_crop1_x = tr_cell_guide_crop1.x + 256;
-            int tr_cell_guide_crop1_y = tr_cell_guide_crop1.y + 256;
-            int bl_cell_guide_crop1_x = bl_cell_guide_crop1.x + 256;
-            int bl_cell_guide_crop1_y = bl_cell_guide_crop1.y + 256;
-            int br_cell_guide_crop1_x = br_cell_guide_crop1.x + 256;
-            int br_cell_guide_crop1_y = br_cell_guide_crop1.y + 256;
-            cv::Point tl_cell_guide_crop1_xy1 = cv::Point(tl_cell_guide_crop1_x, tl_cell_guide_crop1_y);
-            cv::Point tr_cell_guide_crop1_xy1 = cv::Point(tr_cell_guide_crop1_x, tr_cell_guide_crop1_y);
-            cv::Point bl_cell_guide_crop1_xy1 = cv::Point(bl_cell_guide_crop1_x, bl_cell_guide_crop1_y);
-            cv::Point br_cell_guide_crop1_xy1 = cv::Point(br_cell_guide_crop1_x, br_cell_guide_crop1_y);
-            cv::rectangle(tl_image, tl_cell_guide_crop1, tl_cell_guide_crop1_xy1, yellow, 4); 
-            cv::rectangle(tr_image, tr_cell_guide_crop1, tr_cell_guide_crop1_xy1, yellow, 4); 
-            cv::rectangle(bl_image, bl_cell_guide_crop1, bl_cell_guide_crop1_xy1, yellow, 4); 
-            cv::rectangle(br_image, br_cell_guide_crop1, br_cell_guide_crop1_xy1, yellow, 4); 
+            cv::Mat* container_corner_list = draw_rectangle(container_corner_crop_tl, container_corner_crop_tr, container_corner_crop_bl, container_corner_crop_br,
+                                                            tl_image, tr_image, bl_image, br_image, lemon);
+            tl_image = *(container_corner_list+0);
+            tr_image = *(container_corner_list+1);
+            bl_image = *(container_corner_list+2);
+            br_image = *(container_corner_list+3);
 
-            int tl_cell_guide_crop2_x = tl_cell_guide_crop2.x + 256;
-            int tl_cell_guide_crop2_y = tl_cell_guide_crop2.y + 256;
-            int tr_cell_guide_crop2_x = tr_cell_guide_crop2.x + 256;
-            int tr_cell_guide_crop2_y = tr_cell_guide_crop2.y + 256;
-            int bl_cell_guide_crop2_x = bl_cell_guide_crop2.x + 256;
-            int bl_cell_guide_crop2_y = bl_cell_guide_crop2.y + 256;
-            int br_cell_guide_crop2_x = br_cell_guide_crop2.x + 256;
-            int br_cell_guide_crop2_y = br_cell_guide_crop2.y + 256;
-            cv::Point tl_cell_guide_crop1_xy2 = cv::Point(tl_cell_guide_crop2_x, tl_cell_guide_crop2_y);
-            cv::Point tr_cell_guide_crop1_xy2 = cv::Point(tr_cell_guide_crop2_x, tr_cell_guide_crop2_y);
-            cv::Point bl_cell_guide_crop1_xy2 = cv::Point(bl_cell_guide_crop2_x, bl_cell_guide_crop2_y);
-            cv::Point br_cell_guide_crop1_xy2 = cv::Point(br_cell_guide_crop2_x, br_cell_guide_crop2_y);
-            cv::rectangle(tl_image, tl_cell_guide_crop2, tl_cell_guide_crop1_xy2, blue, 4); 
-            cv::rectangle(tr_image, tr_cell_guide_crop2, tr_cell_guide_crop1_xy2, blue, 4); 
-            cv::rectangle(bl_image, bl_cell_guide_crop2, bl_cell_guide_crop1_xy2, blue, 4); 
-            cv::rectangle(br_image, br_cell_guide_crop2, br_cell_guide_crop1_xy2, blue, 4); 
+            cv::Mat* cell_guide_list1 = draw_rectangle(tl_cell_guide_crop1, tr_cell_guide_crop1, bl_cell_guide_crop1, br_cell_guide_crop1,
+                                                       tl_image, tr_image, bl_image, br_image, yellow);
+            tl_image = *(cell_guide_list1+0);
+            tr_image = *(cell_guide_list1+1);
+            bl_image = *(cell_guide_list1+2);
+            br_image = *(cell_guide_list1+3);
 
+            cv::Mat* cell_guide_list2 = draw_rectangle(tl_cell_guide_crop2, tr_cell_guide_crop2, bl_cell_guide_crop2, br_cell_guide_crop2,
+                                                       tl_image, tr_image, bl_image, br_image, blue);
+            tl_image = *(cell_guide_list2+0);
+            tr_image = *(cell_guide_list2+1);
+            bl_image = *(cell_guide_list2+2);
+            br_image = *(cell_guide_list2+3);
+
+
+            cv::Mat tl_container_corner_crop_image = cv_bridge::toCvShare(data->tl_container_corner_crop_image, data, "bgr8")->image; 
+            cv::Mat tr_container_corner_crop_image = cv_bridge::toCvShare(data->tr_container_corner_crop_image, data, "bgr8")->image; 
+            cv::Mat bl_container_corner_crop_image = cv_bridge::toCvShare(data->bl_container_corner_crop_image, data, "bgr8")->image;
+            cv::Mat br_container_corner_crop_image = cv_bridge::toCvShare(data->br_container_corner_crop_image, data, "bgr8")->image;
+
+            cv::Mat tl_cell_guide_crop_image1 = cv_bridge::toCvShare(data->tl_cell_guide_crop_image1, data, "bgr8")->image; 
+            cv::Mat tr_cell_guide_crop_image1 = cv_bridge::toCvShare(data->tr_cell_guide_crop_image1, data, "bgr8")->image; 
+            cv::Mat bl_cell_guide_crop_image1 = cv_bridge::toCvShare(data->bl_cell_guide_crop_image1, data, "bgr8")->image;
+            cv::Mat br_cell_guide_crop_image1 = cv_bridge::toCvShare(data->br_cell_guide_crop_image1, data, "bgr8")->image;
+
+            cv::Mat tl_cell_guide_crop_image2 = cv_bridge::toCvShare(data->tl_cell_guide_crop_image2, data, "bgr8")->image; 
+            cv::Mat tr_cell_guide_crop_image2 = cv_bridge::toCvShare(data->tr_cell_guide_crop_image2, data, "bgr8")->image; 
+            cv::Mat bl_cell_guide_crop_image2 = cv_bridge::toCvShare(data->bl_cell_guide_crop_image2, data, "bgr8")->image;
+            cv::Mat br_cell_guide_crop_image2 = cv_bridge::toCvShare(data->br_cell_guide_crop_image2, data, "bgr8")->image;
+
+            cv::Mat tl_mask = cv::Mat::zeros(tl_image.size(),tl_image.type());
+            cv::Mat tr_mask = cv::Mat::zeros(tr_image.size(),tr_image.type());
+            cv::Mat bl_mask = cv::Mat::zeros(bl_image.size(),tl_image.type());
+            cv::Mat br_mask = cv::Mat::zeros(br_image.size(),tr_image.type());
+
+            cv::resize(tl_container_corner_crop_image, tl_container_corner_crop_image, cv::Size(256, 256), 2);
+            tl_mask = crop_copy_to_mask(container_corner_tl_x0, container_corner_tl_y0, tl_mask, tl_container_corner_crop_image);
+
+            cv::resize(tr_container_corner_crop_image, tr_container_corner_crop_image, cv::Size(256, 256), 2);
+            tr_mask = crop_copy_to_mask(container_corner_tr_x0, container_corner_tr_y0, tr_mask, tr_container_corner_crop_image);
+
+            cv::resize(bl_container_corner_crop_image, bl_container_corner_crop_image, cv::Size(256, 256), 2);
+            bl_mask = crop_copy_to_mask(container_corner_bl_x0, container_corner_bl_y0, bl_mask, bl_container_corner_crop_image);
+
+            cv::resize(br_container_corner_crop_image, br_container_corner_crop_image, cv::Size(256, 256), 2);
+            br_mask = crop_copy_to_mask(container_corner_br_x0, container_corner_br_y0, br_mask, br_container_corner_crop_image);
+
+
+            cv::resize(tl_cell_guide_crop_image1, tl_cell_guide_crop_image1, cv::Size(256, 256), 2);
+            tl_mask = crop_copy_to_mask(clip1_cell_guide_tl_x, clip1_cell_guide_tl_y, tl_mask, tl_cell_guide_crop_image1);
+
+            cv::resize(tr_cell_guide_crop_image1, tr_cell_guide_crop_image1, cv::Size(256, 256), 2);
+            tr_mask = crop_copy_to_mask(clip1_cell_guide_tr_x, clip1_cell_guide_tr_y, tr_mask, tr_cell_guide_crop_image1);
+
+            cv::resize(bl_cell_guide_crop_image1, bl_cell_guide_crop_image1, cv::Size(256, 256), 2);
+            bl_mask = crop_copy_to_mask(clip1_cell_guide_bl_x, clip1_cell_guide_bl_y, bl_mask, bl_cell_guide_crop_image1);
+
+            cv::resize(br_cell_guide_crop_image1, br_cell_guide_crop_image1, cv::Size(256, 256), 2);
+            br_mask = crop_copy_to_mask(clip1_cell_guide_br_x, clip1_cell_guide_br_y, br_mask, br_cell_guide_crop_image1);
+
+
+            cv::resize(tl_cell_guide_crop_image2, tl_cell_guide_crop_image2, cv::Size(256, 256), 2);
+            tl_mask = crop_copy_to_mask(clip2_cell_guide_tl_x, clip2_cell_guide_tl_y, tl_mask, tl_cell_guide_crop_image2);
+
+            cv::resize(tr_cell_guide_crop_image2, tr_cell_guide_crop_image2, cv::Size(256, 256), 2);
+            tr_mask = crop_copy_to_mask(clip2_cell_guide_tr_x, clip2_cell_guide_tr_y, tr_mask, tr_cell_guide_crop_image2);
+
+            cv::resize(bl_cell_guide_crop_image2, bl_cell_guide_crop_image2, cv::Size(256, 256), 2);
+            bl_mask = crop_copy_to_mask(clip2_cell_guide_bl_x, clip2_cell_guide_bl_y, bl_mask, bl_cell_guide_crop_image2);
+
+            cv::resize(br_cell_guide_crop_image2, br_cell_guide_crop_image2, cv::Size(256, 256), 2);
+            br_mask = crop_copy_to_mask(clip2_cell_guide_br_x, clip2_cell_guide_br_y, br_mask, br_cell_guide_crop_image2);
+
+            
+            cv::Mat mask_merge_col_0 = zpmc::zpmc_images_merge_row(tl_mask, bl_mask);
+            cv::Mat mask_merge_col_1 = zpmc::zpmc_images_merge_row(tr_mask, br_mask);
+            
             cv::Mat src_merge_col_0 = zpmc::zpmc_images_merge_row(tl_image, bl_image);
             cv::Mat src_merge_col_1 = zpmc::zpmc_images_merge_row(tr_image, br_image);
             cv::Mat merge_log = zpmc::zpmc_images_merge_col(src_merge_col_0, src_merge_col_1);
-            // cv::resize(merge_log, merge_log, cv::Size(merge_log.cols/4, merge_log.rows/4), 2); 
 
-            // cv::imshow("images:", merge_log);
-            // cv::waitKey(1);
-            cv::imwrite("/root/code/xian_aqc_ws/xian_project_file/trt/results/"+timeStr+".jpg", merge_log);
+            cv::Mat merge_row0 = zpmc::zpmc_images_merge_col(mask_merge_col_0, merge_log);
+            cv::Mat merge_row1 = zpmc::zpmc_images_merge_col(merge_row0, mask_merge_col_1);
+
+
+            cv::resize(merge_row1, merge_row1, cv::Size(merge_log.cols/2, merge_log.rows/4), 2); 
+
+            cv::imshow("xian_image_cop_process_show:", merge_row1);
+            cv::waitKey(1);
+            // cv::imwrite("/root/code/xian_aqc_ws/xian_project_file/trt/results/"+timeStr+".jpg", merge_row1);
 
             elapsedTimeP = std::chrono::duration_cast<std::chrono::milliseconds>(cur_time - pre_time);
             timediff = elapsedTimeP.count();
             std::cout << "FPS: " << 1000.0 / timediff << std::endl;
         } 
+
+        cv::Mat crop_copy_to_mask(int crop_x0, int crop_y0, cv::Mat src, cv::Mat crop_image)
+        {
+            cv::Mat mask_container_corner = src(cv::Rect(crop_x0, crop_y0, crop_image.cols, crop_image.rows));
+            crop_image.copyTo(mask_container_corner, crop_image);
+            return src;
+        }
+
+        cv::Mat* draw_rectangle(cv::Point tl_xy0, cv::Point tr_xy0, cv::Point bl_xy0, cv::Point br_xy0,
+                                cv::Mat tl_image, cv::Mat tr_image, cv::Mat bl_image, cv::Mat br_image, cv::Scalar color)
+        {
+            static cv::Mat imgs[4];
+            int tl_x1 = tl_xy0.x + 256;
+            int tl_y1 = tl_xy0.y + 256;
+            int tr_x1 = tr_xy0.x + 256;
+            int tr_y1 = tr_xy0.y + 256;
+            int bl_x1 = bl_xy0.x + 256;
+            int bl_y1 = bl_xy0.y + 256;
+            int br_x1 = br_xy0.x + 256;
+            int br_y1 = br_xy0.y + 256;
+            cv::Point tl_xy1 = cv::Point(tl_x1, tl_y1);
+            cv::Point tr_xy1 = cv::Point(tr_x1, tr_y1);
+            cv::Point bl_xy1 = cv::Point(bl_x1, bl_y1);
+            cv::Point br_xy1 = cv::Point(br_x1, br_y1);
+            cv::rectangle(tl_image, tl_xy0, tl_xy1, color, 4); 
+            cv::rectangle(tr_image, tr_xy0, tr_xy1, color, 4); 
+            cv::rectangle(bl_image, bl_xy0, bl_xy1, color, 4); 
+            cv::rectangle(br_image, br_xy0, br_xy1, color, 4); 
+            imgs[0] = tl_image;
+            imgs[1] = tr_image;
+            imgs[2] = bl_image;
+            imgs[3] = br_image;
+            return imgs;
+        }
+        
+
+        
             
 };
 

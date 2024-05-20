@@ -166,21 +166,21 @@ class Xian_ContainerCornerCopProcess
                                                                 crop_w, crop_h, src_w, src_h);
             cv::Point clip1_cell_guide_tr_xy0 = *(clip1_cell_guide_tr_xy+0);
             cv::Point clip1_cell_guide_tr_xy1 = *(clip1_cell_guide_tr_xy+1);
-            tr_image_cell_guide_crop_1 = tl_image(cv::Rect(clip1_cell_guide_tr_xy0.x, clip1_cell_guide_tr_xy0.y, crop_w, crop_h)).clone();
+            tr_image_cell_guide_crop_1 = tr_image(cv::Rect(clip1_cell_guide_tr_xy0.x, clip1_cell_guide_tr_xy0.y, crop_w, crop_h)).clone();
 
             cv::Point* clip1_cell_guide_bl_xy = zpmc::crop_area(xian_bl_container_point_x - xian_crop_bais_x_bl_1,
                                                                 xian_bl_container_point_y - xian_crop_bais_y_bl_1,
                                                                 crop_w, crop_h, src_w, src_h);
             cv::Point clip1_cell_guide_bl_xy0 = *(clip1_cell_guide_bl_xy+0);
             cv::Point clip1_cell_guide_bl_xy1 = *(clip1_cell_guide_bl_xy+1);
-            bl_image_cell_guide_crop_1 = tl_image(cv::Rect(clip1_cell_guide_bl_xy0.x, clip1_cell_guide_bl_xy0.y, crop_w, crop_h)).clone();
+            bl_image_cell_guide_crop_1 = bl_image(cv::Rect(clip1_cell_guide_bl_xy0.x, clip1_cell_guide_bl_xy0.y, crop_w, crop_h)).clone();
 
             cv::Point* clip1_cell_guide_br_xy = zpmc::crop_area(xian_br_container_point_x + xian_crop_bais_x_br_1,
                                                                 xian_br_container_point_y - xian_crop_bais_y_br_1,
                                                                 crop_w, crop_h, src_w, src_h);
             cv::Point clip1_cell_guide_br_xy0 = *(clip1_cell_guide_br_xy+0);
             cv::Point clip1_cell_guide_br_xy1 = *(clip1_cell_guide_br_xy+1);
-            br_image_cell_guide_crop_1 = tl_image(cv::Rect(clip1_cell_guide_br_xy0.x, clip1_cell_guide_br_xy0.y, crop_w, crop_h)).clone();
+            br_image_cell_guide_crop_1 = br_image(cv::Rect(clip1_cell_guide_br_xy0.x, clip1_cell_guide_br_xy0.y, crop_w, crop_h)).clone();
 
             // cell guide crop2
             cv::Point* clip2_cell_guide_tl_xy = zpmc::crop_area(xian_tl_container_point_x - xian_crop_bais_x_tl_2, 
@@ -195,21 +195,21 @@ class Xian_ContainerCornerCopProcess
                                                                 crop_w, crop_h, src_w, src_h);
             cv::Point clip2_cell_guide_tr_xy0 = *(clip2_cell_guide_tr_xy+0);
             cv::Point clip2_cell_guide_tr_xy1 = *(clip2_cell_guide_tr_xy+1);
-            tr_image_cell_guide_crop_2 = tl_image(cv::Rect(clip2_cell_guide_tr_xy0.x, clip2_cell_guide_tr_xy0.y, crop_w, crop_h)).clone();
+            tr_image_cell_guide_crop_2 = tr_image(cv::Rect(clip2_cell_guide_tr_xy0.x, clip2_cell_guide_tr_xy0.y, crop_w, crop_h)).clone();
 
             cv::Point* clip2_cell_guide_bl_xy = zpmc::crop_area(xian_bl_container_point_x - xian_crop_bais_x_bl_2,
                                                                 xian_bl_container_point_y - xian_crop_bais_y_bl_2,
                                                                 crop_w, crop_h, src_w, src_h);
             cv::Point clip2_cell_guide_bl_xy0 = *(clip2_cell_guide_bl_xy+0);
             cv::Point clip2_cell_guide_bl_xy1 = *(clip2_cell_guide_bl_xy+1);
-            bl_image_cell_guide_crop_2 = tl_image(cv::Rect(clip2_cell_guide_bl_xy0.x, clip2_cell_guide_bl_xy0.y, crop_w, crop_h)).clone();
+            bl_image_cell_guide_crop_2 = bl_image(cv::Rect(clip2_cell_guide_bl_xy0.x, clip2_cell_guide_bl_xy0.y, crop_w, crop_h)).clone();
 
             cv::Point* clip2_cell_guide_br_xy = zpmc::crop_area(xian_br_container_point_x + xian_crop_bais_x_br_2,
                                                                 xian_br_container_point_y - xian_crop_bais_y_br_2,
                                                                 crop_w, crop_h, src_w, src_h);
             cv::Point clip2_cell_guide_br_xy0 = *(clip2_cell_guide_br_xy+0);
             cv::Point clip2_cell_guide_br_xy1 = *(clip2_cell_guide_br_xy+1);
-            br_image_cell_guide_crop_2 = tl_image(cv::Rect(clip2_cell_guide_br_xy0.x, clip2_cell_guide_br_xy0.y, crop_w, crop_h)).clone();
+            br_image_cell_guide_crop_2 = br_image(cv::Rect(clip2_cell_guide_br_xy0.x, clip2_cell_guide_br_xy0.y, crop_w, crop_h)).clone();
 
             cv::resize(tl_image_crop, tl_image_crop_resize, cv::Size(512, 512), 2);
             cv::resize(tr_image_crop, tr_image_crop_resize, cv::Size(512, 512), 2);

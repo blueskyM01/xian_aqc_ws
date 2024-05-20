@@ -203,11 +203,11 @@ class Xian_KeypointsRecognitionShow
             cv::Mat src_merge_col_0 = zpmc::zpmc_images_merge_row(tl_image, bl_image);
             cv::Mat src_merge_col_1 = zpmc::zpmc_images_merge_row(tr_image, br_image);
             cv::Mat merge_log = zpmc::zpmc_images_merge_col(src_merge_col_0, src_merge_col_1);
-            // cv::resize(merge_log, merge_log, cv::Size(merge_log.cols/4, merge_log.rows/4), 2); 
+            cv::resize(merge_log, merge_log, cv::Size(merge_log.cols/4, merge_log.rows/4), 2); 
 
-            // cv::imshow("images:", merge_log);
-            // cv::waitKey(1);
-            cv::imwrite("/root/code/xian_aqc_ws/xian_project_file/trt/results/"+timeStr+".jpg", merge_log);
+            cv::imshow("xian_keypoints_recognition_show:", merge_log);
+            cv::waitKey(1);
+            // cv::imwrite("/root/code/xian_aqc_ws/xian_project_file/trt/results/"+timeStr+".jpg", merge_log);
 
             elapsedTimeP = std::chrono::duration_cast<std::chrono::milliseconds>(cur_time - pre_time);
             timediff = elapsedTimeP.count();

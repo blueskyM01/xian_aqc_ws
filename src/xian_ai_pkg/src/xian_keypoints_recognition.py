@@ -285,8 +285,19 @@ def get_final_container_corner_keypoint(results, image_shape, cls_idx,
     return identifed_container_corner_x, identifed_container_corner_y
     
 
-def get_final_cell_guide_keypoint():
-    pass
+def get_final_cell_guide_keypoint(results, image_shape, cls_idx, clip1_cell_guide_x, clip1_cell_guide_y):
+    if results is None:
+        identifed_cell_guide_x = -1
+        identifed_cell_guide_y = -1
+        print('No cell guide1 keypoints!')
+    else:
+        final_results = get_keypoints(results, image_shape)            
+        tl_cell_guide_crop1 = get_cell_guide_keypoint(final_results, cls_idx=cls_idx, 
+                                                        x0=clip1_cell_guide_x,
+                                                        y0=clip1_cell_guide_y) # cls_idx:0-cell_guide_point; 1-container corner             
+        identifed_cell_guide_x = tl_cell_guide_crop1[0]
+        identifed_cell_guide_y = tl_cell_guide_crop1[1]
+    return identifed_cell_guide_x, identifed_cell_guide_y
 
 def zpmc_onnx2trt(onnxFile, trtFile_save_dir, trtFile_save_name, FPMode):
     input_shape = [512, 512]
@@ -478,29 +489,6 @@ class xian_aqc_keypoints_recognition:
                                                                             identifed_container_corner_distance) # cls_idx:0-cell_guide_point; 1-container corner  
         self.xian_keypoints_msg.tl_container_corner_x = tl_identifed_container_corner[0]
         self.xian_keypoints_msg.tl_container_corner_y = tl_identifed_container_corner[1]
-        # if tl_container_corner_result is None:
-        #     tl_identifed_container_corner_x = xian_tl_container_point_x
-        #     tl_identifed_container_corner_y = xian_tl_container_point_y
-        #     print('No container corner keypoints!')
-        # else:
-        #     final_results0 = get_keypoints(tl_container_corner_result, image_shape)            
-        #     tl_container_corner = get_container_corner_keypoint(final_results0, cls_idx=1, 
-        #                                               x=xian_tl_container_point_x, 
-        #                                               y=xian_tl_container_point_y, 
-        #                                               x0=container_corner_tl_x0,
-        #                                               y0=container_corner_tl_y0,
-        #                                               distance_threshold=identifed_container_corner_distance) # cls_idx:0-cell_guide_point; 1-container corner            
-        #     tl_identifed_container_corner_x = tl_container_corner[0]
-        #     tl_identifed_container_corner_y = tl_container_corner[1]
-        #     # tl_container_corner_src = images_list[0]
-        #     # tl_container_corner_show = xian_display(final_results0, tl_container_corner_src, color=(0, 255, 255))
-        #     # cv2.imwrite('/root/code/xian_aqc_ws/xian_project_file/trt/results/tl_'+ str(datetime.datetime.now()) + '.jpg', 
-        #     #             tl_container_corner_show)
-        # self.xian_keypoints_msg.tl_container_corner_x = tl_identifed_container_corner_x
-        # self.xian_keypoints_msg.tl_container_corner_y = tl_identifed_container_corner_y
-        # # print("tl_identifed_container_corner_x:{}, tl_identifed_container_corner_y:{}".format(tl_identifed_container_corner_x, tl_identifed_container_corner_y))
-        # # print("xian_tl_container_point_x:{}, xian_tl_container_point_y:{}".format(xian_tl_container_point_x, xian_tl_container_point_y))
-        # # print("container_corner_tl_x0:{}, container_corner_tl_y0:{}".format(container_corner_tl_x0, container_corner_tl_y0))
         
         # tr集装箱箱脚点识别
         tr_container_corner_result = results[1]
@@ -510,25 +498,6 @@ class xian_aqc_keypoints_recognition:
                                                                             identifed_container_corner_distance) # cls_idx:0-cell_guide_point; 1-container corner  
         self.xian_keypoints_msg.tr_container_corner_x = tr_identifed_container_corner[0]
         self.xian_keypoints_msg.tr_container_corner_y = tr_identifed_container_corner[1]
-        # if tr_container_corner_result is None:
-        #     tr_identifed_container_corner_x = xian_tr_container_point_x
-        #     tr_identifed_container_corner_y = xian_tr_container_point_y
-        #     print('No container corner keypoints!')
-        # else:
-        #     final_results1 = get_keypoints(tr_container_corner_result, image_shape)            
-        #     tr_container_corner = get_container_corner_keypoint(final_results1, cls_idx=1, 
-        #                                               x=xian_tr_container_point_x, 
-        #                                               y=xian_tr_container_point_y, 
-        #                                               x0=container_corner_tr_x0,
-        #                                               y0=container_corner_tr_y0,
-        #                                               distance_threshold=identifed_container_corner_distance) # cls_idx:0-cell_guide_point; 1-container corner          
-        #     tr_identifed_container_corner_x = tr_container_corner[0]
-        #     tr_identifed_container_corner_y = tr_container_corner[1]
-        # self.xian_keypoints_msg.tr_container_corner_x = tr_identifed_container_corner_x
-        # self.xian_keypoints_msg.tr_container_corner_y = tr_identifed_container_corner_y
-        
-        
-        
         
         # bl集装箱箱脚点识别
         bl_container_corner_result = results[2]
@@ -538,22 +507,6 @@ class xian_aqc_keypoints_recognition:
                                                                             identifed_container_corner_distance) # cls_idx:0-cell_guide_point; 1-container corner  
         self.xian_keypoints_msg.bl_container_corner_x = bl_identifed_container_corner[0]
         self.xian_keypoints_msg.bl_container_corner_y = bl_identifed_container_corner[1]
-        # if bl_container_corner_result is None:
-        #     bl_identifed_container_corner_x = xian_bl_container_point_x
-        #     bl_identifed_container_corner_y = xian_bl_container_point_y
-        #     print('No container corner keypoints!')
-        # else:
-        #     final_results2 = get_keypoints(bl_container_corner_result, image_shape)            
-        #     bl_container_corner = get_container_corner_keypoint(final_results2, cls_idx=1, 
-        #                                               x=xian_bl_container_point_x, 
-        #                                               y=xian_bl_container_point_y, 
-        #                                               x0=container_corner_bl_x0,
-        #                                               y0=container_corner_bl_y0,
-        #                                               distance_threshold=identifed_container_corner_distance) # cls_idx:0-cell_guide_point; 1-container corner            
-        #     bl_identifed_container_corner_x = bl_container_corner[0]
-        #     bl_identifed_container_corner_y = bl_container_corner[1]
-        # self.xian_keypoints_msg.bl_container_corner_x = bl_identifed_container_corner_x
-        # self.xian_keypoints_msg.bl_container_corner_y = bl_identifed_container_corner_y
 
         # br集装箱箱脚点识别
         br_container_corner_result = results[3]
@@ -563,156 +516,63 @@ class xian_aqc_keypoints_recognition:
                                                                             identifed_container_corner_distance) # cls_idx:0-cell_guide_point; 1-container corner  
         self.xian_keypoints_msg.br_container_corner_x = br_identifed_container_corner[0]
         self.xian_keypoints_msg.br_container_corner_y = br_identifed_container_corner[1]
-        # if br_container_corner_result is None:
-        #     br_identifed_container_corner_x = xian_br_container_point_x
-        #     br_identifed_container_corner_y = xian_br_container_point_y
-        #     print('No container corner keypoints!')
-        # else:
-        #     final_results3 = get_keypoints(br_container_corner_result, image_shape)            
-        #     br_container_corner = get_container_corner_keypoint(final_results3, cls_idx=1, 
-        #                                               x=xian_br_container_point_x, 
-        #                                               y=xian_br_container_point_y, 
-        #                                               x0=container_corner_br_x0,
-        #                                               y0=container_corner_br_y0,
-        #                                               distance_threshold=identifed_container_corner_distance) # cls_idx:0-cell_guide_point; 1-container corner            
-        #     br_identifed_container_corner_x = br_container_corner[0]
-        #     br_identifed_container_corner_y = br_container_corner[1]
-        # self.xian_keypoints_msg.br_container_corner_x = br_identifed_container_corner_x
-        # self.xian_keypoints_msg.br_container_corner_y = br_identifed_container_corner_y
-        
+
         # tl导轨crop1
         tl_cell_guide_crop1_result = results[4]
-        if tl_cell_guide_crop1_result is None:
-            tl_identifed_cell_guide1_x = -1
-            tl_identifed_cell_guide1_y = -1
-            print('No cell guide1 keypoints!')
-        else:
-            final_results4 = get_keypoints(tl_cell_guide_crop1_result, image_shape)            
-            tl_cell_guide_crop1 = get_cell_guide_keypoint(final_results4, cls_idx=0, 
-                                                          x0=clip1_cell_guide_tl_x,
-                                                          y0=clip1_cell_guide_tl_y) # cls_idx:0-cell_guide_point; 1-container corner             
-            tl_identifed_cell_guide1_x = tl_cell_guide_crop1[0]
-            tl_identifed_cell_guide1_y = tl_cell_guide_crop1[1]
-        self.xian_keypoints_msg.tl_cell_guide_crop1_x = tl_identifed_cell_guide1_x
-        self.xian_keypoints_msg.tl_cell_guide_crop1_y = tl_identifed_cell_guide1_y
-        
-        print('clip1_cell_guide_tl_x:', clip1_cell_guide_tl_x)
-        print('clip1_cell_guide_tl_y:', clip1_cell_guide_tl_y)
+        tl_identifed_cell_guide1 = get_final_cell_guide_keypoint(tl_cell_guide_crop1_result, image_shape, 0,
+                                                                 clip1_cell_guide_tl_x, clip1_cell_guide_tl_y) # cls_idx:0-cell_guide_point; 1-container corner
+        self.xian_keypoints_msg.tl_cell_guide_crop1_x = tl_identifed_cell_guide1[0]
+        self.xian_keypoints_msg.tl_cell_guide_crop1_y = tl_identifed_cell_guide1[1]
         
         # tr导轨crop1
         tr_cell_guide_crop1_result = results[5]
-        if tr_cell_guide_crop1_result is None:
-            tr_identifed_cell_guide1_x = -1
-            tr_identifed_cell_guide1_y = -1
-            print('No cell guide1 keypoints!')
-        else:
-            final_results5 = get_keypoints(tr_cell_guide_crop1_result, image_shape)            
-            tr_cell_guide_crop1 = get_cell_guide_keypoint(final_results5, cls_idx=0, 
-                                                          x0=clip1_cell_guide_tr_x,
-                                                          y0=clip1_cell_guide_tr_y) # cls_idx:0-cell_guide_point; 1-container corner             
-            tr_identifed_cell_guide1_x = tr_cell_guide_crop1[0]
-            tr_identifed_cell_guide1_y = tr_cell_guide_crop1[1]
-        self.xian_keypoints_msg.tr_cell_guide_crop1_x = tr_identifed_cell_guide1_x
-        self.xian_keypoints_msg.tr_cell_guide_crop1_y = tr_identifed_cell_guide1_y
-        
-        print('clip1_cell_guide_tr_x:', clip1_cell_guide_tr_x)
-        print('clip1_cell_guide_tr_y:', clip1_cell_guide_tr_y)
+        tr_identifed_cell_guide1 = get_final_cell_guide_keypoint(tr_cell_guide_crop1_result, image_shape, 0,
+                                                                 clip1_cell_guide_tr_x, clip1_cell_guide_tr_y) # cls_idx:0-cell_guide_point; 1-container corner
+        self.xian_keypoints_msg.tr_cell_guide_crop1_x = tr_identifed_cell_guide1[0]
+        self.xian_keypoints_msg.tr_cell_guide_crop1_y = tr_identifed_cell_guide1[1]
         
         # bl导轨crop1
         bl_cell_guide_crop1_result = results[6]
-        if bl_cell_guide_crop1_result is None:
-            bl_identifed_cell_guide1_x = -1
-            bl_identifed_cell_guide1_y = -1
-            print('No cell guide1 keypoints!')
-        else:
-            final_results6 = get_keypoints(bl_cell_guide_crop1_result, image_shape)            
-            bl_cell_guide_crop1 = get_cell_guide_keypoint(final_results6, cls_idx=0, 
-                                                          x0=clip1_cell_guide_bl_x,
-                                                          y0=clip1_cell_guide_bl_y) # cls_idx:0-cell_guide_point; 1-container corner             
-            bl_identifed_cell_guide1_x = bl_cell_guide_crop1[0]
-            bl_identifed_cell_guide1_y = bl_cell_guide_crop1[1]
-        self.xian_keypoints_msg.bl_cell_guide_crop1_x = bl_identifed_cell_guide1_x
-        self.xian_keypoints_msg.bl_cell_guide_crop1_y = bl_identifed_cell_guide1_y
+        bl_identifed_cell_guide1 = get_final_cell_guide_keypoint(bl_cell_guide_crop1_result, image_shape, 0,
+                                                                 clip1_cell_guide_bl_x, clip1_cell_guide_bl_y) # cls_idx:0-cell_guide_point; 1-container corner
+        self.xian_keypoints_msg.bl_cell_guide_crop1_x = bl_identifed_cell_guide1[0]
+        self.xian_keypoints_msg.bl_cell_guide_crop1_y = bl_identifed_cell_guide1[1]
         
         # br导轨crop1
         br_cell_guide_crop1_result = results[7]
-        if br_cell_guide_crop1_result is None:
-            br_identifed_cell_guide1_x = -1
-            br_identifed_cell_guide1_y = -1
-            print('No cell guide1 keypoints!')
-        else:
-            final_results7 = get_keypoints(br_cell_guide_crop1_result, image_shape)            
-            br_cell_guide_crop1 = get_cell_guide_keypoint(final_results7, cls_idx=0, 
-                                                          x0=clip1_cell_guide_br_x,
-                                                          y0=clip1_cell_guide_br_y) # cls_idx:0-cell_guide_point; 1-container corner             
-            br_identifed_cell_guide1_x = br_cell_guide_crop1[0]
-            br_identifed_cell_guide1_y = br_cell_guide_crop1[1]
-        self.xian_keypoints_msg.br_cell_guide_crop1_x = br_identifed_cell_guide1_x
-        self.xian_keypoints_msg.br_cell_guide_crop1_y = br_identifed_cell_guide1_y
+        br_identifed_cell_guide1 = get_final_cell_guide_keypoint(br_cell_guide_crop1_result, image_shape, 0,
+                                                                 clip1_cell_guide_br_x, clip1_cell_guide_br_y) # cls_idx:0-cell_guide_point; 1-container corner
+        self.xian_keypoints_msg.br_cell_guide_crop1_x = br_identifed_cell_guide1[0]
+        self.xian_keypoints_msg.br_cell_guide_crop1_y = br_identifed_cell_guide1[1]
+        
         
         # tl导轨crop2
         tl_cell_guide_crop2_result = results[8]
-        if tl_cell_guide_crop2_result is None:
-            tl_identifed_cell_guide2_x = -1
-            tl_identifed_cell_guide2_y = -1
-            print('No cell guide2 keypoints!')
-        else:
-            final_results8 = get_keypoints(tl_cell_guide_crop2_result, image_shape)            
-            tl_cell_guide_crop2 = get_cell_guide_keypoint(final_results8, cls_idx=0, 
-                                                          x0=clip2_cell_guide_tl_x,
-                                                          y0=clip2_cell_guide_tl_y) # cls_idx:0-cell_guide_point; 1-container corner             
-            tl_identifed_cell_guide2_x = tl_cell_guide_crop2[0]
-            tl_identifed_cell_guide2_y = tl_cell_guide_crop2[1]
-        self.xian_keypoints_msg.tl_cell_guide_crop2_x = tl_identifed_cell_guide2_x
-        self.xian_keypoints_msg.tl_cell_guide_crop2_y = tl_identifed_cell_guide2_y
+        tl_identifed_cell_guide2 = get_final_cell_guide_keypoint(tl_cell_guide_crop2_result, image_shape, 0,
+                                                                 clip2_cell_guide_tl_x, clip2_cell_guide_tl_y) # cls_idx:0-cell_guide_point; 1-container corner
+        self.xian_keypoints_msg.tl_cell_guide_crop2_x = tl_identifed_cell_guide2[0]
+        self.xian_keypoints_msg.tl_cell_guide_crop2_y = tl_identifed_cell_guide2[1]
 
         # tr导轨crop2
         tr_cell_guide_crop2_result = results[9]
-        if tr_cell_guide_crop2_result is None:
-            tr_identifed_cell_guide2_x = -1
-            tr_identifed_cell_guide2_y = -1
-            print('No cell guide2 keypoints!')
-        else:
-            final_results9 = get_keypoints(tr_cell_guide_crop2_result, image_shape)            
-            tr_cell_guide_crop2 = get_cell_guide_keypoint(final_results9, cls_idx=0, 
-                                                          x0=clip2_cell_guide_tr_x,
-                                                          y0=clip2_cell_guide_tr_y) # cls_idx:0-cell_guide_point; 1-container corner             
-            tr_identifed_cell_guide2_x = tr_cell_guide_crop2[0]
-            tr_identifed_cell_guide2_y = tr_cell_guide_crop2[1]
-        self.xian_keypoints_msg.tr_cell_guide_crop2_x = tr_identifed_cell_guide2_x
-        self.xian_keypoints_msg.tr_cell_guide_crop2_y = tr_identifed_cell_guide2_y
+        tr_identifed_cell_guide2 = get_final_cell_guide_keypoint(tr_cell_guide_crop2_result, image_shape, 0,
+                                                                 clip2_cell_guide_tr_x, clip2_cell_guide_tr_y) # cls_idx:0-cell_guide_point; 1-container corner
+        self.xian_keypoints_msg.tr_cell_guide_crop2_x = tr_identifed_cell_guide2[0]
+        self.xian_keypoints_msg.tr_cell_guide_crop2_y = tr_identifed_cell_guide2[1]
         
         # bl导轨crop2
         bl_cell_guide_crop2_result = results[10]
-        if bl_cell_guide_crop2_result is None:
-            bl_identifed_cell_guide2_x = -1
-            bl_identifed_cell_guide2_y = -1
-            print('No cell guide2 keypoints!')
-        else:
-            final_results10 = get_keypoints(bl_cell_guide_crop2_result, image_shape)            
-            bl_cell_guide_crop2 = get_cell_guide_keypoint(final_results10, cls_idx=0, 
-                                                          x0=clip2_cell_guide_bl_x,
-                                                          y0=clip2_cell_guide_bl_y) # cls_idx:0-cell_guide_point; 1-container corner             
-            bl_identifed_cell_guide2_x = bl_cell_guide_crop2[0]
-            bl_identifed_cell_guide2_y = bl_cell_guide_crop2[1]
-        self.xian_keypoints_msg.bl_cell_guide_crop2_x = bl_identifed_cell_guide2_x
-        self.xian_keypoints_msg.bl_cell_guide_crop2_y = bl_identifed_cell_guide2_y
+        bl_identifed_cell_guide2 = get_final_cell_guide_keypoint(bl_cell_guide_crop2_result, image_shape, 0,
+                                                                 clip2_cell_guide_bl_x, clip2_cell_guide_bl_y) # cls_idx:0-cell_guide_point; 1-container corner
+        self.xian_keypoints_msg.bl_cell_guide_crop2_x = bl_identifed_cell_guide2[0]
+        self.xian_keypoints_msg.bl_cell_guide_crop2_y = bl_identifed_cell_guide2[1]
         
         # br导轨crop2
         br_cell_guide_crop2_result = results[11]
-        if br_cell_guide_crop2_result is None:
-            br_identifed_cell_guide2_x = -1
-            br_identifed_cell_guide2_y = -1
-            print('No cell guide1 keypoints!')
-        else:
-            final_results11 = get_keypoints(br_cell_guide_crop2_result, image_shape)            
-            br_cell_guide_crop2 = get_cell_guide_keypoint(final_results11, cls_idx=0, 
-                                                          x0=clip2_cell_guide_br_x,
-                                                          y0=clip2_cell_guide_br_y) # cls_idx:0-cell_guide_point; 1-container corner             
-            br_identifed_cell_guide2_x = br_cell_guide_crop2[0]
-            br_identifed_cell_guide2_y = br_cell_guide_crop2[1]
-        self.xian_keypoints_msg.br_cell_guide_crop2_x = br_identifed_cell_guide2_x
-        self.xian_keypoints_msg.br_cell_guide_crop2_y = br_identifed_cell_guide2_y
+        br_identifed_cell_guide2 = get_final_cell_guide_keypoint(br_cell_guide_crop2_result, image_shape, 0,
+                                                                 clip2_cell_guide_br_x, clip2_cell_guide_br_y) # cls_idx:0-cell_guide_point; 1-container corner
+        self.xian_keypoints_msg.br_cell_guide_crop2_x = br_identifed_cell_guide2[0]
+        self.xian_keypoints_msg.br_cell_guide_crop2_y = br_identifed_cell_guide2[1]
           
         self.xian_keypoints_msg.tl_image = data.tl_image
         self.xian_keypoints_msg.tr_image = data.tr_image
