@@ -334,10 +334,10 @@ class Xian_GetCellGuideRoiShow
 
             cv::resize(br_crop_image, br_crop_image, cv::Size(256, 256), 2);
             br_mask = zpmc::crop_copy_to_mask(br_x0, br_y0, br_mask, br_crop_image);
-            imgs[0] = tl_image;
-            imgs[1] = tr_image;
-            imgs[2] = bl_image;
-            imgs[3] = br_image;
+            imgs[0] = tl_mask;
+            imgs[1] = tr_mask;
+            imgs[2] = bl_mask;
+            imgs[3] = br_mask;
             return imgs;
         }
     
