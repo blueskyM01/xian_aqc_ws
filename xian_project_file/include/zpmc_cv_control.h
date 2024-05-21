@@ -36,6 +36,7 @@ namespace zpmc
     void xresize(const cv::Mat &src, cv::Mat &des, cv::Size size); // 最近邻缩放算法
 
     cv::Point* crop_area(int cx, int cy, int crop_w, int crop_h, int src_w, int src_h);
+    cv::Mat crop_copy_to_mask(int crop_x0, int crop_y0, cv::Mat src, cv::Mat crop_image);
 
     class zpmc_ControlAlgorithm
     {

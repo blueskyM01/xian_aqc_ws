@@ -221,3 +221,7 @@ add_executable(xian_image_cop_process_show src/xian_image_cop_process_show.cpp )
 add_dependencies(xian_image_cop_process_show ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(xian_image_cop_process_show zpmc_cv_control ${OpenCV_LIBRARIES} ${catkin_LIBRARIES})
 
+add_executable(xian_get_cell_guide_roi_show src/xian_get_cell_guide_roi_show.cpp )
+add_dependencies(xian_get_cell_guide_roi_show ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(xian_get_cell_guide_roi_show zpmc_cv_control ${OpenCV_LIBRARIES} ${catkin_LIBRARIES})
+

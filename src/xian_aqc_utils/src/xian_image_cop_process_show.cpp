@@ -237,42 +237,42 @@ class Xian_ImageCropProcessShow
             cv::Mat br_mask = cv::Mat::zeros(br_image.size(),tr_image.type());
 
             cv::resize(tl_container_corner_crop_image, tl_container_corner_crop_image, cv::Size(256, 256), 2);
-            tl_mask = crop_copy_to_mask(container_corner_tl_x0, container_corner_tl_y0, tl_mask, tl_container_corner_crop_image);
+            tl_mask = zpmc::crop_copy_to_mask(container_corner_tl_x0, container_corner_tl_y0, tl_mask, tl_container_corner_crop_image);
 
             cv::resize(tr_container_corner_crop_image, tr_container_corner_crop_image, cv::Size(256, 256), 2);
-            tr_mask = crop_copy_to_mask(container_corner_tr_x0, container_corner_tr_y0, tr_mask, tr_container_corner_crop_image);
+            tr_mask = zpmc::crop_copy_to_mask(container_corner_tr_x0, container_corner_tr_y0, tr_mask, tr_container_corner_crop_image);
 
             cv::resize(bl_container_corner_crop_image, bl_container_corner_crop_image, cv::Size(256, 256), 2);
-            bl_mask = crop_copy_to_mask(container_corner_bl_x0, container_corner_bl_y0, bl_mask, bl_container_corner_crop_image);
+            bl_mask = zpmc::crop_copy_to_mask(container_corner_bl_x0, container_corner_bl_y0, bl_mask, bl_container_corner_crop_image);
 
             cv::resize(br_container_corner_crop_image, br_container_corner_crop_image, cv::Size(256, 256), 2);
-            br_mask = crop_copy_to_mask(container_corner_br_x0, container_corner_br_y0, br_mask, br_container_corner_crop_image);
+            br_mask = zpmc::crop_copy_to_mask(container_corner_br_x0, container_corner_br_y0, br_mask, br_container_corner_crop_image);
 
 
             cv::resize(tl_cell_guide_crop_image1, tl_cell_guide_crop_image1, cv::Size(256, 256), 2);
-            tl_mask = crop_copy_to_mask(clip1_cell_guide_tl_x, clip1_cell_guide_tl_y, tl_mask, tl_cell_guide_crop_image1);
+            tl_mask = zpmc::crop_copy_to_mask(clip1_cell_guide_tl_x, clip1_cell_guide_tl_y, tl_mask, tl_cell_guide_crop_image1);
 
             cv::resize(tr_cell_guide_crop_image1, tr_cell_guide_crop_image1, cv::Size(256, 256), 2);
-            tr_mask = crop_copy_to_mask(clip1_cell_guide_tr_x, clip1_cell_guide_tr_y, tr_mask, tr_cell_guide_crop_image1);
+            tr_mask = zpmc::crop_copy_to_mask(clip1_cell_guide_tr_x, clip1_cell_guide_tr_y, tr_mask, tr_cell_guide_crop_image1);
 
             cv::resize(bl_cell_guide_crop_image1, bl_cell_guide_crop_image1, cv::Size(256, 256), 2);
-            bl_mask = crop_copy_to_mask(clip1_cell_guide_bl_x, clip1_cell_guide_bl_y, bl_mask, bl_cell_guide_crop_image1);
+            bl_mask = zpmc::crop_copy_to_mask(clip1_cell_guide_bl_x, clip1_cell_guide_bl_y, bl_mask, bl_cell_guide_crop_image1);
 
             cv::resize(br_cell_guide_crop_image1, br_cell_guide_crop_image1, cv::Size(256, 256), 2);
-            br_mask = crop_copy_to_mask(clip1_cell_guide_br_x, clip1_cell_guide_br_y, br_mask, br_cell_guide_crop_image1);
+            br_mask = zpmc::crop_copy_to_mask(clip1_cell_guide_br_x, clip1_cell_guide_br_y, br_mask, br_cell_guide_crop_image1);
 
 
             cv::resize(tl_cell_guide_crop_image2, tl_cell_guide_crop_image2, cv::Size(256, 256), 2);
-            tl_mask = crop_copy_to_mask(clip2_cell_guide_tl_x, clip2_cell_guide_tl_y, tl_mask, tl_cell_guide_crop_image2);
+            tl_mask = zpmc::crop_copy_to_mask(clip2_cell_guide_tl_x, clip2_cell_guide_tl_y, tl_mask, tl_cell_guide_crop_image2);
 
             cv::resize(tr_cell_guide_crop_image2, tr_cell_guide_crop_image2, cv::Size(256, 256), 2);
-            tr_mask = crop_copy_to_mask(clip2_cell_guide_tr_x, clip2_cell_guide_tr_y, tr_mask, tr_cell_guide_crop_image2);
+            tr_mask = zpmc::crop_copy_to_mask(clip2_cell_guide_tr_x, clip2_cell_guide_tr_y, tr_mask, tr_cell_guide_crop_image2);
 
             cv::resize(bl_cell_guide_crop_image2, bl_cell_guide_crop_image2, cv::Size(256, 256), 2);
-            bl_mask = crop_copy_to_mask(clip2_cell_guide_bl_x, clip2_cell_guide_bl_y, bl_mask, bl_cell_guide_crop_image2);
+            bl_mask = zpmc::crop_copy_to_mask(clip2_cell_guide_bl_x, clip2_cell_guide_bl_y, bl_mask, bl_cell_guide_crop_image2);
 
             cv::resize(br_cell_guide_crop_image2, br_cell_guide_crop_image2, cv::Size(256, 256), 2);
-            br_mask = crop_copy_to_mask(clip2_cell_guide_br_x, clip2_cell_guide_br_y, br_mask, br_cell_guide_crop_image2);
+            br_mask = zpmc::crop_copy_to_mask(clip2_cell_guide_br_x, clip2_cell_guide_br_y, br_mask, br_cell_guide_crop_image2);
 
             
             cv::Mat mask_merge_col_0 = zpmc::zpmc_images_merge_row(tl_mask, bl_mask);
@@ -296,13 +296,6 @@ class Xian_ImageCropProcessShow
             timediff = elapsedTimeP.count();
             std::cout << "FPS: " << 1000.0 / timediff << std::endl;
         } 
-
-        cv::Mat crop_copy_to_mask(int crop_x0, int crop_y0, cv::Mat src, cv::Mat crop_image)
-        {
-            cv::Mat mask_container_corner = src(cv::Rect(crop_x0, crop_y0, crop_image.cols, crop_image.rows));
-            crop_image.copyTo(mask_container_corner, crop_image);
-            return src;
-        }
 
         cv::Mat* draw_rectangle(cv::Point tl_xy0, cv::Point tr_xy0, cv::Point bl_xy0, cv::Point br_xy0,
                                 cv::Mat tl_image, cv::Mat tr_image, cv::Mat bl_image, cv::Mat br_image, cv::Scalar color)

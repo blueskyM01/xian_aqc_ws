@@ -216,3 +216,7 @@ include_directories(
 add_executable(xian_image_cop_process src/xian_image_cop_process.cpp )
 add_dependencies(xian_image_cop_process ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(xian_image_cop_process zpmc_cv_control ${OpenCV_LIBRARIES} ${catkin_LIBRARIES})
+
+add_executable(xian_get_cell_guide_roi src/xian_get_cell_guide_roi.cpp )
+add_dependencies(xian_get_cell_guide_roi ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(xian_get_cell_guide_roi zpmc_cv_control ${OpenCV_LIBRARIES} ${catkin_LIBRARIES})
