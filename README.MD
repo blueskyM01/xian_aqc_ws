@@ -36,8 +36,8 @@
         sudo docker exec -it xian_aqc /bin/bash
         ```
     - IP
-        - PLC: 10.28.137.21
-        - Orin sender： LAN1网口（eth0，AP）: 10.28.137.11；LAN2网口（eth1，PLC）: 10.28.137.22
+        - PLC: 10.128.137.21
+        - Orin sender： LAN1网口（eth0，AP）: 10.28.137.11；LAN2网口（eth1，PLC）: 10.128.137.22
         - Orin reciever (LAN1网口): 10.28.137.12
     - python3 link  
         ```
