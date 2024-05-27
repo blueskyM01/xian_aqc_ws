@@ -20,10 +20,10 @@
         - xhost +local:root # 出现non-network local connections being added to access control list说明执行成功
         - run docker image
             ```
-            sudo docker run --name xian_aqc -itd --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" -v /home/ntueee/yangjianbing:/root/code -p 2810:22 -p 2811:2811 -p 2812:2812 -e NVIDIA_DRIVER_CAPABILITIES=compute,utility --env="DISPLAY" --env="QT_X11_NO_MITSHM=1" --gpus all --shm-size="12g" --restart=always nvidia/cuda:11.4.3-cudnn8-devel-ubuntu20.04
+            sudo docker run --name xian_aqc -itd --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" -v /home/ntueee/yangjianbing:/root/code -p 2810:22 -p 6000:6000 -p 2812:2812 -e NVIDIA_DRIVER_CAPABILITIES=compute,utility --env="DISPLAY" --env="QT_X11_NO_MITSHM=1" --gpus all --shm-size="12g" --restart=always nvidia/cuda:11.4.3-cudnn8-devel-ubuntu20.04
 
             # 2810: ssh port
-            # 2811: image wireless transmission port
+            # 6000: image wireless transmission port
             # 2812: PLC communication port
             ```
         - 注意：
@@ -35,7 +35,10 @@
         ```
         sudo docker exec -it xian_aqc /bin/bash
         ```
-
+    - IP
+        - PLC: 10.28.137.21
+        - Orin sender： LAN1网口（eth0，AP）: 10.28.137.11；LAN2网口（eth1，PLC）: 10.28.137.22
+        - Orin reciever (LAN1网口): 10.28.137.12
     - python3 link  
         ```
         rm -rf /usr/bin/python  
