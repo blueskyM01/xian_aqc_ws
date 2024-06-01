@@ -6,8 +6,6 @@
 #include<netinet/in.h>
 #include<arpa/inet.h>
 
-#include "zpmc_cv_control.h"
-
 #include <ros/callback_queue.h>
 #include "boost/thread.hpp"
 
@@ -56,7 +54,7 @@ class zpmc_CommunicationWithAccs
         // json zpmc_j20;
         // 从文件读取20feet配置
         // std::ifstream zpmc_20feet("/zpmc/project_file/09_param_dir/zpmc_20f.json");   
-        std::ifstream zpmc_20feet;
+        // std::ifstream zpmc_20feet;
         std::string accs_ip, local_ip_str;
         int PORT = 2812;
 
@@ -206,7 +204,7 @@ class zpmc_CommunicationWithAccs
             // accs_ip = zpmc_j20["xian_accs_ip"];
 
             ros::param::get("/xian_aqc_dynamic_parameters_server/xian_accs_ip", accs_ip);
-            std::cout << "accs ip:"<< accs_ip << std::endl;
+            std::cout << "accs ip:"<< accs_ip << "  Port:" << PORT << std::endl;
             server_ip = accs_ip.c_str();
             addr.sin_family = AF_INET;
             addr.sin_port = htons(PORT);
@@ -229,7 +227,7 @@ class zpmc_CommunicationWithAccs
 
             pre_time = cur_time;
             cur_time = std::chrono::high_resolution_clock::now();
-            timeStr = zpmc::zpmc_get_stystem_time();
+           
             elapsedTimeP = std::chrono::duration_cast<std::chrono::milliseconds>(cur_time - pre_time);
             timediff = std::max(elapsedTimeP.count(), (long)(1));
 
@@ -305,6 +303,7 @@ class zpmc_CommunicationWithAccs
                 plc_buffer_send.header4 = 254;
 
                 uint16_t plc_buffer_send_t = sizeof(plc_buffer_send)-6;
+                std::cout << "Size of send to plc: " << plc_buffer_send_t << std::endl;
                 unsigned char plc_buffer_send_bytes[2];
                 unsigned char plc_buffer_send_bytes_inv[2];
                 Uint8ToByte(plc_buffer_send_t, plc_buffer_send_bytes);
@@ -317,47 +316,79 @@ class zpmc_CommunicationWithAccs
                 plc_buffer_send.send_len = plc_buffer_send_;
 
                 ros::param::get("/xian_aqc_dynamic_parameters_server/xian_acds_heart_beat", xian_acds_heart_beat); 
-                plc_buffer_send.Heart_Beat_AFLS = (int16_t)xian_acds_heart_beat;
+                unsigned char xian_acds_heart_beat_bytes[2];
+                unsigned char xian_acds_heart_beat_bytes_inv[2];
+                Uint8ToByte(xian_acds_heart_beat, xian_acds_heart_beat_bytes);
+                int xian_acds_heart_beat_len = sizeof(xian_acds_heart_beat_bytes);
+                for(int i=0; i<xian_acds_heart_beat_len; i++)
+                {
+                    xian_acds_heart_beat_bytes_inv[i] = xian_acds_heart_beat_bytes[xian_acds_heart_beat_len-1-i];
+                }
+                uint16_t xian_acds_heart_beat_ = ByteToUint8(xian_acds_heart_beat_bytes_inv);
+                plc_buffer_send.Heart_Beat_AFLS = xian_acds_heart_beat_;
+                std::cout << "Heart_Beat_AFLS: " << xian_acds_heart_beat_ << std::endl;
+                
+                //plc_buffer_send.Heart_Beat_AFLS = (int16_t)xian_acds_heart_beat;
 
                 ros::param::get("/xian_aqc_dynamic_parameters_server/xian_acds_send_to_retrable_box_mode0", xian_acds_send_to_retrable_box_mode0);
                 ros::param::get("/xian_aqc_dynamic_parameters_server/xian_acds_send_to_retrable_box_mode1", xian_acds_send_to_retrable_box_mode1);
                 ros::param::get("/xian_aqc_dynamic_parameters_server/xian_acds_send_to_retrable_box_mode2", xian_acds_send_to_retrable_box_mode2);
                 ros::param::get("/xian_aqc_dynamic_parameters_server/xian_acds_send_to_retrable_box_mode3", xian_acds_send_to_retrable_box_mode3);
-                plc_buffer_send.mode0 = (int16_t)xian_acds_send_to_retrable_box_mode0;
-                plc_buffer_send.mode1 = (int16_t)xian_acds_send_to_retrable_box_mode1;
-                plc_buffer_send.mode2 = (int16_t)xian_acds_send_to_retrable_box_mode2;
-                plc_buffer_send.mode3 = (int16_t)xian_acds_send_to_retrable_box_mode3;
+                
+                unsigned char xian_acds_mode0_bytes[2];
+                unsigned char xian_acds_mode0_bytes_inv[2];
+                Uint8ToByte((int16_t)xian_acds_send_to_retrable_box_mode0, xian_acds_mode0_bytes);
+                int xian_acds_mode0_len = sizeof(xian_acds_mode0_bytes);
+                for(int i=0; i<xian_acds_mode0_len; i++)
+                {
+                    xian_acds_mode0_bytes_inv[i] = xian_acds_mode0_bytes[xian_acds_mode0_len-1-i];
+                }
+                uint16_t xian_acds_send_to_retrable_box_mode0_ = ByteToUint8(xian_acds_mode0_bytes_inv);                
+                plc_buffer_send.mode0 = xian_acds_send_to_retrable_box_mode0_;
+                
+                
+                unsigned char xian_acds_mode1_bytes[2];
+                unsigned char xian_acds_mode1_bytes_inv[2];
+                Uint8ToByte((int16_t)xian_acds_send_to_retrable_box_mode1, xian_acds_mode1_bytes);
+                int xian_acds_mode1_len = sizeof(xian_acds_mode1_bytes);
+                for(int i=0; i<xian_acds_mode1_len; i++)
+                {
+                    xian_acds_mode1_bytes_inv[i] = xian_acds_mode1_bytes[xian_acds_mode1_len-1-i];
+                }
+                uint16_t xian_acds_send_to_retrable_box_mode1_ = ByteToUint8(xian_acds_mode1_bytes_inv);                
+                plc_buffer_send.mode1 = xian_acds_send_to_retrable_box_mode1_;
+                
+                
+                unsigned char xian_acds_mode2_bytes[2];
+                unsigned char xian_acds_mode2_bytes_inv[2];
+                Uint8ToByte((int16_t)xian_acds_send_to_retrable_box_mode2, xian_acds_mode2_bytes);
+                int xian_acds_mode2_len = sizeof(xian_acds_mode2_bytes);
+                for(int i=0; i<xian_acds_mode2_len; i++)
+                {
+                    xian_acds_mode2_bytes_inv[i] = xian_acds_mode2_bytes[xian_acds_mode2_len-1-i];
+                }
+                uint16_t xian_acds_send_to_retrable_box_mode2_ = ByteToUint8(xian_acds_mode2_bytes_inv);                
+                plc_buffer_send.mode2 = xian_acds_send_to_retrable_box_mode2_;
+                
+                
+                
+                unsigned char xian_acds_mode3_bytes[2];
+                unsigned char xian_acds_mode3_bytes_inv[2];
+                Uint8ToByte((int16_t)xian_acds_send_to_retrable_box_mode3, xian_acds_mode3_bytes);
+                int xian_acds_mode3_len = sizeof(xian_acds_mode3_bytes);
+                for(int i=0; i<xian_acds_mode3_len; i++)
+                {
+                    xian_acds_mode3_bytes_inv[i] = xian_acds_mode3_bytes[xian_acds_mode3_len-1-i];
+                }
+                uint16_t xian_acds_send_to_retrable_box_mode3_ = ByteToUint8(xian_acds_mode3_bytes_inv);                
+                plc_buffer_send.mode3 = xian_acds_send_to_retrable_box_mode3_;
 
-                /*
-                double err_gantry_all_plc= err_gantry_all * 100;
-                plc_buffer_send.Diff_X = (int16_t)err_gantry_all_plc;
 
-
-                double err_trolly_all_plc= err_trolly_all * 100;
-                plc_buffer_send.Diff_Y = (int16_t)err_trolly_all_plc;
-
-
-                double err_theta_all_plc= err_theta_all * 100;
-                plc_buffer_send.Target_Angle = (int16_t)err_theta_all_plc;
-
-
-                double err_gantry_plc = err_gantry * 100;
-                plc_buffer_send.Source_Diff_X = (int16_t)err_gantry_plc;
-
-
-                double err_trolly_plc = err_trolly * 100;
-                plc_buffer_send.Source_Diff_Y = (int16_t)err_trolly_plc;
-
-
-                double err_theta_plc = err_theta * 100;
-                plc_buffer_send.Source_Target_Angle = (int16_t)err_theta_plc;
-                */
-
-                std::cout << "send size:" << plc_buffer_send.send_len << std::endl;
-                std::cout << "send to retractable box mode0:" << plc_buffer_send.mode0 << std::endl;
-                std::cout << "send to retractable box mode1:" << plc_buffer_send.mode1 << std::endl;
-                std::cout << "send to retractable box mode2:" << plc_buffer_send.mode2 << std::endl;
-                std::cout << "send to retractable box mode3:" << plc_buffer_send.mode3 << std::endl;
+                std::cout << "send size:" << plc_buffer_send_t << std::endl;
+                std::cout << "send to retractable box mode0:" << xian_acds_send_to_retrable_box_mode0 << std::endl;
+                std::cout << "send to retractable box mode1:" << xian_acds_send_to_retrable_box_mode1 << std::endl;
+                std::cout << "send to retractable box mode2:" << xian_acds_send_to_retrable_box_mode2 << std::endl;
+                std::cout << "send to retractable box mode3:" << xian_acds_send_to_retrable_box_mode3 << std::endl;
 
                 iWriteCount = write(socket_fd, (char*)&plc_buffer_send, sizeof(plc_buffer_send));
                 if (iWriteCount <= 0) 
@@ -384,7 +415,7 @@ class zpmc_CommunicationWithAccs
                 // --------------------------------- send to accs ---------------------------------
 
    
-
+                
                 // --------------------------------- read from accs ---------------------------------
                 int plc_size = read(socket_fd, (char *)&plc_buffer, sizeof(plc_buffer));//通过fd与客户端联系在一起,返回接收到的字节数
                 if (plc_size <= 0) 
@@ -456,25 +487,25 @@ class zpmc_CommunicationWithAccs
                     unsigned char mode0_inv[2];
                     memcpy(mode0, plc_buffer+recv_plc.mode0, sizeof(mode0));
                     mode0_ = HextoDec(mode0, sizeof(mode0));
-                    ros::param::set("/xian_aqc_dynamic_parameters_server/xian_acds_send_to_retrable_box_mode0", mode0_); 
+                    //ros::param::set("/xian_aqc_dynamic_parameters_server/xian_acds_send_to_retrable_box_mode0", mode0_); 
 
                     unsigned char mode1[2];
                     unsigned char mode1_inv[2];
                     memcpy(mode1, plc_buffer+recv_plc.mode1, sizeof(mode1));
                     mode1_ = HextoDec(mode1, sizeof(mode1));
-                    ros::param::set("/xian_aqc_dynamic_parameters_server/xian_acds_send_to_retrable_box_mode1", mode1_); 
+                    //ros::param::set("/xian_aqc_dynamic_parameters_server/xian_acds_send_to_retrable_box_mode1", mode1_); 
 
                     unsigned char mode2[2];
                     unsigned char mode2_inv[2];
                     memcpy(mode2, plc_buffer+recv_plc.mode2, sizeof(mode2));
                     mode2_ = HextoDec(mode2, sizeof(mode2));
-                    ros::param::set("/xian_aqc_dynamic_parameters_server/xian_acds_send_to_retrable_box_mode2", mode2_); 
+                    //ros::param::set("/xian_aqc_dynamic_parameters_server/xian_acds_send_to_retrable_box_mode2", mode2_); 
 
                     unsigned char mode3[2];
                     unsigned char mode3_inv[2];
                     memcpy(mode3, plc_buffer+recv_plc.mode3, sizeof(mode3));
                     mode3_ = HextoDec(mode3, sizeof(mode3));
-                    ros::param::set("/xian_aqc_dynamic_parameters_server/xian_acds_send_to_retrable_box_mode3", mode3_); 
+                    //ros::param::set("/xian_aqc_dynamic_parameters_server/xian_acds_send_to_retrable_box_mode3", mode3_); 
 
                     std::cout << "Read from plc state0: " << state0_ << std::endl;
                     std::cout << "Read from plc state1: " << state1_ << std::endl;
@@ -485,6 +516,9 @@ class zpmc_CommunicationWithAccs
                     std::cout << "Read from plc mode2: " << mode2_ << std::endl;
                     std::cout << "Read from plc mode3: " << mode3_ << std::endl;
 
+                    
+                    // -----------------------------------------------------------------------------------dfdsfd----------------
+                    
                     /*
                     unsigned char Spreader_Size[2];
                     unsigned char Spreader_Size_inv[2];
@@ -700,7 +734,7 @@ int main(int argc, char** argv)
     spinner.start();
 
     zpmc_communicate_with_accs_node.m_timer_HeartBeat = nh_2.createWallTimer(ros::WallDuration(0.1), &zpmc_CommunicationWithAccs::m_timer_HeartBeat_f, &zpmc_communicate_with_accs_node);
-    zpmc_communicate_with_accs_node.m_timer_Main_Func = nh_2.createWallTimer(ros::WallDuration(0.05), &zpmc_CommunicationWithAccs::m_timer_Main_Func_f, &zpmc_communicate_with_accs_node);
+    zpmc_communicate_with_accs_node.m_timer_Main_Func = nh_2.createWallTimer(ros::WallDuration(0.1), &zpmc_CommunicationWithAccs::m_timer_Main_Func_f, &zpmc_communicate_with_accs_node);
 
     ros::waitForShutdown();
 
