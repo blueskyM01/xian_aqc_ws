@@ -173,8 +173,9 @@
     ```
 - compile 
     ```
-    cd /xxxx/xian_aqc_ws
-    catkin_make
+    $ cd /xxxx/xian_aqc_ws
+    $ catkin_make
+    若编译出现问题，删掉xxxx/xian_aqc_ws/src/CMakeLists.txt，然后再编译试试。
     ```
 - vim ~/.bashrc (source ~/.bashrc)
     ```
