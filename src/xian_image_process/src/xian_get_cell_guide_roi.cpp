@@ -10,7 +10,7 @@
 #include<stdio.h>
 #include<sys/types.h>
 #include "xian_msg_pkg/xian_keypoints.h"
-#include "xian_msg_pkg/xian_cel_guide_roi_msg.h"
+#include "xian_msg_pkg/xian_cell_guide_roi_msg.h"
 #include "zpmc_cv_control.h"
 
 
@@ -22,7 +22,7 @@ class Xian_GetCellGuideROI
             // 创建一个ROS节点句柄
             ros::NodeHandle nh;
 
-            command_publisher_ = nh.advertise<xian_msg_pkg::xian_cel_guide_roi_msg>("xian_cell_guide_crop_images", 1);
+            command_publisher_ = nh.advertise<xian_msg_pkg::xian_cell_guide_roi_msg>("xian_cell_guide_crop_images", 1);
             command_subscribe_ = nh.subscribe<xian_msg_pkg::xian_keypoints>("xian_aqc_keypoints", 1, &Xian_GetCellGuideROI::command_callback, this);
 
         }
@@ -92,7 +92,7 @@ class Xian_GetCellGuideROI
         sensor_msgs::ImagePtr tl_cell_guide_crop_image0, tr_cell_guide_crop_image0, bl_cell_guide_crop_image0, br_cell_guide_crop_image0;
         sensor_msgs::ImagePtr tl_cell_guide_crop_image1, tr_cell_guide_crop_image1, bl_cell_guide_crop_image1, br_cell_guide_crop_image1;
         sensor_msgs::ImagePtr tl_cell_guide_crop_image2, tr_cell_guide_crop_image2, bl_cell_guide_crop_image2, br_cell_guide_crop_image2;
-        xian_msg_pkg::xian_cel_guide_roi_msg crop_images;
+        xian_msg_pkg::xian_cell_guide_roi_msg crop_images;
 
         void command_callback(const xian_msg_pkg::xian_keypointsConstPtr& data)
         {

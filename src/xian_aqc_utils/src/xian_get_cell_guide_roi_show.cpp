@@ -9,7 +9,7 @@
 
 #include<stdio.h>
 #include<sys/types.h>
-#include "xian_msg_pkg/xian_cel_guide_roi_msg.h"
+#include "xian_msg_pkg/xian_cell_guide_roi_msg.h"
 #include "zpmc_cv_control.h"
 
 
@@ -21,7 +21,7 @@ class Xian_GetCellGuideRoiShow
             // 创建一个ROS节点句柄
             ros::NodeHandle nh;
 
-            command_subscribe_ = nh.subscribe<xian_msg_pkg::xian_cel_guide_roi_msg>("xian_cell_guide_crop_images", 1, &Xian_GetCellGuideRoiShow::command_callback, this);
+            command_subscribe_ = nh.subscribe<xian_msg_pkg::xian_cell_guide_roi_msg>("xian_cell_guide_crop_images", 1, &Xian_GetCellGuideRoiShow::command_callback, this);
 
         }
 
@@ -106,7 +106,7 @@ class Xian_GetCellGuideRoiShow
  
         cv::Mat tl_image, tr_image, bl_image, br_image;
 
-        void command_callback(const xian_msg_pkg::xian_cel_guide_roi_msgConstPtr& data)
+        void command_callback(const xian_msg_pkg::xian_cell_guide_roi_msgConstPtr& data)
         {
             timeStr = zpmc::zpmc_get_stystem_time();
             pre_time = cur_time;
