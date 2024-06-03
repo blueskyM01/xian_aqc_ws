@@ -282,7 +282,7 @@ class Xian_GetCellGuideRoiShow
 
             cv::resize(merge_row1, merge_row1, cv::Size(merge_log.cols/2, merge_log.rows/4), 2); 
 
-            cv::imshow("xian_image_cop_process_show:", merge_row1);
+            cv::imshow("xian_get_cell_guide_roi_show:", merge_row1);
             cv::waitKey(1);
             // cv::imwrite("/root/code/xian_aqc_ws/xian_project_file/trt/results/"+timeStr+".jpg", merge_row1);
             

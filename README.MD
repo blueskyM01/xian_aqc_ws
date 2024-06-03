@@ -168,7 +168,7 @@
 ## 2. RUN
 - 获取读写权限
     ```
-    chomd 777 src/xian_ai_pkg/src/xian_cell_guide_recognition.py
+    chmod 777 src/xian_ai_pkg/src/xian_cell_guide_recognition.py
     chmod 777 src/xian_ai_pkg/src/xian_keypoints_recognition.py
     ```
 - compile 
@@ -188,7 +188,11 @@
 |:--- |:---  |
 | aqc_cell_detection_resuls | xian_msg_pkg/xian_cell_guide_msg |
 
-## 4. TCP variable list 
+## 4. [Node description](./xian_project_file/doc/node_description.MD)
+
+
+
+## 5. TCP variable list 
 - For client: note that **write** first, then **read**.
 - For server: note that **read** first, then **write**.
     ```

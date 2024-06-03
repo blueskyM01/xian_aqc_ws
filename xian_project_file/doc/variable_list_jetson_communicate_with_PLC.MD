@@ -30,10 +30,10 @@
     | 26 | SDS Right Control_X | INT | 2 | BYTE58 | unit:mm | SDS右侧控制点X坐标 |
     | 27 | SDS Right Control_Y | INT | 2 | BYTE60 | unit:mm | SDS右侧控制点Y坐标 |
     | 28 | AFLS Enable | WORD | 2 | BYTE62 | 0-不启用 1-启用 | 系统使能信号，发送一次 |
-    | 29 | State0 | WORD | 2 | BYTE64 | 0收回；1伸出；2故障 | 伸缩盒子0的状态 |
-    | 30 | State1 | WORD | 2 | BYTE66 | 0收回；1伸出；2故障 | 伸缩盒子1的状态 |
-    | 31 | State2 | WORD | 2 | BYTE68 | 0收回；1伸出；2故障 | 伸缩盒子2的状态 |
-    | 32 | State3 | WORD | 2 | BYTE70 | 0收回；1伸出；2故障 | 伸缩盒子3的状态 |
+    | 29 | State0 | WORD | 2 | BYTE64 | 0-None(运动过程中)；1-收回；2-伸出; 3-故障 | 伸缩盒子0的状态 |
+    | 30 | State1 | WORD | 2 | BYTE66 | 0-None(运动过程中)；1-收回；2-伸出; 3-故障 | 伸缩盒子1的状态 |
+    | 31 | State2 | WORD | 2 | BYTE68 | 0-None(运动过程中)；1-收回；2-伸出; 3-故障 | 伸缩盒子2的状态 |
+    | 32 | State3 | WORD | 2 | BYTE70 | 0-None(运动过程中)；1-收回；2-伸出; 3-故障 | 伸缩盒子3的状态 |
     | 33 | mode0 | WORD | 2 | BYTE72 | 0手动；1自动 | 伸缩盒子0的工作模式 |
     | 34 | mode1 | WORD | 2 | BYTE74 | 0手动；1自动 | 伸缩盒子1的工作模式 |
     | 35 | mode2 | WORD | 2 | BYTE76 | 0手动；1自动 | 伸缩盒子2的工作模式 |
