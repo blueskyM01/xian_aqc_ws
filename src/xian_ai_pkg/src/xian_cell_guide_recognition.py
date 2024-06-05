@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 #!coding=utf-8
 import rospy
-from zpmc_unloading_interface_pkg.msg import ZpmcLockHolePreprocessImages, ZpmcLockHoleMasks
+from xian_msg_pkg.msg import xian_cell_guide_roi_msg, xian_cell_guide_mask
 
 # from cuda import cudart
 import sys
@@ -13,7 +13,7 @@ import common
 from cv_bridge import CvBridge, CvBridgeError
 
 import pycuda.driver as cuda
-# cfx = cuda.Device(0).make_context()
+cfx = cuda.Device(0).make_context()
 
 
 def zpmc_decode(loc, priors):
@@ -333,7 +333,7 @@ def zpmc_onnx2trt(onnxFile, trtFile_save_dir, trtFile_save_name, FPMode):
     print('outputTensor4:', outputTensor4.name, outputTensor4.shape)
 
     _, nHeight, nWidth, _ = inputTensor.shape
-    profile.set_shape(inputTensor.name, (4, nHeight, nWidth, 3), (4, nHeight, nWidth, 3), (4, nHeight, nWidth, 3)) # 最小batch，常见batch，最大batch
+    profile.set_shape(inputTensor.name, (12, nHeight, nWidth, 3), (12, nHeight, nWidth, 3), (12, nHeight, nWidth, 3)) # 最小batch，常见batch，最大batch
     config.add_optimization_profile(profile)
 
     trtFile = os.path.join(trtFile_save_dir, trtFile_save_name)
@@ -363,109 +363,201 @@ def zpmc_onnx2trt(onnxFile, trtFile_save_dir, trtFile_save_name, FPMode):
 
 
 # 编译调用onnx
-project_file_dir = '/root/code/zpmc_unloading_loading_ws/zpmc_project_file/onnx_trt/corner_line/'
-onnxFile = project_file_dir + 'yolact.onnx'
-trtFile_save_dir = project_file_dir
-trtFile_save_name = 'yolact16.trt'
+onnxFile = '/root/code/xian_aqc_ws/xian_project_file/onnx/cell_guide.onnx'
+trtFile_save_dir = '/root/code/xian_aqc_ws/xian_project_file/trt'
+trtFile_save_name = 'cell_guide16.trt'
 FPMode = 'FP16'
 context, inputs, outputs, bindings, stream = zpmc_onnx2trt(onnxFile, trtFile_save_dir, trtFile_save_name, FPMode)
 
 
-class zpmc_lock_hole_recognition:
+class xian_cell_guide_recognition:
     def __init__(self):
         
-        print("start zpmc_lock_hole_recognition!")
-        self.lock_hole_mask_publisher = rospy.Publisher('zpmc_lock_hole_masks', ZpmcLockHoleMasks, queue_size=1)  # 创建消息发布者
+        print("start xian_cell_guide_recognition!")
+        self.xian_cell_guide_mask_publisher = rospy.Publisher('xian_cell_guide_masks', xian_cell_guide_mask, queue_size=1)  # 创建消息发布者
         # self.rate = rospy.Rate(1)  # 设置消息发布频率为1Hz
-        rospy.Subscriber('zpmc_lock_hole_preprocess_images', ZpmcLockHolePreprocessImages, self.callback)
+        rospy.Subscriber('xian_cell_guide_crop_images', xian_cell_guide_roi_msg, self.callback)
 
         self.pre_time = datetime.datetime.now()
         self.cur_time = datetime.datetime.now()
         self.timediff = 1
         self.counter = 0
 
-        self.lock_hole_mask_msg = ZpmcLockHoleMasks()
+        self.xian_cell_guide_mask_msg = xian_cell_guide_mask()
 
         rospy.spin()
-
+        
+    def decode_mask_f(self, result_mask, src):
+        if result_mask is not None:
+            decode_mask = CvBridge().cv2_to_imgmsg(result_mask,"bgr8")
+        else:
+            temp = np.zeros_like(src)
+            decode_mask = CvBridge().cv2_to_imgmsg(temp,"bgr8")
+        return decode_mask
 
     def callback(self, data):
-        
-        zpmc_firstlanding_enable = rospy.get_param("/zpmc_unloading_parameters_node/zpmc_firstlanding_enable")
-        zpmc_loading_enable = rospy.get_param("/zpmc_unloading_parameters_node/zpmc_loading_enable")
-        zpmc_unloading_enable = rospy.get_param("/zpmc_unloading_parameters_node/zpmc_unloading_enable")
-
         self.pre_time = self.cur_time
         self.cur_time = datetime.datetime.now()
-        if zpmc_firstlanding_enable == 1 and zpmc_loading_enable == 0 and zpmc_unloading_enable == 0:
 
-            image_src_0 = CvBridge().imgmsg_to_cv2(data.tl_preprocess_image, "bgr8") # 获取输入的原始图像，并且ros图像格式转opencv图像格式
-            image_src_1 = CvBridge().imgmsg_to_cv2(data.tr_preprocess_image, "bgr8") # 获取输入的原始图像，并且ros图像格式转opencv图像格式
-            image_src_2 = CvBridge().imgmsg_to_cv2(data.bl_preprocess_image, "bgr8") # 获取输入的原始图像，并且ros图像格式转opencv图像格式
-            image_src_3 = CvBridge().imgmsg_to_cv2(data.br_preprocess_image, "bgr8") # 获取输入的原始图像，并且ros图像格式转opencv图像格式
+        tl_cell_guide_crop0 = CvBridge().imgmsg_to_cv2(data.tl_cell_guide_crop0, "bgr8") # 获取输入的原始图像，并且ros图像格式转opencv图像格式
+        tr_cell_guide_crop0 = CvBridge().imgmsg_to_cv2(data.tr_cell_guide_crop0, "bgr8") # 获取输入的原始图像，并且ros图像格式转opencv图像格式
+        bl_cell_guide_crop0 = CvBridge().imgmsg_to_cv2(data.bl_cell_guide_crop0, "bgr8") # 获取输入的原始图像，并且ros图像格式转opencv图像格式
+        br_cell_guide_crop0 = CvBridge().imgmsg_to_cv2(data.br_cell_guide_crop0, "bgr8") # 获取输入的原始图像，并且ros图像格式转opencv图像格式
+        tl_cell_guide_crop1 = CvBridge().imgmsg_to_cv2(data.tl_cell_guide_crop1, "bgr8") # 获取输入的原始图像，并且ros图像格式转opencv图像格式
+        tr_cell_guide_crop1 = CvBridge().imgmsg_to_cv2(data.tr_cell_guide_crop1, "bgr8") # 获取输入的原始图像，并且ros图像格式转opencv图像格式
+        bl_cell_guide_crop1 = CvBridge().imgmsg_to_cv2(data.bl_cell_guide_crop1, "bgr8") # 获取输入的原始图像，并且ros图像格式转opencv图像格式
+        br_cell_guide_crop1 = CvBridge().imgmsg_to_cv2(data.br_cell_guide_crop1, "bgr8") # 获取输入的原始图像，并且ros图像格式转opencv图像格式
+        tl_cell_guide_crop2 = CvBridge().imgmsg_to_cv2(data.tl_cell_guide_crop2, "bgr8") # 获取输入的原始图像，并且ros图像格式转opencv图像格式
+        tr_cell_guide_crop2 = CvBridge().imgmsg_to_cv2(data.tr_cell_guide_crop2, "bgr8") # 获取输入的原始图像，并且ros图像格式转opencv图像格式
+        bl_cell_guide_crop2 = CvBridge().imgmsg_to_cv2(data.bl_cell_guide_crop2, "bgr8") # 获取输入的原始图像，并且ros图像格式转opencv图像格式
+        br_cell_guide_crop2 = CvBridge().imgmsg_to_cv2(data.br_cell_guide_crop2, "bgr8") # 获取输入的原始图像，并且ros图像格式转opencv图像格式
+        
 
-            images_resize_list = [image_src_0, image_src_1, image_src_2, image_src_3]
-            # images_process = zpmc_std_mean(images_resize_list)
+        h, w, _ = tl_cell_guide_crop0.shape
+        images_resize_list = [tl_cell_guide_crop0,
+                              tr_cell_guide_crop0,
+                              bl_cell_guide_crop0,
+                              br_cell_guide_crop0,
+                              tl_cell_guide_crop1,
+                              tr_cell_guide_crop1,
+                              bl_cell_guide_crop1,
+                              br_cell_guide_crop1,
+                              tl_cell_guide_crop2,
+                              tr_cell_guide_crop2,
+                              bl_cell_guide_crop2,
+                              br_cell_guide_crop2]
+        # images_process = zpmc_std_mean(images_resize_list)
 
-            inputs[0].host = np.ascontiguousarray(images_resize_list, dtype=np.float32)
-            # cfx.push()
-            trt_outputs = common.do_inference_v2(context, bindings=bindings, inputs=inputs, outputs=outputs, stream=stream)
-            # cfx.pop()
-            batch_size = len(images_resize_list)
-            trt_outputs_shape = [(batch_size, 138, 138, 32), (batch_size, 19248, 4), (batch_size, 19248, 32), (batch_size, 19248, 2), (19248, 4)]
-            
-            proto_data = trt_outputs[0].reshape(trt_outputs_shape[0])
-            loc_data = trt_outputs[1].reshape(trt_outputs_shape[1])
-            mask_data = trt_outputs[2].reshape(trt_outputs_shape[2])
-            conf_data = trt_outputs[3].reshape(trt_outputs_shape[3])
-            prior_data = trt_outputs[4].reshape(trt_outputs_shape[4])
-            
-            CLASSES = ['BG', 'LOCKHOLE']
-            result = zpmc_PostProcess(CLASSES, proto_data, prior_data, mask_data, conf_data, loc_data, conf_thresh=0.05)
-            classes, scores, boxes, masks = zpmc_display(result, images_resize_list, 720, 1280, score_threshold=0.15)
+        inputs[0].host = np.ascontiguousarray(images_resize_list, dtype=np.float32)
+        cfx.push()
+        trt_outputs = common.do_inference_v2(context, bindings=bindings, inputs=inputs, outputs=outputs, stream=stream)
+        cfx.pop()
+        batch_size = len(images_resize_list)
+        trt_outputs_shape = [(batch_size, 138, 138, 32), (batch_size, 19248, 4), (batch_size, 19248, 32), (batch_size, 19248, 2), (19248, 4)]
+        
+        proto_data = trt_outputs[0].reshape(trt_outputs_shape[0])
+        loc_data = trt_outputs[1].reshape(trt_outputs_shape[1])
+        mask_data = trt_outputs[2].reshape(trt_outputs_shape[2])
+        conf_data = trt_outputs[3].reshape(trt_outputs_shape[3])
+        prior_data = trt_outputs[4].reshape(trt_outputs_shape[4])
+        
+        CLASSES = ['BG', 'cell_guide']
+        result = zpmc_PostProcess(CLASSES, proto_data, prior_data, mask_data, conf_data, loc_data, conf_thresh=0.05)
+        classes, scores, boxes, masks = zpmc_display(result, images_resize_list, h, w, score_threshold=0.15)
+        # print('w {}, h {}'.format(w, h))
+        # cv2.imwrite('/root/code/zpmc_unloading_loading_ws/zpmc_project_file/onnx_trt/'+str(self.cur_time)+'_0.jpg', masks[0])
+        # cv2.imwrite('/root/code/zpmc_unloading_loading_ws/zpmc_project_file/onnx_trt/'+str(self.cur_time)+'_1.jpg', masks[1])
+        # cv2.imwrite('/root/code/zpmc_unloading_loading_ws/zpmc_project_file/onnx_trt/'+str(self.cur_time)+'_2.jpg', masks[2])
+        # cv2.imwrite('/root/code/zpmc_unloading_loading_ws/zpmc_project_file/onnx_trt/'+str(self.cur_time)+'_3.jpg', masks[3])
+        
+        # cv2.imwrite('/root/code/xian_aqc_ws/xian_project_file/trt/results/tl_crop0.jpg', tl_cell_guide_crop0)
+        # cv2.imwrite('/root/code/xian_aqc_ws/xian_project_file/trt/results/tr_crop0.jpg', tr_cell_guide_crop0)
+        # cv2.imwrite('/root/code/xian_aqc_ws/xian_project_file/trt/results/bl_crop0.jpg', bl_cell_guide_crop0)
+        # cv2.imwrite('/root/code/xian_aqc_ws/xian_project_file/trt/results/br_crop0.jpg', br_cell_guide_crop0)
+        
+        # cv2.imwrite('/root/code/xian_aqc_ws/xian_project_file/trt/results/tl_crop1.jpg', tl_cell_guide_crop1)
+        # cv2.imwrite('/root/code/xian_aqc_ws/xian_project_file/trt/results/tr_crop1.jpg', tr_cell_guide_crop1)
+        # cv2.imwrite('/root/code/xian_aqc_ws/xian_project_file/trt/results/bl_crop1.jpg', bl_cell_guide_crop1)
+        # cv2.imwrite('/root/code/xian_aqc_ws/xian_project_file/trt/results/br_crop1.jpg', br_cell_guide_crop1)
 
-            # cv2.imwrite('/root/code/zpmc_unloading_loading_ws/zpmc_project_file/onnx_trt/'+str(self.cur_time)+'_0.jpg', masks[0])
-            # cv2.imwrite('/root/code/zpmc_unloading_loading_ws/zpmc_project_file/onnx_trt/'+str(self.cur_time)+'_1.jpg', masks[1])
-            # cv2.imwrite('/root/code/zpmc_unloading_loading_ws/zpmc_project_file/onnx_trt/'+str(self.cur_time)+'_2.jpg', masks[2])
-            # cv2.imwrite('/root/code/zpmc_unloading_loading_ws/zpmc_project_file/onnx_trt/'+str(self.cur_time)+'_3.jpg', masks[3])
+        # cv2.imwrite('/root/code/xian_aqc_ws/xian_project_file/trt/results/tl_crop2.jpg', tl_cell_guide_crop2)
+        # cv2.imwrite('/root/code/xian_aqc_ws/xian_project_file/trt/results/tr_crop2.jpg', tr_cell_guide_crop2)
+        # cv2.imwrite('/root/code/xian_aqc_ws/xian_project_file/trt/results/bl_crop2.jpg', bl_cell_guide_crop2)
+        # cv2.imwrite('/root/code/xian_aqc_ws/xian_project_file/trt/results/br_crop2.jpg', br_cell_guide_crop2)
+        
+        
+        
+        if masks[0] is not None:
+            cv2.imwrite('/root/code/xian_aqc_ws/xian_project_file/trt/results/'+str(self.cur_time)+'_0.jpg', masks[0])
+        if masks[1] is not None:    
+            cv2.imwrite('/root/code/xian_aqc_ws/xian_project_file/trt/results/'+str(self.cur_time)+'_1.jpg', masks[1])
+        if masks[2] is not None:
+            cv2.imwrite('/root/code/xian_aqc_ws/xian_project_file/trt/results/'+str(self.cur_time)+'_2.jpg', masks[2])
+        if masks[3] is not None:
+            cv2.imwrite('/root/code/xian_aqc_ws/xian_project_file/trt/results/'+str(self.cur_time)+'_3.jpg', masks[3])
+        
+        if masks[4] is not None:
+            cv2.imwrite('/root/code/xian_aqc_ws/xian_project_file/trt/results/'+str(self.cur_time)+'_4.jpg', masks[4])
+        if masks[5] is not None:
+            cv2.imwrite('/root/code/xian_aqc_ws/xian_project_file/trt/results/'+str(self.cur_time)+'_5.jpg', masks[5])
+        if masks[6] is not None:
+            cv2.imwrite('/root/code/xian_aqc_ws/xian_project_file/trt/results/'+str(self.cur_time)+'_6.jpg', masks[6])
+        if masks[7] is not None:
+            cv2.imwrite('/root/code/xian_aqc_ws/xian_project_file/trt/results/'+str(self.cur_time)+'_7.jpg', masks[7])
+        
+        if masks[8] is not None:
+            cv2.imwrite('/root/code/xian_aqc_ws/xian_project_file/trt/results/'+str(self.cur_time)+'_8.jpg', masks[8])
+        if masks[9] is not None:
+            cv2.imwrite('/root/code/xian_aqc_ws/xian_project_file/trt/results/'+str(self.cur_time)+'_9.jpg', masks[9])
+        if masks[10] is not None:
+            cv2.imwrite('/root/code/xian_aqc_ws/xian_project_file/trt/results/'+str(self.cur_time)+'_10.jpg', masks[10])
+        if masks[11] is not None:
+            cv2.imwrite('/root/code/xian_aqc_ws/xian_project_file/trt/results/'+str(self.cur_time)+'_11.jpg', masks[11])
+        
+        
 
-            self.lock_hole_mask_msg.tl_image = data.tl_image
-            self.lock_hole_mask_msg.tr_image = data.tr_image
-            self.lock_hole_mask_msg.bl_image = data.bl_image
-            self.lock_hole_mask_msg.br_image = data.br_image
+        self.xian_cell_guide_mask_msg.tl_image = data.tl_image
+        self.xian_cell_guide_mask_msg.tr_image = data.tr_image
+        self.xian_cell_guide_mask_msg.bl_image = data.bl_image
+        self.xian_cell_guide_mask_msg.br_image = data.br_image
+        
+        self.xian_cell_guide_mask_msg.tl_mask_0 = self.decode_mask_f(masks[0], tl_cell_guide_crop0)
+        self.xian_cell_guide_mask_msg.tr_mask_0 = self.decode_mask_f(masks[1], tr_cell_guide_crop0)
+        self.xian_cell_guide_mask_msg.bl_mask_0 = self.decode_mask_f(masks[2], bl_cell_guide_crop0)
+        self.xian_cell_guide_mask_msg.br_mask_0 = self.decode_mask_f(masks[3], br_cell_guide_crop0)
+        
+        self.xian_cell_guide_mask_msg.tl_mask_1 = self.decode_mask_f(masks[4], tl_cell_guide_crop1)
+        self.xian_cell_guide_mask_msg.tr_mask_1 = self.decode_mask_f(masks[5], tr_cell_guide_crop1)
+        self.xian_cell_guide_mask_msg.bl_mask_1 = self.decode_mask_f(masks[6], bl_cell_guide_crop1)
+        self.xian_cell_guide_mask_msg.br_mask_1 = self.decode_mask_f(masks[7], br_cell_guide_crop1)
+        
+        self.xian_cell_guide_mask_msg.tl_mask_2 = self.decode_mask_f(masks[8], tl_cell_guide_crop2)
+        self.xian_cell_guide_mask_msg.tr_mask_2 = self.decode_mask_f(masks[9], tr_cell_guide_crop2)
+        self.xian_cell_guide_mask_msg.bl_mask_2 = self.decode_mask_f(masks[10], bl_cell_guide_crop2)
+        self.xian_cell_guide_mask_msg.br_mask_2 = self.decode_mask_f(masks[11], br_cell_guide_crop2)
+        
+        self.xian_cell_guide_mask_msg.tl_container_corner_cx = data.tl_container_corner_cx
+        self.xian_cell_guide_mask_msg.tl_container_corner_cy = data.tl_container_corner_cy
+        self.xian_cell_guide_mask_msg.tr_container_corner_cx = data.tr_container_corner_cx
+        self.xian_cell_guide_mask_msg.tr_container_corner_cy = data.tr_container_corner_cy
+        self.xian_cell_guide_mask_msg.bl_container_corner_cx = data.bl_container_corner_cx
+        self.xian_cell_guide_mask_msg.bl_container_corner_cy = data.bl_container_corner_cy
+        self.xian_cell_guide_mask_msg.br_container_corner_cx = data.br_container_corner_cx
+        self.xian_cell_guide_mask_msg.br_container_corner_cy = data.br_container_corner_cy
+        
+        self.xian_cell_guide_mask_msg.tl_cell_guide_crop0_tl_x = data.tl_cell_guide_crop0_tl_x
+        self.xian_cell_guide_mask_msg.tl_cell_guide_crop0_tl_y = data.tl_cell_guide_crop0_tl_y
+        self.xian_cell_guide_mask_msg.tr_cell_guide_crop0_tl_x = data.tr_cell_guide_crop0_tl_x
+        self.xian_cell_guide_mask_msg.tr_cell_guide_crop0_tl_y = data.tr_cell_guide_crop0_tl_y
+        self.xian_cell_guide_mask_msg.bl_cell_guide_crop0_tl_x = data.bl_cell_guide_crop0_tl_x
+        self.xian_cell_guide_mask_msg.bl_cell_guide_crop0_tl_y = data.bl_cell_guide_crop0_tl_y
+        self.xian_cell_guide_mask_msg.br_cell_guide_crop0_tl_x = data.br_cell_guide_crop0_tl_x
+        self.xian_cell_guide_mask_msg.br_cell_guide_crop0_tl_y = data.br_cell_guide_crop0_tl_y
+        
+        self.xian_cell_guide_mask_msg.tl_cell_guide_crop1_tl_x = data.tl_cell_guide_crop1_tl_x
+        self.xian_cell_guide_mask_msg.tl_cell_guide_crop1_tl_y = data.tl_cell_guide_crop1_tl_y
+        self.xian_cell_guide_mask_msg.tr_cell_guide_crop1_tl_x = data.tr_cell_guide_crop1_tl_x
+        self.xian_cell_guide_mask_msg.tr_cell_guide_crop1_tl_y = data.tr_cell_guide_crop1_tl_y
+        self.xian_cell_guide_mask_msg.bl_cell_guide_crop1_tl_x = data.bl_cell_guide_crop1_tl_x
+        self.xian_cell_guide_mask_msg.bl_cell_guide_crop1_tl_y = data.bl_cell_guide_crop1_tl_y
+        self.xian_cell_guide_mask_msg.br_cell_guide_crop1_tl_x = data.br_cell_guide_crop1_tl_x
+        self.xian_cell_guide_mask_msg.br_cell_guide_crop1_tl_y = data.br_cell_guide_crop1_tl_y
+        
+        self.xian_cell_guide_mask_msg.tl_cell_guide_crop2_tl_x = data.tl_cell_guide_crop2_tl_x
+        self.xian_cell_guide_mask_msg.tl_cell_guide_crop2_tl_y = data.tl_cell_guide_crop2_tl_y
+        self.xian_cell_guide_mask_msg.tr_cell_guide_crop2_tl_x = data.tr_cell_guide_crop2_tl_x
+        self.xian_cell_guide_mask_msg.tr_cell_guide_crop2_tl_y = data.tr_cell_guide_crop2_tl_y
+        self.xian_cell_guide_mask_msg.bl_cell_guide_crop2_tl_x = data.bl_cell_guide_crop2_tl_x
+        self.xian_cell_guide_mask_msg.bl_cell_guide_crop2_tl_y = data.bl_cell_guide_crop2_tl_y
+        self.xian_cell_guide_mask_msg.br_cell_guide_crop2_tl_x = data.br_cell_guide_crop2_tl_x
+        self.xian_cell_guide_mask_msg.br_cell_guide_crop2_tl_y = data.br_cell_guide_crop2_tl_y
 
-            if masks[0] is not None:
-                self.lock_hole_mask_msg.tl_mask_image = CvBridge().cv2_to_imgmsg(masks[0],"bgr8")
-            else:
-                temp = np.zeros_like(image_src_0)
-                self.lock_hole_mask_msg.tl_mask_image = CvBridge().cv2_to_imgmsg(temp,"bgr8")
+        self.xian_cell_guide_mask_publisher.publish(self.xian_cell_guide_mask_msg)
 
-            if masks[1] is not None:
-                self.lock_hole_mask_msg.tr_mask_image = CvBridge().cv2_to_imgmsg(masks[1],"bgr8")
-            else:
-                temp = np.zeros_like(image_src_1)
-                self.lock_hole_mask_msg.tr_mask_image = CvBridge().cv2_to_imgmsg(temp,"bgr8")
-
-            if masks[2] is not None:
-                self.lock_hole_mask_msg.bl_mask_image = CvBridge().cv2_to_imgmsg(masks[2],"bgr8")
-            else:
-                temp = np.zeros_like(image_src_2)
-                self.lock_hole_mask_msg.bl_mask_image = CvBridge().cv2_to_imgmsg(temp,"bgr8")
-
-            if masks[3] is not None:
-                self.lock_hole_mask_msg.br_mask_image = CvBridge().cv2_to_imgmsg(masks[3],"bgr8")
-            else:
-                temp = np.zeros_like(image_src_3)
-                self.lock_hole_mask_msg.br_mask_image = CvBridge().cv2_to_imgmsg(temp,"bgr8")
-
-            self.lock_hole_mask_publisher.publish(self.lock_hole_mask_msg)
-            print('This is firstlanding work!')
-        else:
-            print('This is not firstlanding work!')
         self.timediff = (self.cur_time - self.pre_time).total_seconds()
-        rospy.set_param("/zpmc_unloading_parameters_node/zpmc_corner_line_ai_fps", 1.0/self.timediff)
-        zpmc_corner_line_ai_fps = rospy.get_param("/zpmc_unloading_parameters_node/zpmc_corner_line_ai_fps")
-        print('FPS {:2.3f}'.format(zpmc_corner_line_ai_fps))
+        rospy.set_param("/xian_aqc_dynamic_parameters_server/xian_cell_guide_recognition_fps", 1.0/self.timediff)
+        xian_cell_guide_recognition_fps = rospy.get_param("/xian_aqc_dynamic_parameters_server/xian_cell_guide_recognition_fps")
+        print('FPS {:2.3f}'.format(xian_cell_guide_recognition_fps))
         
 
 
@@ -473,22 +565,22 @@ class HB:
     def __init__(self):
         self.counter = 0
 
-    def zpmc_heat_beat_callback(self, event):
-        rospy.set_param("/zpmc_unloading_parameters_node/zpmc_corner_line_ai_heat_beat", self.counter)
-        zpmc_corner_line_ai_heat_beat = rospy.get_param("/zpmc_unloading_parameters_node/zpmc_corner_line_ai_heat_beat")
+    def xian_heat_beat_callback(self, event):
+        rospy.set_param("/xian_aqc_dynamic_parameters_server/xian_cell_guide_recognition_heat_beat", self.counter)
+        xian_cell_guide_recognition_heat_beat = rospy.get_param("/xian_aqc_dynamic_parameters_server/xian_cell_guide_recognition_heat_beat")
         if self.counter>1000:
             self.counter = 0
         self.counter += 1
-        print("zpmc_corner_line_ai_heat_beat:", zpmc_corner_line_ai_heat_beat)
+        print("xian_cell_guide_recognition_heat_beat:", xian_cell_guide_recognition_heat_beat)
 
 
 
 if __name__ == '__main__':
     try:
         tt = HB()
-        rospy.init_node('zpmc_corner_line_recognition', anonymous=True)  # 初始化ROS节点
-        rospy.Timer(rospy.Duration(1), tt.zpmc_heat_beat_callback, oneshot=False)
-        publisher = zpmc_lock_hole_recognition()
+        rospy.init_node('xian_cell_guide_recognition_node', anonymous=True)  # 初始化ROS节点
+        rospy.Timer(rospy.Duration(1), tt.xian_heat_beat_callback, oneshot=False)
+        publisher = xian_cell_guide_recognition()
         
 
 

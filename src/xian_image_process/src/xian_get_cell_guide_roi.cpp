@@ -201,20 +201,20 @@ class Xian_GetCellGuideROI
             cv::Point clip2_cell_guide_br_xy1 = *(clip2_cell_guide_br_xy+1);
             br_image_cell_guide_crop_2 = br_image(cv::Rect(clip2_cell_guide_br_xy0.x, clip2_cell_guide_br_xy0.y, crop_w, crop_h)).clone();
 
-            cv::resize(tl_image_cell_guide_crop_0, tl_image_cell_guide_crop_0_resize, cv::Size(512, 512), 2);
-            cv::resize(tr_image_cell_guide_crop_0, tr_image_cell_guide_crop_0_resize, cv::Size(512, 512), 2);
-            cv::resize(bl_image_cell_guide_crop_0, bl_image_cell_guide_crop_0_resize, cv::Size(512, 512), 2);
-            cv::resize(br_image_cell_guide_crop_0, br_image_cell_guide_crop_0_resize, cv::Size(512, 512), 2);
+            cv::resize(tl_image_cell_guide_crop_0, tl_image_cell_guide_crop_0_resize, cv::Size(550, 550), 2);
+            cv::resize(tr_image_cell_guide_crop_0, tr_image_cell_guide_crop_0_resize, cv::Size(550, 550), 2);
+            cv::resize(bl_image_cell_guide_crop_0, bl_image_cell_guide_crop_0_resize, cv::Size(550, 550), 2);
+            cv::resize(br_image_cell_guide_crop_0, br_image_cell_guide_crop_0_resize, cv::Size(550, 550), 2);
             
-            cv::resize(tl_image_cell_guide_crop_1, tl_image_cell_guide_crop_1_resize, cv::Size(512, 512), 2);
-            cv::resize(tr_image_cell_guide_crop_1, tr_image_cell_guide_crop_1_resize, cv::Size(512, 512), 2);
-            cv::resize(bl_image_cell_guide_crop_1, bl_image_cell_guide_crop_1_resize, cv::Size(512, 512), 2);
-            cv::resize(br_image_cell_guide_crop_1, br_image_cell_guide_crop_1_resize, cv::Size(512, 512), 2);
+            cv::resize(tl_image_cell_guide_crop_1, tl_image_cell_guide_crop_1_resize, cv::Size(550, 550), 2);
+            cv::resize(tr_image_cell_guide_crop_1, tr_image_cell_guide_crop_1_resize, cv::Size(550, 550), 2);
+            cv::resize(bl_image_cell_guide_crop_1, bl_image_cell_guide_crop_1_resize, cv::Size(550, 550), 2);
+            cv::resize(br_image_cell_guide_crop_1, br_image_cell_guide_crop_1_resize, cv::Size(550, 550), 2);
 
-            cv::resize(tl_image_cell_guide_crop_2, tl_image_cell_guide_crop_2_resize, cv::Size(512, 512), 2);
-            cv::resize(tr_image_cell_guide_crop_2, tr_image_cell_guide_crop_2_resize, cv::Size(512, 512), 2);
-            cv::resize(bl_image_cell_guide_crop_2, bl_image_cell_guide_crop_2_resize, cv::Size(512, 512), 2);
-            cv::resize(br_image_cell_guide_crop_2, br_image_cell_guide_crop_2_resize, cv::Size(512, 512), 2);
+            cv::resize(tl_image_cell_guide_crop_2, tl_image_cell_guide_crop_2_resize, cv::Size(550, 550), 2);
+            cv::resize(tr_image_cell_guide_crop_2, tr_image_cell_guide_crop_2_resize, cv::Size(550, 550), 2);
+            cv::resize(bl_image_cell_guide_crop_2, bl_image_cell_guide_crop_2_resize, cv::Size(550, 550), 2);
+            cv::resize(br_image_cell_guide_crop_2, br_image_cell_guide_crop_2_resize, cv::Size(550, 550), 2);
 
 
             tl_cell_guide_crop_image0 = cv_bridge::CvImage(std_msgs::Header(), "bgr8", tl_image_cell_guide_crop_0_resize).toImageMsg();

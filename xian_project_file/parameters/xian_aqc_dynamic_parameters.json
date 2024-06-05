@@ -98,5 +98,16 @@
     "clip2_cell_guide_br_y1": 0,
     "xian_get_cell_guide_roi_heart_beat": 0,
     "xian_get_cell_guide_roi_fps": 0,
-    "xian_PLC_heart_beat": 0
+    "xian_PLC_heart_beat": 0,
+    "xian_cell_guide_recognition_heat_beat": 0,
+    "xian_cell_guide_recognition_fps": 0,
+    "xian_cell_guide_point_identification_heart_beat": 0,
+    "xian_cell_guide_point_identification_fps": 0,
+    "xian_cell_guide_mask_resize_heart_beat": 0,
+    "xian_cell_guide_mask_resize_fps": 0,
+    "scale_lower": 0.7,
+    "scale_upper": 1.3,
+    "point_w_a": 1.0,
+    "point_w_b": 0.0,
+    "area_threshold": 10
 }

@@ -195,21 +195,21 @@ class Xian_GetCellGuideRoiShow
             cv::circle(br_image, br_container_corner, 16, red, -1);
 
             cv::Mat* cell_guide_list0 = draw_rectangle(tl_cell_guide_crop0_tl, tr_cell_guide_crop0_tl, bl_cell_guide_crop0_tl, br_cell_guide_crop0_tl,
-                                                            tl_image, tr_image, bl_image, br_image, lemon);
+                                                            tl_image, tr_image, bl_image, br_image, lemon, cv::Point(0, 100));
             tl_image = *(cell_guide_list0+0);
             tr_image = *(cell_guide_list0+1);
             bl_image = *(cell_guide_list0+2);
             br_image = *(cell_guide_list0+3);
 
             cv::Mat* cell_guide_list1 = draw_rectangle(tl_cell_guide_crop1_tl, tr_cell_guide_crop1_tl, bl_cell_guide_crop1_tl, br_cell_guide_crop1_tl,
-                                                       tl_image, tr_image, bl_image, br_image, yellow);
+                                                       tl_image, tr_image, bl_image, br_image, yellow, cv::Point(0, 200));
             tl_image = *(cell_guide_list1+0);
             tr_image = *(cell_guide_list1+1);
             bl_image = *(cell_guide_list1+2);
             br_image = *(cell_guide_list1+3);
 
             cv::Mat* cell_guide_list2 = draw_rectangle(tl_cell_guide_crop2_tl, tr_cell_guide_crop2_tl, bl_cell_guide_crop2_tl, br_cell_guide_crop2_tl,
-                                                       tl_image, tr_image, bl_image, br_image, blue);
+                                                       tl_image, tr_image, bl_image, br_image, blue, cv::Point(0, 300));
             tl_image = *(cell_guide_list2+0);
             tr_image = *(cell_guide_list2+1);
             bl_image = *(cell_guide_list2+2);
@@ -292,7 +292,7 @@ class Xian_GetCellGuideRoiShow
         } 
 
         cv::Mat* draw_rectangle(cv::Point tl_xy0, cv::Point tr_xy0, cv::Point bl_xy0, cv::Point br_xy0,
-                                cv::Mat tl_image, cv::Mat tr_image, cv::Mat bl_image, cv::Mat br_image, cv::Scalar color)
+                                cv::Mat tl_image, cv::Mat tr_image, cv::Mat bl_image, cv::Mat br_image, cv::Scalar color, cv::Point text_position)
         {
             static cv::Mat imgs[4];
             int tl_x1 = tl_xy0.x + 256;
@@ -307,10 +307,43 @@ class Xian_GetCellGuideRoiShow
             cv::Point tr_xy1 = cv::Point(tr_x1, tr_y1);
             cv::Point bl_xy1 = cv::Point(bl_x1, bl_y1);
             cv::Point br_xy1 = cv::Point(br_x1, br_y1);
-            cv::rectangle(tl_image, tl_xy0, tl_xy1, color, 4); 
-            cv::rectangle(tr_image, tr_xy0, tr_xy1, color, 4); 
-            cv::rectangle(bl_image, bl_xy0, bl_xy1, color, 4); 
-            cv::rectangle(br_image, br_xy0, br_xy1, color, 4); 
+
+            if(tl_xy0.x == 0 && tl_xy0.y == 0)
+            {
+                cv::putText(tl_image,"Can't get cell guide roi!", text_position, cv::FONT_HERSHEY_SIMPLEX, 2, color, 5, 8);
+            }
+            else
+            {
+                cv::rectangle(tl_image, tl_xy0, tl_xy1, color, 4); 
+            }
+            
+            if(tr_xy0.x == 0 && tr_xy0.y == 0)
+            {
+                cv::putText(tr_image,"Can't get cell guide roi!", text_position, cv::FONT_HERSHEY_SIMPLEX, 2, color, 5, 8);
+            }
+            else
+            {
+                cv::rectangle(tr_image, tr_xy0, tr_xy1, color, 4); 
+            }
+
+            if(bl_xy0.x == 0 && bl_xy0.y == 0)
+            {
+                cv::putText(bl_image,"Can't get cell guide roi!", text_position, cv::FONT_HERSHEY_SIMPLEX, 2, color, 5, 8);
+            }
+            else
+            {
+                cv::rectangle(bl_image, bl_xy0, bl_xy1, color, 4); 
+            }
+            
+            if(br_xy0.x == 0 && br_xy0.y == 0)
+            {
+                cv::putText(br_image,"Can't get cell guide roi!", text_position, cv::FONT_HERSHEY_SIMPLEX, 2, color, 5, 8);
+            }
+            else
+            {
+                cv::rectangle(br_image, br_xy0, br_xy1, color, 4); 
+            }
+
             imgs[0] = tl_image;
             imgs[1] = tr_image;
             imgs[2] = bl_image;
@@ -323,17 +356,47 @@ class Xian_GetCellGuideRoiShow
                                cv::Mat tl_mask, cv::Mat tr_mask, cv::Mat bl_mask, cv::Mat br_mask)
         {
             static cv::Mat imgs[4];
-            cv::resize(tl_crop_image, tl_crop_image, cv::Size(256, 256), 2);
-            tl_mask = zpmc::crop_copy_to_mask(tl_x0, tl_y0, tl_mask, tl_crop_image);
+            
 
-            cv::resize(tr_crop_image, tr_crop_image, cv::Size(256, 256), 2);
-            tr_mask = zpmc::crop_copy_to_mask(tr_x0, tr_y0, tr_mask, tr_crop_image);
+            if(tl_x0 == 0 && tl_y0 == 0)
+            {
 
-            cv::resize(bl_crop_image, bl_crop_image, cv::Size(256, 256), 2);
-            bl_mask = zpmc::crop_copy_to_mask(bl_x0, bl_y0, bl_mask, bl_crop_image);
+            }
+            else
+            {
+                cv::resize(tl_crop_image, tl_crop_image, cv::Size(256, 256), 2);
+                tl_mask = zpmc::crop_copy_to_mask(tl_x0, tl_y0, tl_mask, tl_crop_image);
+            }
+            
+            if(tr_x0 == 0 && tr_y0 == 0)
+            {
 
-            cv::resize(br_crop_image, br_crop_image, cv::Size(256, 256), 2);
-            br_mask = zpmc::crop_copy_to_mask(br_x0, br_y0, br_mask, br_crop_image);
+            }
+            else
+            {
+                cv::resize(tr_crop_image, tr_crop_image, cv::Size(256, 256), 2);
+                tr_mask = zpmc::crop_copy_to_mask(tr_x0, tr_y0, tr_mask, tr_crop_image);
+            }
+            
+            if(bl_x0 == 0 && bl_y0 == 0)
+            {
+
+            }
+            else
+            {
+                cv::resize(bl_crop_image, bl_crop_image, cv::Size(256, 256), 2);
+                bl_mask = zpmc::crop_copy_to_mask(bl_x0, bl_y0, bl_mask, bl_crop_image);
+            }
+            
+            if(br_x0 == 0 && br_y0 == 0)
+            {
+
+            }
+            else
+            {
+                cv::resize(br_crop_image, br_crop_image, cv::Size(256, 256), 2);
+                br_mask = zpmc::crop_copy_to_mask(br_x0, br_y0, br_mask, br_crop_image);
+            }
             imgs[0] = tl_mask;
             imgs[1] = tr_mask;
             imgs[2] = bl_mask;
