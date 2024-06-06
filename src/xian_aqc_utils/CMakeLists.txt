@@ -228,3 +228,13 @@ target_link_libraries(xian_get_cell_guide_roi_show zpmc_cv_control ${OpenCV_LIBR
 add_executable(xian_retractable_box_work_show src/xian_retractable_box_work_show.cpp )
 add_dependencies(xian_retractable_box_work_show ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(xian_retractable_box_work_show zpmc_cv_control ${OpenCV_LIBRARIES} ${catkin_LIBRARIES})
+
+add_executable(xian_cell_guide_point_identification_show src/xian_cell_guide_point_identification_show.cpp )
+add_dependencies(xian_cell_guide_point_identification_show ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(xian_cell_guide_point_identification_show zpmc_cv_control ${OpenCV_LIBRARIES} ${catkin_LIBRARIES})
+
+add_executable(xian_cell_guide_mask_resize_show src/xian_cell_guide_mask_resize_show.cpp )
+add_dependencies(xian_cell_guide_mask_resize_show ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(xian_cell_guide_mask_resize_show zpmc_cv_control ${OpenCV_LIBRARIES} ${catkin_LIBRARIES})
+
+

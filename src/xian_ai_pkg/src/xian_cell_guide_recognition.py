@@ -467,32 +467,32 @@ class xian_cell_guide_recognition:
         
         
         
-        if masks[0] is not None:
-            cv2.imwrite('/root/code/xian_aqc_ws/xian_project_file/trt/results/'+str(self.cur_time)+'_0.jpg', masks[0])
-        if masks[1] is not None:    
-            cv2.imwrite('/root/code/xian_aqc_ws/xian_project_file/trt/results/'+str(self.cur_time)+'_1.jpg', masks[1])
-        if masks[2] is not None:
-            cv2.imwrite('/root/code/xian_aqc_ws/xian_project_file/trt/results/'+str(self.cur_time)+'_2.jpg', masks[2])
-        if masks[3] is not None:
-            cv2.imwrite('/root/code/xian_aqc_ws/xian_project_file/trt/results/'+str(self.cur_time)+'_3.jpg', masks[3])
+        # if masks[0] is not None:
+        #     cv2.imwrite('/root/code/xian_aqc_ws/xian_project_file/trt/results/'+str(self.cur_time)+'_0.jpg', masks[0])
+        # if masks[1] is not None:    
+        #     cv2.imwrite('/root/code/xian_aqc_ws/xian_project_file/trt/results/'+str(self.cur_time)+'_1.jpg', masks[1])
+        # if masks[2] is not None:
+        #     cv2.imwrite('/root/code/xian_aqc_ws/xian_project_file/trt/results/'+str(self.cur_time)+'_2.jpg', masks[2])
+        # if masks[3] is not None:
+        #     cv2.imwrite('/root/code/xian_aqc_ws/xian_project_file/trt/results/'+str(self.cur_time)+'_3.jpg', masks[3])
         
-        if masks[4] is not None:
-            cv2.imwrite('/root/code/xian_aqc_ws/xian_project_file/trt/results/'+str(self.cur_time)+'_4.jpg', masks[4])
-        if masks[5] is not None:
-            cv2.imwrite('/root/code/xian_aqc_ws/xian_project_file/trt/results/'+str(self.cur_time)+'_5.jpg', masks[5])
-        if masks[6] is not None:
-            cv2.imwrite('/root/code/xian_aqc_ws/xian_project_file/trt/results/'+str(self.cur_time)+'_6.jpg', masks[6])
-        if masks[7] is not None:
-            cv2.imwrite('/root/code/xian_aqc_ws/xian_project_file/trt/results/'+str(self.cur_time)+'_7.jpg', masks[7])
+        # if masks[4] is not None:
+        #     cv2.imwrite('/root/code/xian_aqc_ws/xian_project_file/trt/results/'+str(self.cur_time)+'_4.jpg', masks[4])
+        # if masks[5] is not None:
+        #     cv2.imwrite('/root/code/xian_aqc_ws/xian_project_file/trt/results/'+str(self.cur_time)+'_5.jpg', masks[5])
+        # if masks[6] is not None:
+        #     cv2.imwrite('/root/code/xian_aqc_ws/xian_project_file/trt/results/'+str(self.cur_time)+'_6.jpg', masks[6])
+        # if masks[7] is not None:
+        #     cv2.imwrite('/root/code/xian_aqc_ws/xian_project_file/trt/results/'+str(self.cur_time)+'_7.jpg', masks[7])
         
-        if masks[8] is not None:
-            cv2.imwrite('/root/code/xian_aqc_ws/xian_project_file/trt/results/'+str(self.cur_time)+'_8.jpg', masks[8])
-        if masks[9] is not None:
-            cv2.imwrite('/root/code/xian_aqc_ws/xian_project_file/trt/results/'+str(self.cur_time)+'_9.jpg', masks[9])
-        if masks[10] is not None:
-            cv2.imwrite('/root/code/xian_aqc_ws/xian_project_file/trt/results/'+str(self.cur_time)+'_10.jpg', masks[10])
-        if masks[11] is not None:
-            cv2.imwrite('/root/code/xian_aqc_ws/xian_project_file/trt/results/'+str(self.cur_time)+'_11.jpg', masks[11])
+        # if masks[8] is not None:
+        #     cv2.imwrite('/root/code/xian_aqc_ws/xian_project_file/trt/results/'+str(self.cur_time)+'_8.jpg', masks[8])
+        # if masks[9] is not None:
+        #     cv2.imwrite('/root/code/xian_aqc_ws/xian_project_file/trt/results/'+str(self.cur_time)+'_9.jpg', masks[9])
+        # if masks[10] is not None:
+        #     cv2.imwrite('/root/code/xian_aqc_ws/xian_project_file/trt/results/'+str(self.cur_time)+'_10.jpg', masks[10])
+        # if masks[11] is not None:
+        #     cv2.imwrite('/root/code/xian_aqc_ws/xian_project_file/trt/results/'+str(self.cur_time)+'_11.jpg', masks[11])
         
         
 
