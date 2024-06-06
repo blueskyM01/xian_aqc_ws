@@ -109,5 +109,7 @@
     "scale_upper": 1.3,
     "point_w_a": 1.0,
     "point_w_b": 0.0,
-    "area_threshold": 10
+    "area_threshold": 10,
+    "xian_error_restart_log_heart_beat": 0,
+    "xian_error_restart_log_fps": 0
 }
