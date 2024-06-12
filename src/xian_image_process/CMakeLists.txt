@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(xian_communication_pkg)
+project(xian_image_process)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 # add_compile_options(-std=c++11)
@@ -8,13 +8,14 @@ project(xian_communication_pkg)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
+  cv_bridge
+  image_transport
   roscpp
   rospy
   std_msgs
-  cv_bridge image_transport
 )
+set(OpenCV_DIR "/root/opencv_cuda_4.7.0/lib/cmake/opencv4/")
 find_package(OpenCV REQUIRED)
-
 set(LIB_CONTROL_CV_DIR "/root/code/xian_aqc_ws/xian_project_file/include") 
 set(LIB_CONTROL_CV_LINK_DIR "/root/code/xian_aqc_ws/xian_project_file/lib")
 include_directories(${LIB_CONTROL_CV_DIR})
@@ -111,8 +112,8 @@ link_directories(${LIB_CONTROL_CV_LINK_DIR})
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
 #  INCLUDE_DIRS include
-#  LIBRARIES xian_communication_pkg
-#  CATKIN_DEPENDS roscpp rospy std_msgs
+#  LIBRARIES xian_image_process
+#  CATKIN_DEPENDS cv_bridge image_transport roscpp rospy std_msgs
 #  DEPENDS system_lib
 )
 
@@ -123,13 +124,13 @@ catkin_package(
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 include_directories(
-# include
+  include ../../devel/include
   ${catkin_INCLUDE_DIRS}
 )
 
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}
-#   src/${PROJECT_NAME}/xian_communication_pkg.cpp
+#   src/${PROJECT_NAME}/xian_image_process.cpp
 # )
 
 ## Add cmake target dependencies of the library
@@ -140,7 +141,7 @@ include_directories(
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-# add_executable(${PROJECT_NAME}_node src/xian_communication_pkg_node.cpp)
+# add_executable(${PROJECT_NAME}_node src/xian_image_process_node.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -204,7 +205,7 @@ include_directories(
 #############
 
 ## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_xian_communication_pkg.cpp)
+# catkin_add_gtest(${PROJECT_NAME}-test test/test_xian_image_process.cpp)
 # if(TARGET ${PROJECT_NAME}-test)
 #   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
 # endif()
@@ -212,12 +213,18 @@ include_directories(
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
 
-add_executable(xian_server_simulation_tl src/xian_server_simulation_tl.cpp)
-add_dependencies(xian_server_simulation_tl ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-target_link_libraries(xian_server_simulation_tl ${catkin_LIBRARIES})
-# add_dependencies(xian_server_simulation_tl ${PROJECT_NAME}_gencfg)
+add_executable(xian_image_cop_process src/xian_image_cop_process.cpp )
+add_dependencies(xian_image_cop_process ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(xian_image_cop_process zpmc_cv_control ${OpenCV_LIBRARIES} ${catkin_LIBRARIES})
 
-add_executable(xian_communication_with_plc_node src/xian_communication_with_plc_node.cpp)
-add_dependencies(xian_communication_with_plc_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-target_link_libraries(xian_communication_with_plc_node zpmc_cv_control ${catkin_LIBRARIES})
+add_executable(xian_get_cell_guide_roi src/xian_get_cell_guide_roi.cpp )
+add_dependencies(xian_get_cell_guide_roi ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(xian_get_cell_guide_roi zpmc_cv_control ${OpenCV_LIBRARIES} ${catkin_LIBRARIES})
 
+add_executable(xian_cell_guide_point_identification src/xian_cell_guide_point_identification.cpp )
+add_dependencies(xian_cell_guide_point_identification ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(xian_cell_guide_point_identification zpmc_cv_control ${OpenCV_LIBRARIES} ${catkin_LIBRARIES})
+
+add_executable(xian_cell_guide_mask_resize src/xian_cell_guide_mask_resize.cpp )
+add_dependencies(xian_cell_guide_mask_resize ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(xian_cell_guide_mask_resize zpmc_cv_control ${OpenCV_LIBRARIES} ${catkin_LIBRARIES})

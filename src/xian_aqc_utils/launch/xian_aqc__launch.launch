@@ -1,7 +1,0 @@
-<?xml version="1.0"?>
-<launch>
-    <node name ="xian_aqc_dynamic_parameters_server" pkg="xian_aqc_params" type="xian_aqc_dynamic_parameters_server"/>
-    <node name ="xian_server_simulation_tl" pkg="xian_communication_pkg" type="xian_server_simulation_tl"/>
-    <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch">
-    </include>
-</launch> 

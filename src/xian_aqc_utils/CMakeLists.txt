@@ -8,10 +8,18 @@ project(xian_aqc_utils)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
+  cv_bridge
+  image_transport
   roscpp
   rospy
   std_msgs
 )
+# set(OpenCV_DIR "/root/opencv_cuda_4.7.0/lib/cmake/opencv4/")
+find_package(OpenCV REQUIRED)
+set(LIB_CONTROL_CV_DIR "/root/code/xian_aqc_ws/xian_project_file/include") 
+set(LIB_CONTROL_CV_LINK_DIR "/root/code/xian_aqc_ws/xian_project_file/lib")
+include_directories(${LIB_CONTROL_CV_DIR})
+link_directories(${LIB_CONTROL_CV_LINK_DIR})
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -116,7 +124,7 @@ catkin_package(
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 include_directories(
-# include
+  include ../../devel/include
   ${catkin_INCLUDE_DIRS}
 )
 
@@ -204,3 +212,38 @@ include_directories(
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
+
+add_executable(xian_keypoints_recognition_show src/xian_keypoints_recognition_show.cpp )
+add_dependencies(xian_keypoints_recognition_show ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(xian_keypoints_recognition_show zpmc_cv_control ${OpenCV_LIBRARIES} ${catkin_LIBRARIES})
+
+add_executable(xian_image_cop_process_show src/xian_image_cop_process_show.cpp )
+add_dependencies(xian_image_cop_process_show ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(xian_image_cop_process_show zpmc_cv_control ${OpenCV_LIBRARIES} ${catkin_LIBRARIES})
+
+add_executable(xian_get_cell_guide_roi_show src/xian_get_cell_guide_roi_show.cpp )
+add_dependencies(xian_get_cell_guide_roi_show ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(xian_get_cell_guide_roi_show zpmc_cv_control ${OpenCV_LIBRARIES} ${catkin_LIBRARIES})
+
+add_executable(xian_retractable_box_work_show src/xian_retractable_box_work_show.cpp )
+add_dependencies(xian_retractable_box_work_show ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(xian_retractable_box_work_show zpmc_cv_control ${OpenCV_LIBRARIES} ${catkin_LIBRARIES})
+
+add_executable(xian_cell_guide_point_identification_show src/xian_cell_guide_point_identification_show.cpp )
+add_dependencies(xian_cell_guide_point_identification_show ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(xian_cell_guide_point_identification_show zpmc_cv_control ${OpenCV_LIBRARIES} ${catkin_LIBRARIES})
+
+add_executable(xian_cell_guide_mask_resize_show src/xian_cell_guide_mask_resize_show.cpp )
+add_dependencies(xian_cell_guide_mask_resize_show ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(xian_cell_guide_mask_resize_show zpmc_cv_control ${OpenCV_LIBRARIES} ${catkin_LIBRARIES})
+
+add_executable(xian_error_restart_log src/xian_error_restart_log.cpp )
+add_dependencies(xian_error_restart_log ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(xian_error_restart_log zpmc_cv_control ${OpenCV_LIBRARIES} ${catkin_LIBRARIES})
+
+add_executable(xian_spreader_images_show src/xian_spreader_images_show.cpp)
+add_dependencies(xian_spreader_images_show ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(xian_spreader_images_show zpmc_cv_control ${OpenCV_LIBRARIES} ${catkin_LIBRARIES})
+
+
+
