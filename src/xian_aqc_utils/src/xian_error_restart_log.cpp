@@ -81,7 +81,7 @@ class zpmc_ErrorRestartLog
         int xian_cell_guide_recognition_heat_beat = 0; // 心跳频率1s
         int xian_cell_guide_mask_resize_heart_beat = 0; // 心跳频率1s
         int xian_cell_guide_point_identification_heart_beat = 0; // 心跳频率1s
-
+        int xian_PLC_heart_beat = 0;
 
 
         int xian_plc_heart_beat_cur = 0;
@@ -111,6 +111,7 @@ class zpmc_ErrorRestartLog
         int xian_cell_guide_mask_resize_restart_flag = 0; 
         int xian_cell_guide_point_identification_restart_flag = 0; 
 
+
         
         int xian_error_restart_log_heart_beat = 0;
         double xian_error_restart_log_fps = 0.0;
@@ -137,31 +138,31 @@ class zpmc_ErrorRestartLog
             ros::param::get("/xian_aqc_dynamic_parameters_server/xian_cell_guide_point_identification_heart_beat", xian_cell_guide_point_identification_heart_beat);
 
             
-            // xian_plc_heart_beat_pre = xian_plc_heart_beat_cur;
-            // xian_plc_heart_beat_cur = xian_plc_heart_beat;
-            // if(xian_plc_heart_beat_pre == xian_plc_heart_beat_cur)
-            // {
-            //     xian_communication_with_plc_node_restart_flag ++;
-            // }
-            // else
-            // {
-            //     xian_communication_with_plc_node_restart_flag = 0;
-            // }
-            // if(xian_communication_with_plc_node_restart_flag > v_global_restart_max_count)
-            // {
-            //     // 写入故障日志
-            //     logline = timeStr + "   xian_communication_with_plc_node error";
-            //     logFile.Write(logline);
-            //     std::cout << logline << std::endl;
-            //     // 重启节点
-            //     command_kill_current_node = "ps -x | grep xian_communication_with_plc_node | grep -v 'grep' | kill `awk '{ print $1}'`";
-            //     system(command_kill_current_node.c_str());
-            //     usleep(v_restart_sleep_time);
-            //     command_restart_current_node = "rosrun xian_communication_pkg xian_communication_with_plc_node &";
-            //     system(command_restart_current_node.c_str());
-
-            //     xian_communication_with_plc_node_restart_flag = 0; // 重启后多等20s
-            // }
+            xian_plc_heart_beat_pre = xian_plc_heart_beat_cur;
+            xian_plc_heart_beat_cur = xian_plc_heart_beat;
+            std::cout << xian_plc_heart_beat_pre << "    " << xian_plc_heart_beat_cur << std::endl;
+            if(xian_plc_heart_beat_pre == xian_plc_heart_beat_cur)
+            {
+                xian_communication_with_plc_node_restart_flag ++;
+            }
+            else
+            {
+                xian_communication_with_plc_node_restart_flag = 0;
+            }
+            if(xian_communication_with_plc_node_restart_flag > v_global_restart_max_count)
+            {
+                // 写入故障日志
+                logline = timeStr + "   xian_communication_with_plc_node error";
+                logFile.Write(logline);
+                std::cout << logline << std::endl;
+                // 重启节点
+                command_kill_current_node = "ps -x | grep xian_communication_with_plc_node | grep -v 'grep' | kill `awk '{ print $1}'`";
+                system(command_kill_current_node.c_str());
+                usleep(v_restart_sleep_time);
+                command_restart_current_node = "rosrun xian_communication_pkg xian_communication_with_plc_node &";
+                system(command_restart_current_node.c_str());
+                xian_communication_with_plc_node_restart_flag = 0; // 重启后多等20s
+            }
 
             // xian_camera_driver_heat_beat_pre = xian_camera_driver_heat_beat_cur;
             // xian_camera_driver_heat_beat_cur = xian_camera_driver_heat_beat;
@@ -187,7 +188,8 @@ class zpmc_ErrorRestartLog
             //     system(command_restart_current_node.c_str());
             //     xian_camera_driver_restart_flag = 0;
             // }
-
+            
+            /*
             xian_container_corner_cop_process_heart_beat_pre = xian_container_corner_cop_process_heart_beat_cur;
             xian_container_corner_cop_process_heart_beat_cur = xian_container_corner_cop_process_heart_beat;
             if(xian_container_corner_cop_process_heart_beat_pre == xian_container_corner_cop_process_heart_beat_cur)
@@ -340,6 +342,9 @@ class zpmc_ErrorRestartLog
 
                 xian_cell_guide_point_identification_restart_flag = 0;
             }
+            */
+            
+            
             ros::param::set("/xian_aqc_dynamic_parameters_server/xian_error_restart_log_fps",    1000.0 / timediff);
 
         } 

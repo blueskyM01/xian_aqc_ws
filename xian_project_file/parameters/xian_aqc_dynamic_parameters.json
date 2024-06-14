@@ -111,5 +111,9 @@
     "point_w_b": 0.0,
     "area_threshold": 10,
     "xian_error_restart_log_heart_beat": 0,
-    "xian_error_restart_log_fps": 0
+    "xian_error_restart_log_fps": 0,
+    "xian_trolley_side_client_ros_heart_beat": 0,
+    "xian_trolley_side_client_ros_fps": 0,
+    "xian_spreader_side_server_ros_heart_beat": 0,
+    "xian_spreader_side_server_ros_fps": 0
 }

@@ -31,7 +31,7 @@
         - xhost +local:root # 出现non-network local connections being added to access control list说明执行成功
         - run docker image 
             ```
-            sudo docker run --name xian_aqc -itd --log-opt max-size=50m --runtime nvidia --device /dev/video0 --device /dev/video1 --device /dev/video2 --device /dev/video3 --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" -v /home/nvidia/yangjianbing/:/root/code -p 2810::22 -p 2812:2812 -p 8000-8030:8000-8030 -p 2840:2840 -e NVIDIA_DRIVER_CAPABILITIES=compute,utility --env="DISPLAY" --env="QT_X11_NO_MITSHM=1" --shm-size="12g" --restart=always nvcr.io/nvidia/l4t-jetpack:r35.4.1
+            sudo docker run --name xian_aqc -itd --log-opt max-size=50m --runtime nvidia --device /dev/video0 --device /dev/video1 --device /dev/video2 --device /dev/video3 --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" -v /media/nvidia/nvme0n1pnvme0n1p1/home/nvidia/yangjianbing:/root/code -p 2810:22 -p 2812:2812 -p 2840:2840 -e NVIDIA_DRIVER_CAPABILITIES=compute,utility --env="DISPLAY" --env="QT_X11_NO_MITSHM=1" --shm-size="12g" --restart=always nvcr.io/nvidia-l4t-jetpack-r35.4.1:v1.4
 
             # 2810: ssh port
             # 8000-8030: image wireless transmission port

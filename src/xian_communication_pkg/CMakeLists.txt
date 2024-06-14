@@ -221,3 +221,19 @@ add_executable(xian_communication_with_plc_node src/xian_communication_with_plc_
 add_dependencies(xian_communication_with_plc_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(xian_communication_with_plc_node zpmc_cv_control ${catkin_LIBRARIES})
 
+
+add_executable(xian_spreader_side_server src/xian_spreader_side_server.cpp)
+add_dependencies(xian_spreader_side_server ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(xian_spreader_side_server ${catkin_LIBRARIES})
+
+add_executable(xian_spreader_side_server_ros src/xian_spreader_side_server_ros.cpp)
+add_dependencies(xian_spreader_side_server_ros ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(xian_spreader_side_server_ros ${catkin_LIBRARIES})
+
+add_executable(xian_trolley_side_client src/xian_trolley_side_client.cpp)
+add_dependencies(xian_trolley_side_client ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(xian_trolley_side_client ${catkin_LIBRARIES})
+
+add_executable(xian_trolley_side_client_ros src/xian_trolley_side_client_ros.cpp)
+add_dependencies(xian_trolley_side_client_ros ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(xian_trolley_side_client_ros ${catkin_LIBRARIES})
