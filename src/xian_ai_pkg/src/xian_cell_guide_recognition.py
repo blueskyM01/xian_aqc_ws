@@ -8,7 +8,8 @@ import sys
 import numpy as np
 import cv2, time, datetime, os, json, logging
 import tensorrt as trt
-sys.path.append('/root/TensorRT-8.4.3.1/samples/python') 
+# sys.path.append('/root/TensorRT-8.4.3.1/samples/python') 
+sys.path.append('/usr/src/tensorrt/samples/python') 
 import common
 from cv_bridge import CvBridge, CvBridgeError
 

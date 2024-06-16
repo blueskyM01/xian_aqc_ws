@@ -95,6 +95,18 @@ class Xian_ContainerCornerCopProcess
         sensor_msgs::ImagePtr tl_crop_image, tr_crop_image, bl_crop_image, br_crop_image;
         sensor_msgs::ImagePtr tl_cell_guide_crop_image1, tr_cell_guide_crop_image1, bl_cell_guide_crop_image1, br_cell_guide_crop_image1;
         sensor_msgs::ImagePtr tl_cell_guide_crop_image2, tr_cell_guide_crop_image2, bl_cell_guide_crop_image2, br_cell_guide_crop_image2;
+        cv::cuda::GpuMat tl_image_crop_gpu, tl_image_crop_resize_gpu;
+        cv::cuda::GpuMat tr_image_crop_gpu, tr_image_crop_resize_gpu;
+        cv::cuda::GpuMat bl_image_crop_gpu, bl_image_crop_resize_gpu;
+        cv::cuda::GpuMat br_image_crop_gpu, br_image_crop_resize_gpu;
+        cv::cuda::GpuMat tl_image_cell_guide_crop_1_gpu, tl_image_cell_guide_crop_1_resize_gpu;
+        cv::cuda::GpuMat tr_image_cell_guide_crop_1_gpu, tr_image_cell_guide_crop_1_resize_gpu;
+        cv::cuda::GpuMat bl_image_cell_guide_crop_1_gpu, bl_image_cell_guide_crop_1_resize_gpu;
+        cv::cuda::GpuMat br_image_cell_guide_crop_1_gpu, br_image_cell_guide_crop_1_resize_gpu;
+        cv::cuda::GpuMat tl_image_cell_guide_crop_2_gpu, tl_image_cell_guide_crop_2_resize_gpu;
+        cv::cuda::GpuMat tr_image_cell_guide_crop_2_gpu, tr_image_cell_guide_crop_2_resize_gpu;
+        cv::cuda::GpuMat bl_image_cell_guide_crop_2_gpu, bl_image_cell_guide_crop_2_resize_gpu;
+        cv::cuda::GpuMat br_image_cell_guide_crop_2_gpu, br_image_cell_guide_crop_2_resize_gpu;
         xian_msg_pkg::xian_crop_image_msg crop_images;
 
         void command_callback(const xian_msg_pkg::xian_spreader_images_msgConstPtr& xian_spreader_images)
@@ -231,18 +243,7 @@ class Xian_ContainerCornerCopProcess
             // cv::resize(bl_image_cell_guide_crop_2, bl_image_cell_guide_crop_2_resize, cv::Size(512, 512), 2);
             // cv::resize(br_image_cell_guide_crop_2, br_image_cell_guide_crop_2_resize, cv::Size(512, 512), 2);
 
-            cv::cuda::GpuMat tl_image_crop_gpu, tl_image_crop_resize_gpu;
-            cv::cuda::GpuMat tr_image_crop_gpu, tr_image_crop_resize_gpu;
-            cv::cuda::GpuMat bl_image_crop_gpu, bl_image_crop_resize_gpu;
-            cv::cuda::GpuMat br_image_crop_gpu, br_image_crop_resize_gpu;
-            cv::cuda::GpuMat tl_image_cell_guide_crop_1_gpu, tl_image_cell_guide_crop_1_resize_gpu;
-            cv::cuda::GpuMat tr_image_cell_guide_crop_1_gpu, tr_image_cell_guide_crop_1_resize_gpu;
-            cv::cuda::GpuMat bl_image_cell_guide_crop_1_gpu, bl_image_cell_guide_crop_1_resize_gpu;
-            cv::cuda::GpuMat br_image_cell_guide_crop_1_gpu, br_image_cell_guide_crop_1_resize_gpu;
-            cv::cuda::GpuMat tl_image_cell_guide_crop_2_gpu, tl_image_cell_guide_crop_2_resize_gpu;
-            cv::cuda::GpuMat tr_image_cell_guide_crop_2_gpu, tr_image_cell_guide_crop_2_resize_gpu;
-            cv::cuda::GpuMat bl_image_cell_guide_crop_2_gpu, bl_image_cell_guide_crop_2_resize_gpu;
-            cv::cuda::GpuMat br_image_cell_guide_crop_2_gpu, br_image_cell_guide_crop_2_resize_gpu;
+            
             tl_image_crop_gpu.upload(tl_image_crop);
             tr_image_crop_gpu.upload(tr_image_crop);
             bl_image_crop_gpu.upload(bl_image_crop);

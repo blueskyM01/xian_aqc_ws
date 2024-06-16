@@ -216,3 +216,9 @@ include_directories(
 add_executable(xian_camera_driver src/xian_camera_driver.cpp)
 add_dependencies(xian_camera_driver ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(xian_camera_driver zpmc_cv_control ${OpenCV_LIBRARIES} ${catkin_LIBRARIES})
+
+add_executable(xian_camera_driver_simulation src/xian_camera_driver_simulation.cpp)
+add_dependencies(xian_camera_driver_simulation ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(xian_camera_driver_simulation zpmc_cv_control ${OpenCV_LIBRARIES} ${catkin_LIBRARIES})
+
+

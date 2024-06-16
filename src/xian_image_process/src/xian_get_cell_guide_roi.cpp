@@ -7,6 +7,10 @@
 #include<opencv2/highgui/highgui.hpp>
 #include<opencv2/imgproc/imgproc.hpp>
 
+#include <opencv2/cudaarithm.hpp>
+#include <opencv2/cudaimgproc.hpp>
+#include <opencv2/cudawarping.hpp>
+
 #include<stdio.h>
 #include<sys/types.h>
 #include "xian_msg_pkg/xian_keypoints.h"
@@ -92,6 +96,31 @@ class Xian_GetCellGuideROI
         sensor_msgs::ImagePtr tl_cell_guide_crop_image0, tr_cell_guide_crop_image0, bl_cell_guide_crop_image0, br_cell_guide_crop_image0;
         sensor_msgs::ImagePtr tl_cell_guide_crop_image1, tr_cell_guide_crop_image1, bl_cell_guide_crop_image1, br_cell_guide_crop_image1;
         sensor_msgs::ImagePtr tl_cell_guide_crop_image2, tr_cell_guide_crop_image2, bl_cell_guide_crop_image2, br_cell_guide_crop_image2;
+
+        cv::cuda::GpuMat tl_image_cell_guide_crop_0_gpu;
+        cv::cuda::GpuMat tr_image_cell_guide_crop_0_gpu;
+        cv::cuda::GpuMat bl_image_cell_guide_crop_0_gpu;
+        cv::cuda::GpuMat br_image_cell_guide_crop_0_gpu;
+        cv::cuda::GpuMat tl_image_cell_guide_crop_1_gpu;
+        cv::cuda::GpuMat tr_image_cell_guide_crop_1_gpu;
+        cv::cuda::GpuMat bl_image_cell_guide_crop_1_gpu;
+        cv::cuda::GpuMat br_image_cell_guide_crop_1_gpu;
+        cv::cuda::GpuMat tl_image_cell_guide_crop_2_gpu;
+        cv::cuda::GpuMat tr_image_cell_guide_crop_2_gpu;
+        cv::cuda::GpuMat bl_image_cell_guide_crop_2_gpu;
+        cv::cuda::GpuMat br_image_cell_guide_crop_2_gpu;
+        cv::cuda::GpuMat tl_image_cell_guide_crop_0_resize_gpu;
+        cv::cuda::GpuMat tr_image_cell_guide_crop_0_resize_gpu;
+        cv::cuda::GpuMat bl_image_cell_guide_crop_0_resize_gpu;
+        cv::cuda::GpuMat br_image_cell_guide_crop_0_resize_gpu;
+        cv::cuda::GpuMat tl_image_cell_guide_crop_1_resize_gpu;
+        cv::cuda::GpuMat tr_image_cell_guide_crop_1_resize_gpu;
+        cv::cuda::GpuMat bl_image_cell_guide_crop_1_resize_gpu;
+        cv::cuda::GpuMat br_image_cell_guide_crop_1_resize_gpu;
+        cv::cuda::GpuMat tl_image_cell_guide_crop_2_resize_gpu;
+        cv::cuda::GpuMat tr_image_cell_guide_crop_2_resize_gpu;
+        cv::cuda::GpuMat bl_image_cell_guide_crop_2_resize_gpu;
+        cv::cuda::GpuMat br_image_cell_guide_crop_2_resize_gpu;
         xian_msg_pkg::xian_cell_guide_roi_msg crop_images;
 
         void command_callback(const xian_msg_pkg::xian_keypointsConstPtr& data)
@@ -201,21 +230,55 @@ class Xian_GetCellGuideROI
             cv::Point clip2_cell_guide_br_xy1 = *(clip2_cell_guide_br_xy+1);
             br_image_cell_guide_crop_2 = br_image(cv::Rect(clip2_cell_guide_br_xy0.x, clip2_cell_guide_br_xy0.y, crop_w, crop_h)).clone();
 
-            cv::resize(tl_image_cell_guide_crop_0, tl_image_cell_guide_crop_0_resize, cv::Size(550, 550), 2);
-            cv::resize(tr_image_cell_guide_crop_0, tr_image_cell_guide_crop_0_resize, cv::Size(550, 550), 2);
-            cv::resize(bl_image_cell_guide_crop_0, bl_image_cell_guide_crop_0_resize, cv::Size(550, 550), 2);
-            cv::resize(br_image_cell_guide_crop_0, br_image_cell_guide_crop_0_resize, cv::Size(550, 550), 2);
-            
-            cv::resize(tl_image_cell_guide_crop_1, tl_image_cell_guide_crop_1_resize, cv::Size(550, 550), 2);
-            cv::resize(tr_image_cell_guide_crop_1, tr_image_cell_guide_crop_1_resize, cv::Size(550, 550), 2);
-            cv::resize(bl_image_cell_guide_crop_1, bl_image_cell_guide_crop_1_resize, cv::Size(550, 550), 2);
-            cv::resize(br_image_cell_guide_crop_1, br_image_cell_guide_crop_1_resize, cv::Size(550, 550), 2);
+            // cv::resize(tl_image_cell_guide_crop_0, tl_image_cell_guide_crop_0_resize, cv::Size(550, 550), 2);
+            // cv::resize(tr_image_cell_guide_crop_0, tr_image_cell_guide_crop_0_resize, cv::Size(550, 550), 2);
+            // cv::resize(bl_image_cell_guide_crop_0, bl_image_cell_guide_crop_0_resize, cv::Size(550, 550), 2);
+            // cv::resize(br_image_cell_guide_crop_0, br_image_cell_guide_crop_0_resize, cv::Size(550, 550), 2);
+            // cv::resize(tl_image_cell_guide_crop_1, tl_image_cell_guide_crop_1_resize, cv::Size(550, 550), 2);
+            // cv::resize(tr_image_cell_guide_crop_1, tr_image_cell_guide_crop_1_resize, cv::Size(550, 550), 2);
+            // cv::resize(bl_image_cell_guide_crop_1, bl_image_cell_guide_crop_1_resize, cv::Size(550, 550), 2);
+            // cv::resize(br_image_cell_guide_crop_1, br_image_cell_guide_crop_1_resize, cv::Size(550, 550), 2);
+            // cv::resize(tl_image_cell_guide_crop_2, tl_image_cell_guide_crop_2_resize, cv::Size(550, 550), 2);
+            // cv::resize(tr_image_cell_guide_crop_2, tr_image_cell_guide_crop_2_resize, cv::Size(550, 550), 2);
+            // cv::resize(bl_image_cell_guide_crop_2, bl_image_cell_guide_crop_2_resize, cv::Size(550, 550), 2);
+            // cv::resize(br_image_cell_guide_crop_2, br_image_cell_guide_crop_2_resize, cv::Size(550, 550), 2);
 
-            cv::resize(tl_image_cell_guide_crop_2, tl_image_cell_guide_crop_2_resize, cv::Size(550, 550), 2);
-            cv::resize(tr_image_cell_guide_crop_2, tr_image_cell_guide_crop_2_resize, cv::Size(550, 550), 2);
-            cv::resize(bl_image_cell_guide_crop_2, bl_image_cell_guide_crop_2_resize, cv::Size(550, 550), 2);
-            cv::resize(br_image_cell_guide_crop_2, br_image_cell_guide_crop_2_resize, cv::Size(550, 550), 2);
-
+            tl_image_cell_guide_crop_0_gpu.upload(tl_image_cell_guide_crop_0);
+            tr_image_cell_guide_crop_0_gpu.upload(tr_image_cell_guide_crop_0);
+            bl_image_cell_guide_crop_0_gpu.upload(bl_image_cell_guide_crop_0);
+            br_image_cell_guide_crop_0_gpu.upload(br_image_cell_guide_crop_0);
+            tl_image_cell_guide_crop_1_gpu.upload(tl_image_cell_guide_crop_1);
+            tr_image_cell_guide_crop_1_gpu.upload(tr_image_cell_guide_crop_1);
+            bl_image_cell_guide_crop_1_gpu.upload(bl_image_cell_guide_crop_1);
+            br_image_cell_guide_crop_1_gpu.upload(br_image_cell_guide_crop_1);
+            tl_image_cell_guide_crop_2_gpu.upload(tl_image_cell_guide_crop_2);
+            tr_image_cell_guide_crop_2_gpu.upload(tr_image_cell_guide_crop_2);
+            bl_image_cell_guide_crop_2_gpu.upload(bl_image_cell_guide_crop_2);
+            br_image_cell_guide_crop_2_gpu.upload(br_image_cell_guide_crop_2);
+            cv::cuda::resize(tl_image_cell_guide_crop_0_gpu, tl_image_cell_guide_crop_0_resize_gpu, cv::Size(550, 550), 2);
+            cv::cuda::resize(tr_image_cell_guide_crop_0_gpu, tr_image_cell_guide_crop_0_resize_gpu, cv::Size(550, 550), 2);
+            cv::cuda::resize(bl_image_cell_guide_crop_0_gpu, bl_image_cell_guide_crop_0_resize_gpu, cv::Size(550, 550), 2);
+            cv::cuda::resize(br_image_cell_guide_crop_0_gpu, br_image_cell_guide_crop_0_resize_gpu, cv::Size(550, 550), 2);
+            cv::cuda::resize(tl_image_cell_guide_crop_1_gpu, tl_image_cell_guide_crop_1_resize_gpu, cv::Size(550, 550), 2);
+            cv::cuda::resize(tr_image_cell_guide_crop_1_gpu, tr_image_cell_guide_crop_1_resize_gpu, cv::Size(550, 550), 2);
+            cv::cuda::resize(bl_image_cell_guide_crop_1_gpu, bl_image_cell_guide_crop_1_resize_gpu, cv::Size(550, 550), 2);
+            cv::cuda::resize(br_image_cell_guide_crop_1_gpu, br_image_cell_guide_crop_1_resize_gpu, cv::Size(550, 550), 2);
+            cv::cuda::resize(tl_image_cell_guide_crop_2_gpu, tl_image_cell_guide_crop_2_resize_gpu, cv::Size(550, 550), 2);
+            cv::cuda::resize(tr_image_cell_guide_crop_2_gpu, tr_image_cell_guide_crop_2_resize_gpu, cv::Size(550, 550), 2);
+            cv::cuda::resize(bl_image_cell_guide_crop_2_gpu, bl_image_cell_guide_crop_2_resize_gpu, cv::Size(550, 550), 2);
+            cv::cuda::resize(br_image_cell_guide_crop_2_gpu, br_image_cell_guide_crop_2_resize_gpu, cv::Size(550, 550), 2);
+            tl_image_cell_guide_crop_0_resize_gpu.download(tl_image_cell_guide_crop_0_resize);
+            tr_image_cell_guide_crop_0_resize_gpu.download(tr_image_cell_guide_crop_0_resize);
+            bl_image_cell_guide_crop_0_resize_gpu.download(bl_image_cell_guide_crop_0_resize);
+            br_image_cell_guide_crop_0_resize_gpu.download(br_image_cell_guide_crop_0_resize);
+            tl_image_cell_guide_crop_1_resize_gpu.download(tl_image_cell_guide_crop_1_resize);
+            tr_image_cell_guide_crop_1_resize_gpu.download(tr_image_cell_guide_crop_1_resize);
+            bl_image_cell_guide_crop_1_resize_gpu.download(bl_image_cell_guide_crop_1_resize);
+            br_image_cell_guide_crop_1_resize_gpu.download(br_image_cell_guide_crop_1_resize);
+            tl_image_cell_guide_crop_2_resize_gpu.download(tl_image_cell_guide_crop_2_resize);
+            tr_image_cell_guide_crop_2_resize_gpu.download(tr_image_cell_guide_crop_2_resize);
+            bl_image_cell_guide_crop_2_resize_gpu.download(bl_image_cell_guide_crop_2_resize);
+            br_image_cell_guide_crop_2_resize_gpu.download(br_image_cell_guide_crop_2_resize);
 
             tl_cell_guide_crop_image0 = cv_bridge::CvImage(std_msgs::Header(), "bgr8", tl_image_cell_guide_crop_0_resize).toImageMsg();
             tr_cell_guide_crop_image0 = cv_bridge::CvImage(std_msgs::Header(), "bgr8", tr_image_cell_guide_crop_0_resize).toImageMsg();

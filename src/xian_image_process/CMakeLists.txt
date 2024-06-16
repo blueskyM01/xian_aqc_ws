@@ -221,9 +221,9 @@ add_executable(xian_get_cell_guide_roi src/xian_get_cell_guide_roi.cpp )
 add_dependencies(xian_get_cell_guide_roi ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(xian_get_cell_guide_roi zpmc_cv_control ${OpenCV_LIBRARIES} ${catkin_LIBRARIES})
 
-add_executable(xian_cell_guide_point_identification src/xian_cell_guide_point_identification.cpp )
+add_executable(xian_cell_guide_point_identification src/xian_cell_guide_point_identification.cpp ~/code/xian_aqc_ws/xian_project_file/include/zpmc_cv_control.cpp)
 add_dependencies(xian_cell_guide_point_identification ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-target_link_libraries(xian_cell_guide_point_identification zpmc_cv_control ${OpenCV_LIBRARIES} ${catkin_LIBRARIES})
+target_link_libraries(xian_cell_guide_point_identification ${OpenCV_LIBRARIES} ${catkin_LIBRARIES})
 
 add_executable(xian_cell_guide_mask_resize src/xian_cell_guide_mask_resize.cpp )
 add_dependencies(xian_cell_guide_mask_resize ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
