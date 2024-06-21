@@ -605,11 +605,6 @@ class xian_aqc_keypoints_recognition:
                                                                  clip2_cell_guide_br_x, clip2_cell_guide_br_y) # cls_idx:0-cell_guide_point; 1-container corner
         self.xian_keypoints_msg.br_cell_guide_crop2_x = br_identifed_cell_guide2[0]
         self.xian_keypoints_msg.br_cell_guide_crop2_y = br_identifed_cell_guide2[1]
-          
-        self.xian_keypoints_msg.tl_image = data.tl_image
-        self.xian_keypoints_msg.tr_image = data.tr_image
-        self.xian_keypoints_msg.bl_image = data.bl_image
-        self.xian_keypoints_msg.br_image = data.br_image
 
         self.keypoints_publisher.publish(self.xian_keypoints_msg)
         
@@ -618,8 +613,6 @@ class xian_aqc_keypoints_recognition:
         xian_keypoints_recognition_fps = rospy.get_param("/xian_aqc_dynamic_parameters_server/xian_keypoints_recognition_fps")
         print('FPS {:2.3f}'.format(xian_keypoints_recognition_fps))
         
-
-
 class HB:
     def __init__(self):
         self.counter = 0

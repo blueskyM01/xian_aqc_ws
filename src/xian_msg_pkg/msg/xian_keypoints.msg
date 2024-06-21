@@ -1,7 +1,4 @@
-sensor_msgs/Image tl_image
-sensor_msgs/Image tr_image
-sensor_msgs/Image bl_image
-sensor_msgs/Image br_image
+std_msgs/Header header
 int32 tl_container_corner_x
 int32 tl_container_corner_y
 int32 tr_container_corner_x

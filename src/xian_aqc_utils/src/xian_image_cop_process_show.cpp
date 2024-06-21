@@ -7,22 +7,27 @@
 #include<opencv2/highgui/highgui.hpp>
 #include<opencv2/imgproc/imgproc.hpp>
 
+#include <message_filters/subscriber.h>
+#include <message_filters/time_synchronizer.h>
+#include <boost/bind.hpp>
+
 #include<stdio.h>
 #include<sys/types.h>
 #include "xian_msg_pkg/xian_crop_image_msg.h"
+#include "xian_msg_pkg/xian_spreader_images_msg.h"
 #include "zpmc_cv_control.h"
 
 
 class Xian_ImageCropProcessShow
 {
     public:
-        Xian_ImageCropProcessShow()
+        Xian_ImageCropProcessShow(): 
+            crop_sub(nh, "xian_crop_images", 1),
+            images_sub(nh, "xian_aqc_spreader_images", 1),
+            sync(MySyncPolicy(10), crop_sub, images_sub) 
         {
-            // 创建一个ROS节点句柄
-            ros::NodeHandle nh;
 
-            command_subscribe_ = nh.subscribe<xian_msg_pkg::xian_crop_image_msg>("xian_crop_images", 1, &Xian_ImageCropProcessShow::command_callback, this);
-
+            sync.registerCallback(boost::bind(&Xian_ImageCropProcessShow::command_callback, this, _1, _2));
         }
 
         ros::WallTimer m_timer_HeartBeat;
@@ -34,7 +39,12 @@ class Xian_ImageCropProcessShow
         }
 
     private:
-        ros::Subscriber command_subscribe_;
+        ros::NodeHandle nh;
+        message_filters::Subscriber<xian_msg_pkg::xian_crop_image_msg_<std::allocator<void>>> crop_sub;
+        message_filters::Subscriber<xian_msg_pkg::xian_spreader_images_msg_<std::allocator<void>>> images_sub;
+        typedef message_filters::sync_policies::ExactTime<xian_msg_pkg::xian_crop_image_msg_<std::allocator<void>>,
+                                                          xian_msg_pkg::xian_spreader_images_msg_<std::allocator<void>>> MySyncPolicy;
+        message_filters::Synchronizer<MySyncPolicy> sync;
 
         std::chrono::_V2::system_clock::time_point cur_time = std::chrono::high_resolution_clock::now();
         std::chrono::_V2::system_clock::time_point pre_time = std::chrono::high_resolution_clock::now();
@@ -106,7 +116,8 @@ class Xian_ImageCropProcessShow
  
         cv::Mat tl_image, tr_image, bl_image, br_image;
 
-        void command_callback(const xian_msg_pkg::xian_crop_image_msgConstPtr& data)
+        void command_callback(const boost::shared_ptr<const xian_msg_pkg::xian_crop_image_msg_<std::allocator<void>>>& data,
+                              const boost::shared_ptr<const xian_msg_pkg::xian_spreader_images_msg_<std::allocator<void>>>& images)
         {
             timeStr = zpmc::zpmc_get_stystem_time();
             pre_time = cur_time;
@@ -121,10 +132,10 @@ class Xian_ImageCropProcessShow
             ros::param::get("/xian_aqc_dynamic_parameters_server/xian_br_container_point_x", xian_br_container_point_x);
             ros::param::get("/xian_aqc_dynamic_parameters_server/xian_br_container_point_y", xian_br_container_point_y);
 
-            tl_image = cv_bridge::toCvShare(data->tl_image, data, "bgr8")->image; 
-            tr_image = cv_bridge::toCvShare(data->tr_image, data, "bgr8")->image; 
-            bl_image = cv_bridge::toCvShare(data->bl_image, data, "bgr8")->image;
-            br_image = cv_bridge::toCvShare(data->br_image, data, "bgr8")->image;
+            tl_image = cv_bridge::toCvShare(images->tl_image, images, "bgr8")->image; 
+            tr_image = cv_bridge::toCvShare(images->tr_image, images, "bgr8")->image; 
+            bl_image = cv_bridge::toCvShare(images->bl_image, images, "bgr8")->image;
+            br_image = cv_bridge::toCvShare(images->br_image, images, "bgr8")->image;
 
             container_corner_tl_x0 = data->container_corner_tl_x0;
             container_corner_tl_y0 = data->container_corner_tl_y0;

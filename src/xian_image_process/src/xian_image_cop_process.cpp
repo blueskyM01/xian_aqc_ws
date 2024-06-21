@@ -300,10 +300,10 @@ class Xian_ContainerCornerCopProcess
             bl_cell_guide_crop_image2 = cv_bridge::CvImage(std_msgs::Header(), "bgr8", bl_image_cell_guide_crop_2_resize).toImageMsg();
             br_cell_guide_crop_image2 = cv_bridge::CvImage(std_msgs::Header(), "bgr8", br_image_cell_guide_crop_2_resize).toImageMsg();
 
-            crop_images.tl_image = xian_spreader_images->tl_image;
-            crop_images.tr_image = xian_spreader_images->tr_image;
-            crop_images.bl_image = xian_spreader_images->bl_image;
-            crop_images.br_image = xian_spreader_images->br_image;
+            // crop_images.tl_image = xian_spreader_images->tl_image;
+            // crop_images.tr_image = xian_spreader_images->tr_image;
+            // crop_images.bl_image = xian_spreader_images->bl_image;
+            // crop_images.br_image = xian_spreader_images->br_image;
 
             crop_images.tl_container_corner_crop_image = *tl_crop_image;
             crop_images.tr_container_corner_crop_image = *tr_crop_image;

@@ -7,22 +7,27 @@
 #include<opencv2/highgui/highgui.hpp>
 #include<opencv2/imgproc/imgproc.hpp>
 
+#include <message_filters/subscriber.h>
+#include <message_filters/time_synchronizer.h>
+#include <boost/bind.hpp>
+
 #include<stdio.h>
 #include<sys/types.h>
 #include "xian_msg_pkg/xian_cell_guide_mask_resize.h"
+#include "xian_msg_pkg/xian_spreader_images_msg.h"
 #include "zpmc_cv_control.h"
 
 
 class Xian_CellGuideMaskResizeShow
 {
     public:
-        Xian_CellGuideMaskResizeShow()
+        Xian_CellGuideMaskResizeShow(): 
+            cell_guide_mask_resize_sub(nh, "xian_cell_guide_masks_resize", 1),
+            images_sub(nh, "xian_spreader_image_align_with_cell_guide_crop", 1),
+            sync(MySyncPolicy(10), cell_guide_mask_resize_sub, images_sub) 
         {
-            // 创建一个ROS节点句柄
-            ros::NodeHandle nh;
 
-            command_subscribe_ = nh.subscribe<xian_msg_pkg::xian_cell_guide_mask_resize>("xian_cell_guide_masks_resize", 1, &Xian_CellGuideMaskResizeShow::command_callback, this);
-
+            sync.registerCallback(boost::bind(&Xian_CellGuideMaskResizeShow::command_callback, this, _1, _2));
         }
 
         ros::WallTimer m_timer_HeartBeat;
@@ -34,7 +39,12 @@ class Xian_CellGuideMaskResizeShow
         }
 
     private:
-        ros::Subscriber command_subscribe_;
+        ros::NodeHandle nh;
+        message_filters::Subscriber<xian_msg_pkg::xian_cell_guide_mask_resize_<std::allocator<void>>> cell_guide_mask_resize_sub;
+        message_filters::Subscriber<xian_msg_pkg::xian_spreader_images_msg_<std::allocator<void>>> images_sub;
+        typedef message_filters::sync_policies::ExactTime<xian_msg_pkg::xian_cell_guide_mask_resize_<std::allocator<void>>,
+                                                          xian_msg_pkg::xian_spreader_images_msg_<std::allocator<void>>> MySyncPolicy;
+        message_filters::Synchronizer<MySyncPolicy> sync;
 
         std::chrono::_V2::system_clock::time_point cur_time = std::chrono::high_resolution_clock::now();
         std::chrono::_V2::system_clock::time_point pre_time = std::chrono::high_resolution_clock::now();
@@ -57,30 +67,14 @@ class Xian_CellGuideMaskResizeShow
         int br_container_corner_cx = 0;
         int br_container_corner_cy = 0;
 
-        int tl_cell_guide_crop0_tl_x = 0;
-        int tl_cell_guide_crop0_tl_y = 0;
-        int tr_cell_guide_crop0_tl_x = 0;
-        int tr_cell_guide_crop0_tl_y = 0;
-        int bl_cell_guide_crop0_tl_x = 0;
-        int bl_cell_guide_crop0_tl_y = 0;
-        int br_cell_guide_crop0_tl_x = 0;
-        int br_cell_guide_crop0_tl_y = 0;
-        int tl_cell_guide_crop1_tl_x = 0;
-        int tl_cell_guide_crop1_tl_y = 0;
-        int tr_cell_guide_crop1_tl_x = 0;
-        int tr_cell_guide_crop1_tl_y = 0;
-        int bl_cell_guide_crop1_tl_x = 0;
-        int bl_cell_guide_crop1_tl_y = 0;
-        int br_cell_guide_crop1_tl_x = 0;
-        int br_cell_guide_crop1_tl_y = 0;
-        int tl_cell_guide_crop2_tl_x = 0;
-        int tl_cell_guide_crop2_tl_y = 0;
-        int tr_cell_guide_crop2_tl_x = 0;
-        int tr_cell_guide_crop2_tl_y = 0;
-        int bl_cell_guide_crop2_tl_x = 0;
-        int bl_cell_guide_crop2_tl_y = 0;
-        int br_cell_guide_crop2_tl_x = 0;
-        int br_cell_guide_crop2_tl_y = 0;
+        int tl_cell_guide_crop_tl_x = 0;
+        int tl_cell_guide_crop_tl_y = 0;
+        int tr_cell_guide_crop_tl_x = 0;
+        int tr_cell_guide_crop_tl_y = 0;
+        int bl_cell_guide_crop_tl_x = 0;
+        int bl_cell_guide_crop_tl_y = 0;
+        int br_cell_guide_crop_tl_x = 0;
+        int br_cell_guide_crop_tl_y = 0;
 
         cv::Point tl_container_corner = cv::Point(0,0);
         cv::Point tr_container_corner = cv::Point(0,0);
@@ -88,42 +82,28 @@ class Xian_CellGuideMaskResizeShow
         cv::Point br_container_corner = cv::Point(0,0);
  
         cv::Mat tl_image, tr_image, bl_image, br_image;
-        cv::Mat tl_mask_resize_0;
-        cv::Mat tr_mask_resize_0;
-        cv::Mat bl_mask_resize_0;
-        cv::Mat br_mask_resize_0;
-        cv::Mat tl_mask_resize_1;
-        cv::Mat tr_mask_resize_1;
-        cv::Mat bl_mask_resize_1;
-        cv::Mat br_mask_resize_1;
-        cv::Mat tl_mask_resize_2;
-        cv::Mat tr_mask_resize_2;
-        cv::Mat bl_mask_resize_2;
-        cv::Mat br_mask_resize_2;
+        cv::Mat tl_mask_resize;
+        cv::Mat tr_mask_resize;
+        cv::Mat bl_mask_resize;
+        cv::Mat br_mask_resize;
 
-        void command_callback(const xian_msg_pkg::xian_cell_guide_mask_resizeConstPtr& data)
+        void command_callback(const boost::shared_ptr<const xian_msg_pkg::xian_cell_guide_mask_resize_<std::allocator<void>>>& data,
+                              const boost::shared_ptr<const xian_msg_pkg::xian_spreader_images_msg_<std::allocator<void>>>& images)
         {
             timeStr = zpmc::zpmc_get_stystem_time();
             pre_time = cur_time;
             cur_time = std::chrono::high_resolution_clock::now();
 
-            tl_image = cv_bridge::toCvShare(data->tl_image, data, "bgr8")->image; 
-            tr_image = cv_bridge::toCvShare(data->tr_image, data, "bgr8")->image; 
-            bl_image = cv_bridge::toCvShare(data->bl_image, data, "bgr8")->image;
-            br_image = cv_bridge::toCvShare(data->br_image, data, "bgr8")->image;
+            tl_image = cv_bridge::toCvShare(images->tl_image, images, "bgr8")->image; 
+            tr_image = cv_bridge::toCvShare(images->tr_image, images, "bgr8")->image; 
+            bl_image = cv_bridge::toCvShare(images->bl_image, images, "bgr8")->image;
+            br_image = cv_bridge::toCvShare(images->br_image, images, "bgr8")->image;
 
-            tl_mask_resize_0 = cv_bridge::toCvShare(data->tl_mask_resize_0, data, "bgr8")->image;
-            tr_mask_resize_0 = cv_bridge::toCvShare(data->tr_mask_resize_0, data, "bgr8")->image;
-            bl_mask_resize_0 = cv_bridge::toCvShare(data->bl_mask_resize_0, data, "bgr8")->image;
-            br_mask_resize_0 = cv_bridge::toCvShare(data->br_mask_resize_0, data, "bgr8")->image;
-            tl_mask_resize_1 = cv_bridge::toCvShare(data->tl_mask_resize_1, data, "bgr8")->image;
-            tr_mask_resize_1 = cv_bridge::toCvShare(data->tr_mask_resize_1, data, "bgr8")->image;
-            bl_mask_resize_1 = cv_bridge::toCvShare(data->bl_mask_resize_1, data, "bgr8")->image;
-            br_mask_resize_1 = cv_bridge::toCvShare(data->br_mask_resize_1, data, "bgr8")->image;
-            tl_mask_resize_2 = cv_bridge::toCvShare(data->tl_mask_resize_2, data, "bgr8")->image;
-            tr_mask_resize_2 = cv_bridge::toCvShare(data->tr_mask_resize_2, data, "bgr8")->image;
-            bl_mask_resize_2 = cv_bridge::toCvShare(data->bl_mask_resize_2, data, "bgr8")->image;
-            br_mask_resize_2 = cv_bridge::toCvShare(data->br_mask_resize_2, data, "bgr8")->image;
+            tl_mask_resize = cv_bridge::toCvShare(data->tl_mask_resize, data, "bgr8")->image;
+            tr_mask_resize = cv_bridge::toCvShare(data->tr_mask_resize, data, "bgr8")->image;
+            bl_mask_resize = cv_bridge::toCvShare(data->bl_mask_resize, data, "bgr8")->image;
+            br_mask_resize = cv_bridge::toCvShare(data->br_mask_resize, data, "bgr8")->image;
+
             
             tl_container_corner_cx = data->tl_container_corner_cx;
             tl_container_corner_cy = data->tl_container_corner_cy;
@@ -143,30 +123,15 @@ class Xian_CellGuideMaskResizeShow
             br_container_corner.x = br_container_corner_cx;
             br_container_corner.y = br_container_corner_cy;
 
-            tl_cell_guide_crop0_tl_x = data->tl_cell_guide_crop0_tl_x;
-            tl_cell_guide_crop0_tl_y = data->tl_cell_guide_crop0_tl_y;
-            tr_cell_guide_crop0_tl_x = data->tr_cell_guide_crop0_tl_x;
-            tr_cell_guide_crop0_tl_y = data->tr_cell_guide_crop0_tl_y;
-            bl_cell_guide_crop0_tl_x = data->bl_cell_guide_crop0_tl_x;
-            bl_cell_guide_crop0_tl_y = data->bl_cell_guide_crop0_tl_y;
-            br_cell_guide_crop0_tl_x = data->br_cell_guide_crop0_tl_x;
-            br_cell_guide_crop0_tl_y = data->br_cell_guide_crop0_tl_y;
-            tl_cell_guide_crop1_tl_x = data->tl_cell_guide_crop1_tl_x;
-            tl_cell_guide_crop1_tl_y = data->tl_cell_guide_crop1_tl_y;
-            tr_cell_guide_crop1_tl_x = data->tr_cell_guide_crop1_tl_x;
-            tr_cell_guide_crop1_tl_y = data->tr_cell_guide_crop1_tl_y;
-            bl_cell_guide_crop1_tl_x = data->bl_cell_guide_crop1_tl_x;
-            bl_cell_guide_crop1_tl_y = data->bl_cell_guide_crop1_tl_y;
-            br_cell_guide_crop1_tl_x = data->br_cell_guide_crop1_tl_x;
-            br_cell_guide_crop1_tl_y = data->br_cell_guide_crop1_tl_y;
-            tl_cell_guide_crop2_tl_x = data->tl_cell_guide_crop2_tl_x;
-            tl_cell_guide_crop2_tl_y = data->tl_cell_guide_crop2_tl_y;
-            tr_cell_guide_crop2_tl_x = data->tr_cell_guide_crop2_tl_x;
-            tr_cell_guide_crop2_tl_y = data->tr_cell_guide_crop2_tl_y;
-            bl_cell_guide_crop2_tl_x = data->bl_cell_guide_crop2_tl_x;
-            bl_cell_guide_crop2_tl_y = data->bl_cell_guide_crop2_tl_y;
-            br_cell_guide_crop2_tl_x = data->br_cell_guide_crop2_tl_x;
-            br_cell_guide_crop2_tl_y = data->br_cell_guide_crop2_tl_y;
+            tl_cell_guide_crop_tl_x = data->tl_cell_guide_crop_tl_x;
+            tl_cell_guide_crop_tl_y = data->tl_cell_guide_crop_tl_y;
+            tr_cell_guide_crop_tl_x = data->tr_cell_guide_crop_tl_x;
+            tr_cell_guide_crop_tl_y = data->tr_cell_guide_crop_tl_y;
+            bl_cell_guide_crop_tl_x = data->bl_cell_guide_crop_tl_x;
+            bl_cell_guide_crop_tl_y = data->bl_cell_guide_crop_tl_y;
+            br_cell_guide_crop_tl_x = data->br_cell_guide_crop_tl_x;
+            br_cell_guide_crop_tl_y = data->br_cell_guide_crop_tl_y;
+
 
             cv::circle(tl_image, tl_container_corner, 16, red, -1);
             cv::circle(tr_image, tr_container_corner, 16, red, -1);
@@ -178,41 +143,18 @@ class Xian_CellGuideMaskResizeShow
             cv::Mat bl_mask = cv::Mat::zeros(bl_image.size(),tl_image.type());
             cv::Mat br_mask = cv::Mat::zeros(br_image.size(),tr_image.type());
 
-            cv::Mat* masks0 = copy_to_image(tl_mask_resize_0, tr_mask_resize_0, 
-                                            bl_mask_resize_0, br_mask_resize_0, 
-                                            tl_cell_guide_crop0_tl_x, tl_cell_guide_crop0_tl_y,
-                                            tr_cell_guide_crop0_tl_x, tr_cell_guide_crop0_tl_y,
-                                            bl_cell_guide_crop0_tl_x, bl_cell_guide_crop0_tl_y,
-                                            br_cell_guide_crop0_tl_x, br_cell_guide_crop0_tl_y,
+            cv::Mat* masks = copy_to_image(tl_mask_resize, tr_mask_resize, 
+                                            bl_mask_resize, br_mask_resize, 
+                                            tl_cell_guide_crop_tl_x, tl_cell_guide_crop_tl_y,
+                                            tr_cell_guide_crop_tl_x, tr_cell_guide_crop_tl_y,
+                                            bl_cell_guide_crop_tl_x, bl_cell_guide_crop_tl_y,
+                                            br_cell_guide_crop_tl_x, br_cell_guide_crop_tl_y,
                                             tl_mask, tr_mask, bl_mask, br_mask);
-            tl_mask = *(masks0+0);
-            tr_mask = *(masks0+1);
-            bl_mask = *(masks0+2);
-            br_mask = *(masks0+3);
+            tl_mask = *(masks+0);
+            tr_mask = *(masks+1);
+            bl_mask = *(masks+2);
+            br_mask = *(masks+3);
 
-            cv::Mat* masks1 = copy_to_image(tl_mask_resize_1, tr_mask_resize_1, 
-                                            bl_mask_resize_1, br_mask_resize_1, 
-                                            tl_cell_guide_crop1_tl_x, tl_cell_guide_crop1_tl_y,
-                                            tr_cell_guide_crop1_tl_x, tr_cell_guide_crop1_tl_y,
-                                            bl_cell_guide_crop1_tl_x, bl_cell_guide_crop1_tl_y,
-                                            br_cell_guide_crop1_tl_x, br_cell_guide_crop1_tl_y,
-                                            tl_mask, tr_mask, bl_mask, br_mask);
-            tl_mask = *(masks1+0);
-            tr_mask = *(masks1+1);
-            bl_mask = *(masks1+2);
-            br_mask = *(masks1+3);
-
-            cv::Mat* masks2 = copy_to_image(tl_mask_resize_2, tr_mask_resize_2, 
-                                            bl_mask_resize_2, br_mask_resize_2, 
-                                            tl_cell_guide_crop2_tl_x, tl_cell_guide_crop2_tl_y,
-                                            tr_cell_guide_crop2_tl_x, tr_cell_guide_crop2_tl_y,
-                                            bl_cell_guide_crop2_tl_x, bl_cell_guide_crop2_tl_y,
-                                            br_cell_guide_crop2_tl_x, br_cell_guide_crop2_tl_y,
-                                            tl_mask, tr_mask, bl_mask, br_mask);
-            tl_mask = *(masks2+0);
-            tr_mask = *(masks2+1);
-            bl_mask = *(masks2+2);
-            br_mask = *(masks2+3);
 
             
             cv::Mat mask_merge_col_0 = zpmc::zpmc_images_merge_row(tl_mask, bl_mask);
