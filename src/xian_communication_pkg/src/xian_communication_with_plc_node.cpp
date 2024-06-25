@@ -487,25 +487,25 @@ class zpmc_CommunicationWithAccs
                     unsigned char mode0_inv[2];
                     memcpy(mode0, plc_buffer+recv_plc.mode0, sizeof(mode0));
                     mode0_ = HextoDec(mode0, sizeof(mode0));
-                    //ros::param::set("/xian_aqc_dynamic_parameters_server/xian_acds_send_to_retrable_box_mode0", mode0_); 
+                    ros::param::set("/xian_aqc_dynamic_parameters_server/xian_from_plc_to_retrable_box_mode0", mode0_); 
 
                     unsigned char mode1[2];
                     unsigned char mode1_inv[2];
                     memcpy(mode1, plc_buffer+recv_plc.mode1, sizeof(mode1));
                     mode1_ = HextoDec(mode1, sizeof(mode1));
-                    //ros::param::set("/xian_aqc_dynamic_parameters_server/xian_acds_send_to_retrable_box_mode1", mode1_); 
+                    ros::param::set("/xian_aqc_dynamic_parameters_server/xian_from_plc_to_retrable_box_mode1", mode1_); 
 
                     unsigned char mode2[2];
                     unsigned char mode2_inv[2];
                     memcpy(mode2, plc_buffer+recv_plc.mode2, sizeof(mode2));
                     mode2_ = HextoDec(mode2, sizeof(mode2));
-                    //ros::param::set("/xian_aqc_dynamic_parameters_server/xian_acds_send_to_retrable_box_mode2", mode2_); 
+                    ros::param::set("/xian_aqc_dynamic_parameters_server/xian_from_plc_to_retrable_box_mode2", mode2_); 
 
                     unsigned char mode3[2];
                     unsigned char mode3_inv[2];
                     memcpy(mode3, plc_buffer+recv_plc.mode3, sizeof(mode3));
                     mode3_ = HextoDec(mode3, sizeof(mode3));
-                    //ros::param::set("/xian_aqc_dynamic_parameters_server/xian_acds_send_to_retrable_box_mode3", mode3_); 
+                    ros::param::set("/xian_aqc_dynamic_parameters_server/xian_from_plc_to_retrable_box_mode3", mode3_); 
 
                     std::cout << "Read from plc state0: " << state0_ << std::endl;
                     std::cout << "Read from plc state1: " << state1_ << std::endl;

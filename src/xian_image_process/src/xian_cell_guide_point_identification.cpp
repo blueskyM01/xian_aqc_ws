@@ -125,17 +125,17 @@ class Xian_CellGuidePointIdentification
 
             // -----------------------------crop-----------------------------
             std::vector<std::vector<double>>* target_results_set = xian_get_cell_guide_results(tl_mask_resize, tr_mask_resize, 
-                                                                                                bl_mask_resize, br_mask_resize,
-                                                                                                scale_lower, scale_upper, 
-                                                                                                point_w_a, point_w_b, 
-                                                                                                area_threshold, 
-                                                                                                crop_w, crop_h);
+                                                                                               bl_mask_resize, br_mask_resize,
+                                                                                               scale_lower, scale_upper, 
+                                                                                               point_w_a, point_w_b, 
+                                                                                               area_threshold, 
+                                                                                               crop_w, crop_h);
             
             int* target_points_set = xian_get_cell_guide_points(target_results_set,
-                                                                 tl_cell_guide_crop_tl_x, tl_cell_guide_crop_tl_y,
-                                                                 tr_cell_guide_crop_tl_x, tr_cell_guide_crop_tl_y,
-                                                                 bl_cell_guide_crop_tl_x, bl_cell_guide_crop_tl_y,
-                                                                 br_cell_guide_crop_tl_x, br_cell_guide_crop_tl_y);
+                                                                tl_cell_guide_crop_tl_x, tl_cell_guide_crop_tl_y,
+                                                                tr_cell_guide_crop_tl_x, tr_cell_guide_crop_tl_y,
+                                                                bl_cell_guide_crop_tl_x, bl_cell_guide_crop_tl_y,
+                                                                br_cell_guide_crop_tl_x, br_cell_guide_crop_tl_y);
 
             cell_guide_points.tl_cell_guide_cx = *(target_points_set+0);
             cell_guide_points.tl_cell_guide_cy = *(target_points_set+1);

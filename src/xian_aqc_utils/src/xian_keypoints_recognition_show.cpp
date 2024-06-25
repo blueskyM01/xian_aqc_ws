@@ -26,7 +26,7 @@ class Xian_KeypointsRecognitionShow
             images_sub(nh, "xian_aqc_spreader_images", 1),
             sync(MySyncPolicy(10), keypoints_sub, images_sub) 
         {
-
+            command_publisher_show = nh.advertise<sensor_msgs::Image>("keypoints_recognition_visualization", 1);
             sync.registerCallback(boost::bind(&Xian_KeypointsRecognitionShow::command_callback, this, _1, _2));
         }
 
@@ -45,6 +45,7 @@ class Xian_KeypointsRecognitionShow
         typedef message_filters::sync_policies::ExactTime<xian_msg_pkg::xian_keypoints_<std::allocator<void>>,
                                                           xian_msg_pkg::xian_spreader_images_msg_<std::allocator<void>>> MySyncPolicy;
         message_filters::Synchronizer<MySyncPolicy> sync;
+        ros::Publisher command_publisher_show;
 
         std::chrono::_V2::system_clock::time_point cur_time = std::chrono::high_resolution_clock::now();
         std::chrono::_V2::system_clock::time_point pre_time = std::chrono::high_resolution_clock::now();
@@ -121,6 +122,7 @@ class Xian_KeypointsRecognitionShow
         cv::Point br_cell_guide_crop2 = cv::Point(0,0);
  
         cv::Mat tl_image, tr_image, bl_image, br_image;
+        sensor_msgs::ImagePtr keypoints_recognition_show;
 
         void command_callback(const boost::shared_ptr<const xian_msg_pkg::xian_keypoints_<std::allocator<void>>>& data,
                               const boost::shared_ptr<const xian_msg_pkg::xian_spreader_images_msg_<std::allocator<void>>>& images)
@@ -254,9 +256,12 @@ class Xian_KeypointsRecognitionShow
             cv::Mat merge_log = zpmc::zpmc_images_merge_col(src_merge_col_0, src_merge_col_1);
             cv::resize(merge_log, merge_log, cv::Size(merge_log.cols/4, merge_log.rows/4), 2); 
 
-            cv::imshow("xian_keypoints_recognition_show:", merge_log);
-            cv::waitKey(1);
+            // cv::imshow("xian_keypoints_recognition_show:", merge_log);
+            // cv::waitKey(1);
             // cv::imwrite("/root/code/xian_aqc_ws/xian_project_file/trt/results/"+timeStr+".jpg", merge_log);
+
+            keypoints_recognition_show = cv_bridge::CvImage(std_msgs::Header(), "bgr8", merge_log).toImageMsg();
+            command_publisher_show.publish(keypoints_recognition_show);
 
             elapsedTimeP = std::chrono::duration_cast<std::chrono::milliseconds>(cur_time - pre_time);
             timediff = elapsedTimeP.count();

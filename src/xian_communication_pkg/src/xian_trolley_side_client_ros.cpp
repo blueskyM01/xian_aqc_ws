@@ -151,7 +151,15 @@ class Xian_TrolleySideClientRos
                     spreader_data.State0, spreader_data.State1, spreader_data.State2, spreader_data.State3,
                     spreader_data.mode0, spreader_data.mode1, spreader_data.mode2, spreader_data.mode3,
                     spreader_data.spreader_heart_beat);
-
+                ros::param::set("/xian_aqc_dynamic_parameters_server/xian_spreader_side_server_ros_heart_beat", spreader_data.spreader_heart_beat);  
+                ros::param::set("/xian_aqc_dynamic_parameters_server/xian_from_plc_to_retrable_box_mode0", spreader_data.mode0); 
+                ros::param::set("/xian_aqc_dynamic_parameters_server/xian_from_plc_to_retrable_box_mode1", spreader_data.mode1); 
+                ros::param::set("/xian_aqc_dynamic_parameters_server/xian_from_plc_to_retrable_box_mode2", spreader_data.mode2); 
+                ros::param::set("/xian_aqc_dynamic_parameters_server/xian_from_plc_to_retrable_box_mode3", spreader_data.mode3); 
+                ros::param::set("/xian_aqc_dynamic_parameters_server/xian_retrable_box_state0", spreader_data.State0);
+                ros::param::set("/xian_aqc_dynamic_parameters_server/xian_retrable_box_state1", spreader_data.State1);
+                ros::param::set("/xian_aqc_dynamic_parameters_server/xian_retrable_box_state2", spreader_data.State2);
+                ros::param::set("/xian_aqc_dynamic_parameters_server/xian_retrable_box_state3", spreader_data.State3);
                 // Optionally, you can add a sleep here to control the rate of communication
                 usleep(50 * 1000); // 50 ms
             }

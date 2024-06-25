@@ -9,6 +9,12 @@
     <node name ="xian_cell_guide_recognition" pkg="xian_ai_pkg" type="xian_cell_guide_recognition.py"/>
     <node name ="xian_cell_guide_mask_resize" pkg="xian_image_process" type="xian_cell_guide_mask_resize"/>
     <node name ="xian_cell_guide_point_identification" pkg="xian_image_process" type="xian_cell_guide_point_identification"/>
+    <node name ="xian_cell_guide_point_identification_show" pkg="xian_aqc_utils" type="xian_cell_guide_point_identification_show"/>
+    <node name ="xian_spreader_images_show" pkg="xian_aqc_utils" type="xian_spreader_images_show"/>
+    <node name ="xian_image_cop_process_show" pkg="xian_aqc_utils" type="xian_image_cop_process_show"/>
+    <node name ="xian_keypoints_recognition_show" pkg="xian_aqc_utils" type="xian_keypoints_recognition_show"/>
+    <node name ="xian_get_cell_guide_roi_show" pkg="xian_aqc_utils" type="xian_get_cell_guide_roi_show"/>
+    <node name ="xian_cell_guide_mask_resize_show" pkg="xian_aqc_utils" type="xian_cell_guide_mask_resize_show"/>
     <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch">
     </include>
 </launch> 

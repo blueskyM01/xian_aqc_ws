@@ -107,8 +107,8 @@ class Xian_CellGuideMaskResize
             ros::param::get("/xian_aqc_dynamic_parameters_server/xian_cell_guide_mask_resize_fps", xian_cell_guide_mask_resize_fps);
             std::cout << "FPS: " << xian_cell_guide_mask_resize_fps << std::endl;
 
-            tl_mask = cv_bridge::toCvShare(data->tl_mask, data, "bgr8")->image; 
-            tr_mask = cv_bridge::toCvShare(data->tr_mask, data, "bgr8")->image; 
+            tl_mask = cv_bridge::toCvShare(data->tl_mask, data, "bgr8")->image;
+            tr_mask = cv_bridge::toCvShare(data->tr_mask, data, "bgr8")->image;
             bl_mask = cv_bridge::toCvShare(data->bl_mask, data, "bgr8")->image;
             br_mask = cv_bridge::toCvShare(data->br_mask, data, "bgr8")->image; 
             // tl_mask_1 = cv_bridge::toCvShare(data->tl_mask_1, data, "bgr8")->image; 

@@ -26,7 +26,7 @@ class Xian_CellGuideMaskResizeShow
             images_sub(nh, "xian_spreader_image_align_with_cell_guide_crop", 1),
             sync(MySyncPolicy(10), cell_guide_mask_resize_sub, images_sub) 
         {
-
+            command_publisher_show = nh.advertise<sensor_msgs::Image>("cell_guide_masks_resize_visualization", 1);
             sync.registerCallback(boost::bind(&Xian_CellGuideMaskResizeShow::command_callback, this, _1, _2));
         }
 
@@ -45,6 +45,7 @@ class Xian_CellGuideMaskResizeShow
         typedef message_filters::sync_policies::ExactTime<xian_msg_pkg::xian_cell_guide_mask_resize_<std::allocator<void>>,
                                                           xian_msg_pkg::xian_spreader_images_msg_<std::allocator<void>>> MySyncPolicy;
         message_filters::Synchronizer<MySyncPolicy> sync;
+        ros::Publisher command_publisher_show;
 
         std::chrono::_V2::system_clock::time_point cur_time = std::chrono::high_resolution_clock::now();
         std::chrono::_V2::system_clock::time_point pre_time = std::chrono::high_resolution_clock::now();
@@ -80,12 +81,19 @@ class Xian_CellGuideMaskResizeShow
         cv::Point tr_container_corner = cv::Point(0,0);
         cv::Point bl_container_corner = cv::Point(0,0);
         cv::Point br_container_corner = cv::Point(0,0);
+
+        cv::Point tl_cell_guide_corner = cv::Point(0,0);
+        cv::Point tr_cell_guide_corner = cv::Point(0,0);
+        cv::Point bl_cell_guide_corner = cv::Point(0,0);
+        cv::Point br_cell_guide_corner = cv::Point(0,0);
  
         cv::Mat tl_image, tr_image, bl_image, br_image;
         cv::Mat tl_mask_resize;
         cv::Mat tr_mask_resize;
         cv::Mat bl_mask_resize;
         cv::Mat br_mask_resize;
+
+        sensor_msgs::ImagePtr cell_guide_masks_resize_show;
 
         void command_callback(const boost::shared_ptr<const xian_msg_pkg::xian_cell_guide_mask_resize_<std::allocator<void>>>& data,
                               const boost::shared_ptr<const xian_msg_pkg::xian_spreader_images_msg_<std::allocator<void>>>& images)
@@ -132,11 +140,30 @@ class Xian_CellGuideMaskResizeShow
             br_cell_guide_crop_tl_x = data->br_cell_guide_crop_tl_x;
             br_cell_guide_crop_tl_y = data->br_cell_guide_crop_tl_y;
 
+            tl_cell_guide_corner.x = tl_cell_guide_crop_tl_x+128;
+            tl_cell_guide_corner.y = tl_cell_guide_crop_tl_y+128;
+            tr_cell_guide_corner.x = tr_cell_guide_crop_tl_x+128;
+            tr_cell_guide_corner.y = tr_cell_guide_crop_tl_y+128;
+            bl_cell_guide_corner.x = bl_cell_guide_crop_tl_x+128;
+            bl_cell_guide_corner.y = bl_cell_guide_crop_tl_y+128;
+            br_cell_guide_corner.x = br_cell_guide_crop_tl_x+128;
+            br_cell_guide_corner.y = br_cell_guide_crop_tl_y+128;
+
 
             cv::circle(tl_image, tl_container_corner, 16, red, -1);
             cv::circle(tr_image, tr_container_corner, 16, red, -1);
             cv::circle(bl_image, bl_container_corner, 16, red, -1);
             cv::circle(br_image, br_container_corner, 16, red, -1);
+
+            cv::circle(tl_image, tl_cell_guide_corner, 16, blue, -1);
+            cv::circle(tr_image, tr_cell_guide_corner, 16, blue, -1);
+            cv::circle(bl_image, bl_cell_guide_corner, 16, blue, -1);
+            cv::circle(br_image, br_cell_guide_corner, 16, blue, -1);
+
+            // printf("tl_cell_guide_corner: %d, %d \n", tl_cell_guide_corner.x, tl_cell_guide_corner.y);
+            // printf("tr_cell_guide_corner: %d, %d \n", tr_cell_guide_corner.x, tr_cell_guide_corner.y);
+            // printf("bl_cell_guide_corner: %d, %d \n", bl_cell_guide_corner.x, bl_cell_guide_corner.y);
+            // printf("br_cell_guide_corner: %d, %d \n", br_cell_guide_corner.x, br_cell_guide_corner.y);
 
             cv::Mat tl_mask = cv::Mat::zeros(tl_image.size(),tl_image.type());
             cv::Mat tr_mask = cv::Mat::zeros(tr_image.size(),tr_image.type());
@@ -170,9 +197,11 @@ class Xian_CellGuideMaskResizeShow
 
             cv::resize(merge_row1, merge_row1, cv::Size(merge_log.cols/2, merge_log.rows/4), 2); 
 
-            cv::imshow("xian_cell_guide_mask_resize_show:", merge_row1);
-            cv::waitKey(1);
-            // cv::imwrite("/root/code/xian_aqc_ws/xian_project_file/trt/results/"+timeStr+".jpg", merge_log);
+            // cv::imshow("xian_cell_guide_mask_resize_show:", merge_row1);
+            // cv::waitKey(1);
+            // cv::imwrite("/root/code/xian_aqc_ws/xian_project_file/trt/results/"+timeStr+".jpg", merge_row1);
+            cell_guide_masks_resize_show = cv_bridge::CvImage(std_msgs::Header(), "bgr8", merge_row1).toImageMsg();
+            command_publisher_show.publish(cell_guide_masks_resize_show);
             
             elapsedTimeP = std::chrono::duration_cast<std::chrono::milliseconds>(cur_time - pre_time);
             timediff = elapsedTimeP.count();

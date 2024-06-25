@@ -25,7 +25,7 @@ class Xian_SpreaderImagesShow
             // 创建一个ROS节点句柄
             ros::NodeHandle nh;
             command_subscribe_ = nh.subscribe<xian_msg_pkg::xian_spreader_images_msg>("xian_aqc_spreader_images", 1, &Xian_SpreaderImagesShow::command_callback, this);
-
+            command_publisher_show = nh.advertise<sensor_msgs::Image>("spreader_images_merge_visualization", 1);
         }
 
         ros::WallTimer m_timer_HeartBeat;
@@ -38,6 +38,7 @@ class Xian_SpreaderImagesShow
 
     private:
         ros::Subscriber command_subscribe_;
+        ros::Publisher command_publisher_show;
 
         std::chrono::_V2::system_clock::time_point cur_time = std::chrono::high_resolution_clock::now();
         std::chrono::_V2::system_clock::time_point pre_time = std::chrono::high_resolution_clock::now();
@@ -47,7 +48,7 @@ class Xian_SpreaderImagesShow
         std::string timeStr;
  
         cv::Mat tl_image, tr_image, bl_image, br_image, merge_row1_resize;
-        sensor_msgs::Image spreder_imgs_resize;
+        sensor_msgs::ImagePtr spreader_images_merge;
 
         void command_callback(const xian_msg_pkg::xian_spreader_images_msgConstPtr& data)
         {
@@ -77,9 +78,10 @@ class Xian_SpreaderImagesShow
             else
             {
 
-                cv::imshow("xian_spreader_images_show01:", merge_row1_resize);
-                cv::waitKey(10);
-
+                // cv::imshow("xian_spreader_images_show01:", merge_row1_resize);
+                // cv::waitKey(10);
+                spreader_images_merge = cv_bridge::CvImage(std_msgs::Header(), "bgr8", merge_row1_resize).toImageMsg();
+                command_publisher_show.publish(spreader_images_merge);
 
                 //cv::imwrite("/root/code/xian_aqc_ws/xian_project_file/trt/results/"+timeStr+"_tl_.jpg", tl_image);
                 //cv::imwrite("/root/code/xian_aqc_ws/xian_project_file/trt/results/"+timeStr+"tr_.jpg", tr_image);

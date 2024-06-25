@@ -3,3 +3,4 @@
 /.vscode
 /xian_project_file/onnx
 /xian_project_file/trt
+/xian_project_file/include/zpmc_cv_control.cpp

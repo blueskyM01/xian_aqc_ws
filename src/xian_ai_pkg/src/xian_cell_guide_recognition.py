@@ -399,20 +399,18 @@ class xian_cell_guide_recognition:
         container_corner_x = container_corner[0]
         container_corner_y = container_corner[1]
         distance_list = []
-        # value_crop_list = []
-        # for value_crop in crop_list:
-        #     if value_crop[0] == 0 and value_crop[1] == 0:
-        #         pass
-        #     else:
-        #         value_crop_list.append(value_crop)
-                
+        
+        # print('crop_list[0]: x:{}, y:{}'.format(crop_list[0][0], crop_list[0][1]))        
         for xy in crop_list:
             x = xy[0]+128
             y = xy[1]+128
-            distance = (x-container_corner_x)**2 + (y-container_corner_y)**2
+            if xy[0] == 0 and xy[1] == 0:
+                distance = 100000000
+            else:
+                distance = (x-container_corner_x)**2 + (y-container_corner_y)**2
             distance_list.append(distance)
         idx = distance_list.index(min(distance_list))
-        return idx, distance_list  
+        return idx
     
     def callback(self, data):
         self.pre_time = self.cur_time
@@ -456,13 +454,13 @@ class xian_cell_guide_recognition:
         bl_crop_tl_point_list = [bl_crop0, bl_crop1, bl_crop2]
         br_crop_tl_point_list = [br_crop0, br_crop1, br_crop2]
         
-        tl_index, tl_distance = self.get_target_cell_get_crop(tl_crop_tl_point_list, tl_cotainer_corner)
-        tr_index, tr_distance = self.get_target_cell_get_crop(tr_crop_tl_point_list, tr_cotainer_corner)
-        bl_index, bl_distance = self.get_target_cell_get_crop(bl_crop_tl_point_list, bl_cotainer_corner)
-        br_index, br_distance = self.get_target_cell_get_crop(br_crop_tl_point_list, br_cotainer_corner)  
+        tl_index = self.get_target_cell_get_crop(tl_crop_tl_point_list, tl_cotainer_corner)
+        tr_index = self.get_target_cell_get_crop(tr_crop_tl_point_list, tr_cotainer_corner)
+        bl_index = self.get_target_cell_get_crop(bl_crop_tl_point_list, bl_cotainer_corner)
+        br_index = self.get_target_cell_get_crop(br_crop_tl_point_list, br_cotainer_corner)  
         
-        print('tl_index: {} tr_index: {} bl_index: {} br_index: {}'.format(tl_index, tr_index, bl_index, br_index))
-        print('tl_distance: {} tr_distance: {} bl_distance: {} br_distance: {}'.format(tl_distance, tr_distance, bl_distance, br_distance))
+        # print('tl_index: {} tr_index: {} bl_index: {} br_index: {}'.format(tl_index, tr_index, bl_index, br_index))
+        # print('tl_distance: {} \ntr_distance: {} \nbl_distance: {} \nbr_distance: {}'.format(tl_distance, tr_distance, bl_distance, br_distance))
         
         tl_crop_list = [tl_cell_guide_crop0, tl_cell_guide_crop1, tl_cell_guide_crop2]
         tr_crop_list = [tr_cell_guide_crop0, tr_cell_guide_crop1, tr_cell_guide_crop2]
@@ -529,39 +527,12 @@ class xian_cell_guide_recognition:
         
         self.xian_cell_guide_mask_msg.tl_cell_guide_crop_tl_x = tl_crop_tl_point_list[tl_index][0]
         self.xian_cell_guide_mask_msg.tl_cell_guide_crop_tl_y = tl_crop_tl_point_list[tl_index][1]
-        self.xian_cell_guide_mask_msg.tr_cell_guide_crop_tl_x = tr_crop_tl_point_list[tl_index][0]
-        self.xian_cell_guide_mask_msg.tr_cell_guide_crop_tl_y = tr_crop_tl_point_list[tl_index][1]
-        self.xian_cell_guide_mask_msg.bl_cell_guide_crop_tl_x = bl_crop_tl_point_list[tl_index][0]
-        self.xian_cell_guide_mask_msg.bl_cell_guide_crop_tl_y = bl_crop_tl_point_list[tl_index][1]
-        self.xian_cell_guide_mask_msg.br_cell_guide_crop_tl_x = br_crop_tl_point_list[tl_index][0]
-        self.xian_cell_guide_mask_msg.br_cell_guide_crop_tl_y = br_crop_tl_point_list[tl_index][1]
-        
-        # self.xian_cell_guide_mask_msg.tl_cell_guide_crop0_tl_x = data.tl_cell_guide_crop0_tl_x
-        # self.xian_cell_guide_mask_msg.tl_cell_guide_crop0_tl_y = data.tl_cell_guide_crop0_tl_y
-        # self.xian_cell_guide_mask_msg.tr_cell_guide_crop0_tl_x = data.tr_cell_guide_crop0_tl_x
-        # self.xian_cell_guide_mask_msg.tr_cell_guide_crop0_tl_y = data.tr_cell_guide_crop0_tl_y
-        # self.xian_cell_guide_mask_msg.bl_cell_guide_crop0_tl_x = data.bl_cell_guide_crop0_tl_x
-        # self.xian_cell_guide_mask_msg.bl_cell_guide_crop0_tl_y = data.bl_cell_guide_crop0_tl_y
-        # self.xian_cell_guide_mask_msg.br_cell_guide_crop0_tl_x = data.br_cell_guide_crop0_tl_x
-        # self.xian_cell_guide_mask_msg.br_cell_guide_crop0_tl_y = data.br_cell_guide_crop0_tl_y
-        
-        # self.xian_cell_guide_mask_msg.tl_cell_guide_crop1_tl_x = data.tl_cell_guide_crop1_tl_x
-        # self.xian_cell_guide_mask_msg.tl_cell_guide_crop1_tl_y = data.tl_cell_guide_crop1_tl_y
-        # self.xian_cell_guide_mask_msg.tr_cell_guide_crop1_tl_x = data.tr_cell_guide_crop1_tl_x
-        # self.xian_cell_guide_mask_msg.tr_cell_guide_crop1_tl_y = data.tr_cell_guide_crop1_tl_y
-        # self.xian_cell_guide_mask_msg.bl_cell_guide_crop1_tl_x = data.bl_cell_guide_crop1_tl_x
-        # self.xian_cell_guide_mask_msg.bl_cell_guide_crop1_tl_y = data.bl_cell_guide_crop1_tl_y
-        # self.xian_cell_guide_mask_msg.br_cell_guide_crop1_tl_x = data.br_cell_guide_crop1_tl_x
-        # self.xian_cell_guide_mask_msg.br_cell_guide_crop1_tl_y = data.br_cell_guide_crop1_tl_y
-        
-        # self.xian_cell_guide_mask_msg.tl_cell_guide_crop2_tl_x = data.tl_cell_guide_crop2_tl_x
-        # self.xian_cell_guide_mask_msg.tl_cell_guide_crop2_tl_y = data.tl_cell_guide_crop2_tl_y
-        # self.xian_cell_guide_mask_msg.tr_cell_guide_crop2_tl_x = data.tr_cell_guide_crop2_tl_x
-        # self.xian_cell_guide_mask_msg.tr_cell_guide_crop2_tl_y = data.tr_cell_guide_crop2_tl_y
-        # self.xian_cell_guide_mask_msg.bl_cell_guide_crop2_tl_x = data.bl_cell_guide_crop2_tl_x
-        # self.xian_cell_guide_mask_msg.bl_cell_guide_crop2_tl_y = data.bl_cell_guide_crop2_tl_y
-        # self.xian_cell_guide_mask_msg.br_cell_guide_crop2_tl_x = data.br_cell_guide_crop2_tl_x
-        # self.xian_cell_guide_mask_msg.br_cell_guide_crop2_tl_y = data.br_cell_guide_crop2_tl_y
+        self.xian_cell_guide_mask_msg.tr_cell_guide_crop_tl_x = tr_crop_tl_point_list[tr_index][0]
+        self.xian_cell_guide_mask_msg.tr_cell_guide_crop_tl_y = tr_crop_tl_point_list[tr_index][1]
+        self.xian_cell_guide_mask_msg.bl_cell_guide_crop_tl_x = bl_crop_tl_point_list[bl_index][0]
+        self.xian_cell_guide_mask_msg.bl_cell_guide_crop_tl_y = bl_crop_tl_point_list[bl_index][1]
+        self.xian_cell_guide_mask_msg.br_cell_guide_crop_tl_x = br_crop_tl_point_list[br_index][0]
+        self.xian_cell_guide_mask_msg.br_cell_guide_crop_tl_y = br_crop_tl_point_list[br_index][1]
 
         self.xian_cell_guide_mask_publisher.publish(self.xian_cell_guide_mask_msg)
 

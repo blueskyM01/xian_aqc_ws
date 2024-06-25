@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Spreader Images</title>
+    <script type="text/javascript" src="roslib.min.js"></script>
+</head>
+<body>
+    <h1>Spreader Images</h1>
+    <canvas id="canvas" width="1024" height="640"></canvas>
+    <script type="text/javascript">
+        // Connect to ROS
+        var ros = new ROSLIB.Ros({
+            url : 'ws://localhost:9090'
+        });
+
+        ros.on('connection', function() {
+            console.log('Connected to websocket server.');
+        });
+
+        ros.on('error', function(error) {
+            console.log('Error connecting to websocket server: ', error);
+        });
+
+        ros.on('close', function() {
+            console.log('Connection to websocket server closed.');
+        });
+
+        // Create a listener for the image topic
+        var imageListener = new ROSLIB.Topic({
+            ros : ros,
+            name : '/spreader_images_merge_visualization',
+            messageType : 'sensor_msgs/Image'
+        });
+
+        // Function to draw image on canvas
+        function drawImage(message) {
+            console.log('Received image message:', message);
+
+            var canvas = document.getElementById('canvas');
+            var ctx = canvas.getContext('2d');
+            var imageData = ctx.createImageData(message.width, message.height);
+            var data = imageData.data;
+
+            // Decode base64 to binary
+            var binary = atob(message.data);
+            var binaryLength = binary.length;
+            var bytes = new Uint8Array(binaryLength);
+            for (var i = 0; i < binaryLength; i++) {
+                bytes[i] = binary.charCodeAt(i);
+            }
+
+            // Convert bgr8 to rgba
+            for (var i = 0, j = 0; i < bytes.length; i += 3, j += 4) {
+                data[j] = bytes[i+2];     // R
+                data[j+1] = bytes[i+1];   // G
+                data[j+2] = bytes[i];     // B
+                data[j+3] = 255;          // A
+            }
+
+            ctx.putImageData(imageData, 0, 0);
+            console.log('Image drawn on canvas');
+        }
+
+        // Subscribe to the image topic
+        imageListener.subscribe(drawImage);
+    </script>
+</body>
+</html>

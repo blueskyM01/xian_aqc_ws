@@ -1,8 +1,4 @@
 std_msgs/Header header
-sensor_msgs/Image tl_image
-sensor_msgs/Image tr_image
-sensor_msgs/Image bl_image
-sensor_msgs/Image br_image
 int32 xian_cell_guide_point_tl_x
 int32 xian_cell_guide_point_tl_y
 int32 xian_cell_guide_point_tr_x
@@ -22,3 +18,12 @@ int32 xian_container_corner_point_br_y
 float32 xian_gantry_pixel_error
 float32 xian_trolley_pixel_error
 float32 xian_rotate_pixel_error
+int32 error_code
+int32 retract_box_state0
+int32 retract_box_state1
+int32 retract_box_state2
+int32 retract_box_state3
+int32 retract_box_mode0
+int32 retract_box_mode1
+int32 retract_box_mode2
+int32 retract_box_mode3
