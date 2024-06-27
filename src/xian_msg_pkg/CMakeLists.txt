@@ -60,6 +60,7 @@ add_message_files(
   xian_cell_guide_mask.msg
   xian_cell_guide_point_identification.msg
   xian_cell_guide_mask_resize.msg
+  xian_ros_web_interface.msg
 )
 
 ## Generate services in the 'srv' folder

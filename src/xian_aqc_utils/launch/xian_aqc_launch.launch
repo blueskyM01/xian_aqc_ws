@@ -15,6 +15,7 @@
     <node name ="xian_keypoints_recognition_show" pkg="xian_aqc_utils" type="xian_keypoints_recognition_show"/>
     <node name ="xian_get_cell_guide_roi_show" pkg="xian_aqc_utils" type="xian_get_cell_guide_roi_show"/>
     <node name ="xian_cell_guide_mask_resize_show" pkg="xian_aqc_utils" type="xian_cell_guide_mask_resize_show"/>
+    <node name ="xian_ros_web_interface" pkg="xian_aqc_utils" type="xian_ros_web_interface"/>
     <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch">
     </include>
 </launch> 

@@ -98,7 +98,6 @@
     "clip2_cell_guide_br_y1": 0,
     "xian_get_cell_guide_roi_heart_beat": 0,
     "xian_get_cell_guide_roi_fps": 0,
-    "xian_PLC_heart_beat": 0,
     "xian_cell_guide_recognition_heat_beat": 0,
     "xian_cell_guide_recognition_fps": 0,
     "xian_cell_guide_point_identification_heart_beat": 0,

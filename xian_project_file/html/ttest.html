@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>ROS Image and Results Viewer with Parameter Setter</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                display: flex;
+                flex-direction: column; /* Changed to column for smaller screens */
+                margin: 0;
+                padding: 20px;
+            }
+    
+            .row {
+                display: flex;
+                flex-direction: row;
+                margin-bottom: 20px;
+            }
+    
+            .row:nth-child(2) {
+                margin-top: 20px; /* Add margin between rows */
+            }
+    
+            .column {
+                flex: 1;
+                margin-right: 20px;
+            }
+    
+            .param-container {
+                margin-bottom: 10px;
+                display: flex;
+                align-items: center;
+            }
+    
+            .param-container input[type="text"] {
+                flex: 1;
+                padding: 5px;
+                margin-right: 10px;
+                box-sizing: border-box;
+            }
+    
+            .param-container button {
+                padding: 5px 10px;
+                cursor: pointer;
+            }
+        </style>
+        <script type="text/javascript" src="roslib.min.js"></script>
+    </head>
+    <body>
+        <div class="row">
+            <div class="column" id="canvas-container">
+                <h2>Camera Image</h2>
+                <canvas id="canvas" width="1024" height="640"></canvas>
+                <div class="param-container">
+                    <label for="param0">mode 0:</label>
+                    <input type="text" id="param0" placeholder="Enter value">
+                    <button onclick="setRosParam(0)">Set</button>
+                </div>
+                <div class="param-container">
+                    <label for="param1">mode 1:</label>
+                    <input type="text" id="param1" placeholder="Enter value">
+                    <button onclick="setRosParam(1)">Set</button>
+                </div>
+                <div class="param-container">
+                    <label for="param2">mode 2:</label>
+                    <input type="text" id="param2" placeholder="Enter value">
+                    <button onclick="setRosParam(2)">Set</button>
+                </div>
+                <div class="param-container">
+                    <label for="param3">mode 3:</label>
+                    <input type="text" id="param3" placeholder="Enter value">
+                    <button onclick="setRosParam(3)">Set</button>
+                </div>
+                <div class="param-container">
+                    <label for="area_threshold">area_threshold:</label>
+                    <input type="text" id="area_threshold" placeholder="Enter value">
+                    <button onclick="setRosParam2('area_threshold')">Set</button>
+                </div>
+                <div class="param-container">
+                    <label for="identifed_container_corner_distance">identifed_container_corner_distance:</label>
+                    <input type="text" id="identifed_container_corner_distance" placeholder="Enter value">
+                    <button onclick="setRosParam2('identifed_container_corner_distance')">Set</button>
+                </div>
+                <div class="param-container">
+                    <label for="point_w_a">point_w_a:</label>
+                    <input type="text" id="point_w_a" placeholder="Enter value">
+                    <button onclick="setRosParam2('point_w_a')">Set</button>
+                </div>
+                <div class="param-container">
+                    <label for="point_w_b">point_w_b:</label>
+                    <input type="text" id="point_w_b" placeholder="Enter value">
+                    <button onclick="setRosParam2('point_w_b')">Set</button>
+                </div>
+                <div class="param-container">
+                    <label for="scale_lower">scale_lower:</label>
+                    <input type="text" id="scale_lower" placeholder="Enter value">
+                    <button onclick="setRosParam2('scale_lower')">Set</button>
+                </div>
+                <div class="param-container">
+                    <label for="scale_upper">scale_upper:</label>
+                    <input type="text" id="scale_upper" placeholder="Enter value">
+                    <button onclick="setRosParam2('scale_upper')">Set</button>
+                </div>
+                <div class="param-container">
+                    <label for="xian_tl_container_point_x">xian_tl_container_point_x:</label>
+                    <input type="text" id="xian_tl_container_point_x" placeholder="Enter value">
+                    <button onclick="setRosParam2('xian_tl_container_point_x')">Set</button>
+                </div>
+                <div class="param-container">
+                    <label for="xian_tl_container_point_y">xian_tl_container_point_y:</label>
+                    <input type="text" id="xian_tl_container_point_y" placeholder="Enter value">
+                    <button onclick="setRosParam2('xian_tl_container_point_y')">Set</button>
+                </div>
+                <div class="param-container">
+                    <label for="xian_tr_container_point_x">xian_tr_container_point_x:</label>
+                    <input type="text" id="xian_tr_container_point_x" placeholder="Enter value">
+                    <button onclick="setRosParam2('xian_tr_container_point_x')">Set</button>
+                </div>
+                <div class="param-container">
+                    <label for="xian_tr_container_point_y">xian_tr_container_point_y:</label>
+                    <input type="text" id="xian_tr_container_point_y" placeholder="Enter value">
+                    <button onclick="setRosParam2('xian_tr_container_point_y')">Set</button>
+                </div>
+                <div class="param-container">
+                    <label for="xian_bl_container_point_x">xian_bl_container_point_x:</label>
+                    <input type="text" id="xian_bl_container_point_x" placeholder="Enter value">
+                    <button onclick="setRosParam2('xian_bl_container_point_x')">Set</button>
+                </div>
+                <div class="param-container">
+                    <label for="xian_bl_container_point_y">xian_bl_container_point_y:</label>
+                    <input type="text" id="xian_bl_container_point_y" placeholder="Enter value">
+                    <button onclick="setRosParam2('xian_bl_container_point_y')">Set</button>
+                </div>
+                <div class="param-container">
+                    <label for="xian_br_container_point_x">xian_br_container_point_x:</label>
+                    <input type="text" id="xian_br_container_point_x" placeholder="Enter value">
+                    <button onclick="setRosParam2('xian_br_container_point_x')">Set</button>
+                </div>
+                <div class="param-container">
+                    <label for="xian_br_container_point_y">xian_br_container_point_y:</label>
+                    <input type="text" id="xian_br_container_point_y" placeholder="Enter value">
+                    <button onclick="setRosParam2('xian_br_container_point_y')">Set</button>
+                </div>
+                <div class="param-container">
+                    <label for="xian_is_calibrate_flag">xian_is_calibrate_flag:</label>
+                    <input type="text" id="xian_is_calibrate_flag" placeholder="Enter value">
+                    <button onclick="setRosParam2('xian_is_calibrate_flag')">Set</button>
+                </div>
+                <div class="param-container">
+                    <label for="xian_crop_bais_x_bl_1">xian_crop_bais_x_bl_1:</label>
+                    <input type="text" id="xian_crop_bais_x_bl_1" placeholder="Enter value">
+                    <button onclick="setRosParam2('xian_crop_bais_x_bl_1')">Set</button>
+                </div>
+                <div class="param-container">
+                    <label for="xian_crop_bais_x_bl_2">xian_crop_bais_x_bl_2:</label>
+                    <input type="text" id="xian_crop_bais_x_bl_2" placeholder="Enter value">
+                    <button onclick="setRosParam2('xian_crop_bais_x_bl_2')">Set</button>
+                </div>
+                <div class="param-container">
+                    <label for="xian_crop_bais_x_br_1">xian_crop_bais_x_br_1:</label>
+                    <input type="text" id="xian_crop_bais_x_br_1" placeholder="Enter value">
+                    <button onclick="setRosParam2('xian_crop_bais_x_br_1')">Set</button>
+                </div>
+                <div class="param-container">
+                    <label for="xian_crop_bais_x_br_2">xian_crop_bais_x_br_2:</label>
+                    <input type="text" id="xian_crop_bais_x_br_2" placeholder="Enter value">
+                    <button onclick="setRosParam2('xian_crop_bais_x_br_2')">Set</button>
+                </div>
+                <div class="param-container">
+                    <label for="xian_crop_bais_x_tl_1">xian_crop_bais_x_tl_1:</label>
+                    <input type="text" id="xian_crop_bais_x_tl_1" placeholder="Enter value">
+                    <button onclick="setRosParam2('xian_crop_bais_x_tl_1')">Set</button>
+                </div>
+                <div class="param-container">
+                    <label for="xian_crop_bais_x_tl_2">xian_crop_bais_x_tl_2:</label>
+                    <input type="text" id="xian_crop_bais_x_tl_2" placeholder="Enter value">
+                    <button onclick="setRosParam2('xian_crop_bais_x_tl_2')">Set</button>
+                </div>
+                <div class="param-container">
+                    <label for="xian_crop_bais_x_tr_1">xian_crop_bais_x_tr_1:</label>
+                    <input type="text" id="xian_crop_bais_x_tr_1" placeholder="Enter value">
+                    <button onclick="setRosParam2('xian_crop_bais_x_tr_1')">Set</button>
+                </div>
+                <div class="param-container">
+                    <label for="xian_crop_bais_x_tr_2">xian_crop_bais_x_tr_2:</label>
+                    <input type="text" id="xian_crop_bais_x_tr_2" placeholder="Enter value">
+                    <button onclick="setRosParam2('xian_crop_bais_x_tr_2')">Set</button>
+                </div>
+                <div class="param-container">
+                    <label for="xian_crop_bais_y_bl_1">xian_crop_bais_y_bl_1:</label>
+                    <input type="text" id="xian_crop_bais_y_bl_1" placeholder="Enter value">
+                    <button onclick="setRosParam2('xian_crop_bais_y_bl_1')">Set</button>
+                </div>
+                <div class="param-container">
+                    <label for="xian_crop_bais_y_bl_2">xian_crop_bais_y_bl_2:</label>
+                    <input type="text" id="xian_crop_bais_y_bl_2" placeholder="Enter value">
+                    <button onclick="setRosParam2('xian_crop_bais_y_bl_2')">Set</button>
+                </div>
+                <div class="param-container">
+                    <label for="xian_crop_bais_y_br_1">xian_crop_bais_y_br_1:</label>
+                    <input type="text" id="xian_crop_bais_y_br_1" placeholder="Enter value">
+                    <button onclick="setRosParam2('xian_crop_bais_y_br_1')">Set</button>
+                </div>
+                <div class="param-container">
+                    <label for="xian_crop_bais_y_br_2">xian_crop_bais_y_br_2:</label>
+                    <input type="text" id="xian_crop_bais_y_br_2" placeholder="Enter value">
+                    <button onclick="setRosParam2('xian_crop_bais_y_br_2')">Set</button>
+                </div>
+                <div class="param-container">
+                    <label for="xian_crop_bais_y_tl_1">xian_crop_bais_y_tl_1:</label>
+                    <input type="text" id="xian_crop_bais_y_tl_1" placeholder="Enter value">
+                    <button onclick="setRosParam2('xian_crop_bais_y_tl_1')">Set</button>
+                </div>
+                <div class="param-container">
+                    <label for="xian_crop_bais_y_tl_2">xian_crop_bais_y_tl_2:</label>
+                    <input type="text" id="xian_crop_bais_y_tl_2" placeholder="Enter value">
+                    <button onclick="setRosParam2('xian_crop_bais_y_tl_2')">Set</button>
+                </div>
+                <div class="param-container">
+                    <label for="xian_crop_bais_y_tr_1">xian_crop_bais_y_tr_1:</label>
+                    <input type="text" id="xian_crop_bais_y_tr_1" placeholder="Enter value">
+                    <button onclick="setRosParam2('xian_crop_bais_y_tr_1')">Set</button>
+                </div>
+                <div class="param-container">
+                    <label for="xian_crop_bais_y_tr_2">xian_crop_bais_y_tr_2:</label>
+                    <input type="text" id="xian_crop_bais_y_tr_2" placeholder="Enter value">
+                    <button onclick="setRosParam2('xian_crop_bais_y_tr_2')">Set</button>
+                </div>
+                <!-- Add other param-container divs here -->
+            </div>
+            <div class="column" id="results-container">
+                <h2 id="results-header">Xian Results</h2>
+                <div id="results-columns">
+                    <div class="result-column" id="column1">
+                        <ul id="resultsList1"></ul>
+                    </div>
+                    <div class="result-column" id="column2">
+                        <ul id="resultsList2"></ul>
+                    </div>
+                    <div class="result-column" id="column3">
+                        <ul id="resultsList3"></ul>
+                    </div>
+                    <div class="result-column" id="column4">
+                        <ul id="resultsList4"></ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    <script type="text/javascript">
+        var ros = new ROSLIB.Ros({
+            url : 'ws://localhost:9090'
+        });
+
+        ros.on('connection', function() {
+            console.log('Connected to websocket server.');
+        });
+
+        ros.on('error', function(error) {
+            console.log('Error connecting to websocket server: ', error);
+        });
+
+        ros.on('close', function() {
+            console.log('Connection to websocket server closed.');
+        });
+
+        // Image Subscription and Display
+        var imageListener = new ROSLIB.Topic({
+            ros : ros,
+            name : '/xian_visualization',
+            messageType : 'sensor_msgs/Image'
+        });
+
+        function drawImage(message) {
+            var canvas = document.getElementById('canvas');
+            canvas.width = message.width;
+            canvas.height = message.height;
+            var ctx = canvas.getContext('2d');
+            var imageData = ctx.createImageData(message.width, message.height);
+            var data = imageData.data;
+
+            var binary = atob(message.data);
+            var binaryLength = binary.length;
+            var bytes = new Uint8Array(binaryLength);
+            for (var i = 0; i < binaryLength; i++) {
+                bytes[i] = binary.charCodeAt(i);
+            }
+
+            for (var i = 0, j = 0; i < bytes.length; i += 3, j += 4) {
+                data[j] = bytes[i+2];     // R
+                data[j+1] = bytes[i+1];   // G
+                data[j+2] = bytes[i];     // B
+                data[j+3] = 255;          // A
+            }
+
+            ctx.putImageData(imageData, 0, 0);
+            console.log('Image drawn on canvas');
+        }
+
+        imageListener.subscribe(drawImage);
+
+        // Results Subscription and Display
+        var resultsListener = new ROSLIB.Topic({
+            ros : ros,
+            name : '/xian_results',
+            messageType : 'xian_msg_pkg/xian_cell_guide_msg'
+        });
+        var resultsListener2 = new ROSLIB.Topic({
+            ros : ros,
+            name : '/ros_param_visualization',
+            messageType : 'xian_msg_pkg/xian_ros_web_interface'
+        });
+
+        function displayResults(message) {
+            var resultsList1 = document.getElementById('resultsList1');
+            var resultsList2 = document.getElementById('resultsList2');
+            
+            resultsList1.innerHTML = ''; // Clear previous results
+            resultsList2.innerHTML = ''; // Clear previous results
+
+            var fields = [
+                'xian_cell_guide_point_tl_x', 'xian_cell_guide_point_tl_y',
+                'xian_cell_guide_point_tr_x', 'xian_cell_guide_point_tr_y',
+                'xian_cell_guide_point_bl_x', 'xian_cell_guide_point_bl_y',
+                'xian_cell_guide_point_br_x', 'xian_cell_guide_point_br_y',
+                'xian_container_corner_point_tl_x', 'xian_container_corner_point_tl_y',
+                'xian_container_corner_point_tr_x', 'xian_container_corner_point_tr_y',
+                'xian_container_corner_point_bl_x', 'xian_container_corner_point_bl_y',
+                'xian_container_corner_point_br_x', 'xian_container_corner_point_br_y',
+                'xian_gantry_pixel_error', 'xian_trolley_pixel_error', 'xian_rotate_pixel_error',
+                'error_code',
+                'retract_box_state0', 'retract_box_state1', 'retract_box_state2', 'retract_box_state3',
+                'retract_box_mode0', 'retract_box_mode1', 'retract_box_mode2', 'retract_box_mode3'
+            ];
+
+            // Split fields into two columns
+            var halfLength = Math.ceil(fields.length / 2);
+            var fieldsColumn1 = fields.slice(0, halfLength);
+            var fieldsColumn2 = fields.slice(halfLength);
+
+            fieldsColumn1.forEach(function(field) {
+                var listItem = document.createElement('li');
+                listItem.textContent = field + ': ' + message[field];
+                resultsList1.appendChild(listItem);
+            });
+
+            fieldsColumn2.forEach(function(field) {
+                var listItem = document.createElement('li');
+                listItem.textContent = field + ': ' + message[field];
+                resultsList2.appendChild(listItem);
+            });
+        }
+
+        function displayResults2(message) {
+            var resultsList1 = document.getElementById('resultsList3');
+            var resultsList2 = document.getElementById('resultsList4');
+            
+            resultsList1.innerHTML = ''; // Clear previous results
+            resultsList2.innerHTML = ''; // Clear previous results
+
+            var fields = [
+                'area_threshold', 'identifed_container_corner_distance',
+                'point_w_a', 'point_w_b',
+                'scale_lower', 'scale_upper',
+                'xian_tl_container_point_x', 'xian_tl_container_point_y',
+                'xian_tr_container_point_x', 'xian_tr_container_point_y',
+                'xian_bl_container_point_x', 'xian_bl_container_point_y',
+                'xian_br_container_point_x', 'xian_br_container_point_y',
+                'xian_crop_bais_x_bl_1', 'xian_crop_bais_x_bl_2',
+                'xian_crop_bais_x_br_1', 'xian_crop_bais_x_br_2', 
+                'xian_crop_bais_x_tl_1', 'xian_crop_bais_x_tl_2',
+                'xian_crop_bais_x_tr_1', 'xian_crop_bais_x_tr_2',
+                'xian_crop_bais_y_bl_1', 'xian_crop_bais_y_bl_2',
+                'xian_crop_bais_y_br_1', 'xian_crop_bais_y_br_2', 
+                'xian_crop_bais_y_tl_1', 'xian_crop_bais_y_tl_2',
+                'xian_crop_bais_y_tr_1', 'xian_crop_bais_y_tr_2',
+                'xian_is_calibrate_flag', 'xian_aqc_dynamic_param_node_heart_beat', 'xian_plc_heart_beat', 'xian_camera_driver_heat_beat',
+                'xian_container_corner_cop_process_heart_beat', 'xian_keypoints_recognition_heart_beat', 'xian_get_cell_guide_roi_heart_beat', 'xian_cell_guide_recognition_heat_beat',
+                'xian_cell_guide_mask_resize_heart_beat', 'xian_cell_guide_point_identification_heart_beat',
+                'xian_error_restart_log_heart_beat', 'xian_trolley_side_client_ros_heart_beat', 
+                'xian_spreader_side_server_ros_heart_beat', 'xian_camera_sensor_fps',
+                'xian_container_corner_cop_process_fps', 'xian_keypoints_recognition_fps',
+                'xian_get_cell_guide_roi_fps', 'xian_cell_guide_recognition_fps',
+                'xian_cell_guide_mask_resize_fps', 'xian_cell_guide_point_identification_fps',
+                'xian_error_restart_log_fps', 'xian_trolley_side_client_ros_fps',
+                'xian_spreader_side_server_ros_fps'
+            ];
+
+            // Split fields into two columns
+            var halfLength = Math.ceil(fields.length / 2);
+            var fieldsColumn1 = fields.slice(0, halfLength);
+            var fieldsColumn2 = fields.slice(halfLength);
+
+            fieldsColumn1.forEach(function(field) {
+                var listItem = document.createElement('li');
+                listItem.textContent = field + ': ' + message[field];
+                resultsList1.appendChild(listItem);
+            });
+
+            fieldsColumn2.forEach(function(field) {
+                var listItem = document.createElement('li');
+                listItem.textContent = field + ': ' + message[field];
+                resultsList2.appendChild(listItem);
+            });
+        }
+
+        resultsListener.subscribe(displayResults);
+        resultsListener2.subscribe(displayResults2);
+
+        // ROS Parameter Setting
+        function setRosParam(index) {
+            var paramName = '/xian_aqc_dynamic_parameters_server/xian_acds_send_to_retrable_box_mode' + index;
+            var paramValue = document.getElementById('param' + index).value;
+            
+            var param = new ROSLIB.Param({
+                ros : ros,
+                name : paramName
+            });
+
+            param.set(parseInt(paramValue), function() {
+                console.log('ROS parameter ' + paramName + ' set to ' + paramValue);
+                alert('ROS parameter ' + paramName + ' set to ' + paramValue);
+            });
+        }
+        function setRosParam2(index) {
+            var paramName = '/xian_aqc_dynamic_parameters_server/' + index;
+            var paramValue = document.getElementById(index).value;
+            
+            var param = new ROSLIB.Param({
+                ros : ros,
+                name : paramName
+            });
+
+            param.set(parseInt(paramValue), function() {
+                console.log('ROS parameter ' + paramName + ' set to ' + paramValue);
+                alert('ROS parameter ' + paramName + ' set to ' + paramValue);
+            });
+        }
+
+
+
+        
+        // Define the parameter to get
+        // var param = new ROSLIB.Param({
+        //     ros: ros,
+        //     name: '/xian_aqc_dynamic_parameters_server/xian_acds_send_to_retrable_box_mode3'
+        // });
+
+        // // Get the parameter value
+        // param.get(function(value) {
+        //     console.log('Parameter value: ', value);
+        //     document.getElementById('param-value').innerText = value;
+        // });
+    </script>
+</body>
+</html>
