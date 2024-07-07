@@ -89,6 +89,7 @@ class Xian_SpreaderSideServerRos
         int xian_from_plc_to_retrable_box_mode2 = 0;
         int xian_from_plc_to_retrable_box_mode3 = 0;
         int xian_spreader_side_server_ros_heart_beat = 0;
+        int xian_plc_heart_beat = 0;
 
         
 
@@ -168,7 +169,7 @@ class Xian_SpreaderSideServerRos
                 ros::param::get("/xian_aqc_dynamic_parameters_server/xian_from_plc_to_retrable_box_mode1", xian_from_plc_to_retrable_box_mode1);
                 ros::param::get("/xian_aqc_dynamic_parameters_server/xian_from_plc_to_retrable_box_mode2", xian_from_plc_to_retrable_box_mode2);
                 ros::param::get("/xian_aqc_dynamic_parameters_server/xian_from_plc_to_retrable_box_mode3", xian_from_plc_to_retrable_box_mode3);
-                ros::param::get("/xian_aqc_dynamic_parameters_server/xian_spreader_side_server_ros_heart_beat", xian_spreader_side_server_ros_heart_beat); 
+                ros::param::get("/xian_aqc_dynamic_parameters_server/xian_plc_heart_beat", xian_plc_heart_beat); 
                 spreader_data.State0 = xian_retrable_box_state0;
                 spreader_data.State1 = xian_retrable_box_state1;
                 spreader_data.State2 = xian_retrable_box_state2;
@@ -177,7 +178,7 @@ class Xian_SpreaderSideServerRos
                 spreader_data.mode1 = xian_from_plc_to_retrable_box_mode1;
                 spreader_data.mode2 = xian_from_plc_to_retrable_box_mode2;
                 spreader_data.mode3 = xian_from_plc_to_retrable_box_mode3;
-                spreader_data.spreader_heart_beat = xian_spreader_side_server_ros_heart_beat;
+                spreader_data.spreader_heart_beat = xian_plc_heart_beat;
 
                 // Send data to client
                 if (send(client_socket, &spreader_data, sizeof(spreader2trolley), 0) < 0) {

@@ -114,5 +114,15 @@
     "xian_trolley_side_client_ros_heart_beat": 0,
     "xian_trolley_side_client_ros_fps": 0,
     "xian_spreader_side_server_ros_heart_beat": 0,
-    "xian_spreader_side_server_ros_fps": 0
+    "xian_spreader_side_server_ros_fps": 0,
+    "xian_communication_with_plc_simulation_heart_beat": 0,
+    "xian_communication_with_plc_simulation_fps": 0,
+    "xian_cell_guide_detect_enable": 0,
+    "xian_cell_guide_detect_enable_simulation": 0,
+    "xian_cell_guide_detect_enable_data_saving_simulation": 0,
+    "xian_data_saving_heart_beat": 0,
+    "xian_data_saving_fps": 0,
+    "xian_disk_monitor_periodically_delete_heart_beat": 0,
+    "xian_disk_monitor_periodically_delete_fps": 0,
+    "zpmc_disk_area_left": 0
 }

@@ -91,7 +91,7 @@ class Xian_TrolleySideClientRos
             serv_addr.sin_port = htons(PORT);
 
             // Convert IPv4 and IPv6 addresses from text to binary form
-            if (inet_pton(AF_INET, "10.28.137.11", &serv_addr.sin_addr) <= 0) {
+            if (inet_pton(AF_INET, "192.168.1.11", &serv_addr.sin_addr) <= 0) {
                 printf("\nInvalid address/ Address not supported \n");
                 exit(-1);
             }
@@ -151,7 +151,7 @@ class Xian_TrolleySideClientRos
                     spreader_data.State0, spreader_data.State1, spreader_data.State2, spreader_data.State3,
                     spreader_data.mode0, spreader_data.mode1, spreader_data.mode2, spreader_data.mode3,
                     spreader_data.spreader_heart_beat);
-                ros::param::set("/xian_aqc_dynamic_parameters_server/xian_spreader_side_server_ros_heart_beat", spreader_data.spreader_heart_beat);  
+                ros::param::set("/xian_aqc_dynamic_parameters_server/xian_plc_heart_beat", spreader_data.spreader_heart_beat);  
                 ros::param::set("/xian_aqc_dynamic_parameters_server/xian_from_plc_to_retrable_box_mode0", spreader_data.mode0); 
                 ros::param::set("/xian_aqc_dynamic_parameters_server/xian_from_plc_to_retrable_box_mode1", spreader_data.mode1); 
                 ros::param::set("/xian_aqc_dynamic_parameters_server/xian_from_plc_to_retrable_box_mode2", spreader_data.mode2); 

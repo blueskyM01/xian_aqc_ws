@@ -78,3 +78,54 @@
 - parameters:
     - None
 
+
+## 5. `xian_cell_guide_recognition`
+- run: `rosrun xian_ai_pkg xian_cell_guide_recognition`
+- description: 
+
+- subscriber: 
+    - type: `xian_msg_pkg::xian_cell_guide_roi_msg`
+    - name: `xian_cell_guide_crop_images`
+- publisher:
+    - type: `xian_cell_guide_mask`
+    - name: `xian_cell_guide_masks`
+
+- parameters:
+    - None
+
+## 6. `xian_cell_guide_mask_resize`
+- run: `rosrun xian_image_process xian_cell_guide_mask_resize`
+- description: 
+
+- subscriber: 
+    - type: `xian_cell_guide_mask`
+    - name: `xian_cell_guide_masks`
+- publisher:
+    - type: `xian_cell_guide_mask_resize`
+    - name: `xian_cell_guide_masks_resize`
+
+- parameters:
+    - None
+
+## 7. `xian_cell_guide_point_identification`
+- run: `rosrun xian_image_process xian_cell_guide_point_identification`
+- description: 
+
+- subscriber: 
+    - type: `xian_cell_guide_mask_resize`
+    - name: `xian_cell_guide_masks_resize`
+- publisher:
+    - type: `xian_cell_guide_point_identification`
+    - name: `xian_cell_guide_points`
+
+## 8. `xian_aqc_dynamic_parameters_server`
+- run: `rosrun xian_aqc_params xian_keypoints_recognition`
+- description: 
+## 9. `xian_trolley_side_client_ros`
+- run: `rosrun xian_communication_pkg xian_trolley_side_client_ros`
+- description: 
+
+## 10. `xian_row_web_interface`
+- run: `rosrun xian_aqc_utils xian_row_web_interface`
+- description: 
+

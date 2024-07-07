@@ -64,7 +64,7 @@ public:
         ros::param::get("/xian_aqc_dynamic_parameters_server/xian_camera_sensor_fps", xian_camera_sensor_fps);
         std::cout << "FPS: " << xian_camera_sensor_fps << std::endl;
 
-        usleep(50 * 1000); // 50 ms
+        // usleep(50 * 1000); // 50 ms
 
         if (xian_is_calibrate_flag == 0) {
             if (socket_fd == -1 && !connect_flag) {
@@ -187,7 +187,7 @@ private:
     struct timeval tvTimeout;
     struct timeval tvTimeout_recv;
     int res;
-    std::string ip = "10.28.137.12";
+    std::string ip = "192.168.1.12";
     char const* server_ip = ip.c_str();
 
     struct sockaddr_in serv_addr;

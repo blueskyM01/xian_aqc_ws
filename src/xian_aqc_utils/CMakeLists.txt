@@ -249,5 +249,10 @@ add_executable(xian_ros_web_interface src/xian_ros_web_interface.cpp)
 add_dependencies(xian_ros_web_interface ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(xian_ros_web_interface zpmc_cv_control ${OpenCV_LIBRARIES} ${catkin_LIBRARIES})
 
+add_executable(xian_data_saving src/xian_data_saving.cpp)
+add_dependencies(xian_data_saving ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(xian_data_saving zpmc_cv_control ${OpenCV_LIBRARIES} ${catkin_LIBRARIES})
 
-
+add_executable(xian_disk_monitor_periodically_delete src/xian_disk_monitor_periodically_delete.cpp)
+add_dependencies(xian_disk_monitor_periodically_delete ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(xian_disk_monitor_periodically_delete zpmc_cv_control ${OpenCV_LIBRARIES} ${catkin_LIBRARIES})

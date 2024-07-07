@@ -1,8 +1,9 @@
 <?xml version="1.0"?>
 <launch>
     <node name ="xian_aqc_dynamic_parameters_server" pkg="xian_aqc_params" type="xian_aqc_dynamic_parameters_server"/>
-    <!-- <node name ="xian_camera_driver" pkg="xian_sensor_pkg" type="xian_camera_driver"/> -->
+    <node name ="xian_camera_driver" pkg="xian_sensor_pkg" type="xian_camera_driver"/>
     <node name ="xian_trolley_side_client_ros" pkg="xian_communication_pkg" type="xian_trolley_side_client_ros"/>
+    <node name ="xian_communication_with_plc_simulation" pkg="xian_communication_pkg" type="xian_communication_with_plc_simulation"/>
     <node name ="xian_image_cop_process" pkg="xian_image_process" type="xian_image_cop_process"/>
     <node name ="xian_keypoints_recognition" pkg="xian_ai_pkg" type="xian_keypoints_recognition.py"/>
     <node name ="xian_get_cell_guide_roi" pkg="xian_image_process" type="xian_get_cell_guide_roi"/>
@@ -16,6 +17,8 @@
     <node name ="xian_get_cell_guide_roi_show" pkg="xian_aqc_utils" type="xian_get_cell_guide_roi_show"/>
     <node name ="xian_cell_guide_mask_resize_show" pkg="xian_aqc_utils" type="xian_cell_guide_mask_resize_show"/>
     <node name ="xian_ros_web_interface" pkg="xian_aqc_utils" type="xian_ros_web_interface"/>
+    <node name ="xian_data_saving" pkg="xian_aqc_utils" type="xian_data_saving"/>
+    <node name ="xian_disk_monitor_periodically_delete" pkg="xian_aqc_utils" type="xian_disk_monitor_periodically_delete"/>
     <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch">
     </include>
 </launch> 
