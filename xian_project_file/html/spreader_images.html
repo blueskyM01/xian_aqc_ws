@@ -37,6 +37,8 @@
             console.log('Received image message:', message);
 
             var canvas = document.getElementById('canvas');
+            canvas.width = message.width;
+            canvas.height = message.height;
             var ctx = canvas.getContext('2d');
             var imageData = ctx.createImageData(message.width, message.height);
             var data = imageData.data;

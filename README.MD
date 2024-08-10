@@ -210,6 +210,29 @@
     加入如下代码
     source /root/code/xian_aqc_ws/devel/setup.bash
     ```
+
+- spreader side 做如下修改：
+    - 修改`xian_aqc_launch.launch`
+    ```
+    <?xml version="1.0"?>
+    <launch>
+        <node name ="xian_aqc_dynamic_parameters_server" pkg="xian_aqc_params" type="xian_aqc_dynamic_parameters_server"/>
+        <node name ="xian_communication_with_plc_node" pkg="xian_communication_pkg" type="xian_communication_with_plc_node"/>
+        <node name ="xian_spreader_side_server_ros" pkg="xian_communication_pkg" type="xian_spreader_side_server_ros"/>
+        <node name ="xian_error_restart_log" pkg="xian_aqc_utils" type="xian_error_restart_log"/>
+        
+        <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch">
+        </include>
+    </launch> 
+    ```
+    - 修改 `src/xian_aqc_utils/CMakeLists.txt`，取消如下注释
+    ```
+    add_executable(xian_error_restart_log src/xian_error_restart_log.cpp )
+    add_dependencies(xian_error_restart_log ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+    target_link_libraries(xian_error_restart_log zpmc_cv_control ${OpenCV_LIBRARIES} ${catkin_LIBRARIES})
+    ```
+
+
 ## 3. Output
 
 | Output Topic | Message Type |

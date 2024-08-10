@@ -58,6 +58,7 @@ class Xian_TrolleySideClientRos
             int mode2;    
             int mode3; 
             int trolley_heart_beat;
+            int xian_plc_error_clear;
         };
 
         struct spreader2trolley {
@@ -70,6 +71,7 @@ class Xian_TrolleySideClientRos
             int mode2;    
             int mode3; 
             int spreader_heart_beat;
+            int xian_plc_error_clear;
         };
         
         int xian_acds_send_to_retrable_box_mode0 = 0;
@@ -77,6 +79,7 @@ class Xian_TrolleySideClientRos
         int xian_acds_send_to_retrable_box_mode2 = 0;
         int xian_acds_send_to_retrable_box_mode3 = 0;
         int xian_trolley_side_client_ros_heart_beat = 0;
+        int xian_plc_error_clear = 0;
 
         void command_callback()
         {                           
@@ -128,11 +131,14 @@ class Xian_TrolleySideClientRos
                 ros::param::get("/xian_aqc_dynamic_parameters_server/xian_acds_send_to_retrable_box_mode2", xian_acds_send_to_retrable_box_mode2);
                 ros::param::get("/xian_aqc_dynamic_parameters_server/xian_acds_send_to_retrable_box_mode3", xian_acds_send_to_retrable_box_mode3);
                 ros::param::get("/xian_aqc_dynamic_parameters_server/xian_trolley_side_client_ros_heart_beat", xian_trolley_side_client_ros_heart_beat); 
+                ros::param::get("/xian_aqc_dynamic_parameters_server/xian_plc_error_clear", xian_plc_error_clear); 
+
                 trolley_data.mode0 = xian_acds_send_to_retrable_box_mode0;
                 trolley_data.mode1 = xian_acds_send_to_retrable_box_mode1;
                 trolley_data.mode2 = xian_acds_send_to_retrable_box_mode2;
                 trolley_data.mode3 = xian_acds_send_to_retrable_box_mode3;
                 trolley_data.trolley_heart_beat = xian_trolley_side_client_ros_heart_beat;
+                trolley_data.xian_plc_error_clear = xian_plc_error_clear;
                 // Send data to server
                 if (send(sock, &trolley_data, sizeof(trolley2spreader), 0) < 0) {
                     printf("\nSend failed\n");
@@ -160,6 +166,8 @@ class Xian_TrolleySideClientRos
                 ros::param::set("/xian_aqc_dynamic_parameters_server/xian_retrable_box_state1", spreader_data.State1);
                 ros::param::set("/xian_aqc_dynamic_parameters_server/xian_retrable_box_state2", spreader_data.State2);
                 ros::param::set("/xian_aqc_dynamic_parameters_server/xian_retrable_box_state3", spreader_data.State3);
+                ros::param::set("/xian_aqc_dynamic_parameters_server/xian_plc_error_clear", spreader_data.xian_plc_error_clear);
+
                 // Optionally, you can add a sleep here to control the rate of communication
                 usleep(50 * 1000); // 50 ms
             }

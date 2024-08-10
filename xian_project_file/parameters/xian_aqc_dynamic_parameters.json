@@ -124,5 +124,6 @@
     "xian_data_saving_fps": 0,
     "xian_disk_monitor_periodically_delete_heart_beat": 0,
     "xian_disk_monitor_periodically_delete_fps": 0,
-    "zpmc_disk_area_left": 0
+    "zpmc_disk_area_left": 0,
+    "xian_plc_error_clear": 0
 }

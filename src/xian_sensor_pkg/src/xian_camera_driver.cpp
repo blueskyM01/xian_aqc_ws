@@ -145,14 +145,18 @@ public:
             close(socket_fd);
             socket_fd = -1;
         } else {
+            cv::rotate(br_image, br_image, cv::ROTATE_180);
+            cv::rotate(bl_image, bl_image, cv::ROTATE_180);
             img_tl = cv_bridge::CvImage(std_msgs::Header(), "bgr8", tl_image).toImageMsg();
             img_tr = cv_bridge::CvImage(std_msgs::Header(), "bgr8", tr_image).toImageMsg();
             img_bl = cv_bridge::CvImage(std_msgs::Header(), "bgr8", bl_image).toImageMsg();
             img_br = cv_bridge::CvImage(std_msgs::Header(), "bgr8", br_image).toImageMsg();
-
+            
+            
+            
             spreder_imgs.tl_image = *img_tl;
-            spreder_imgs.tr_image = *img_tr;
-            spreder_imgs.bl_image = *img_bl;
+            spreder_imgs.tr_image = *img_bl;
+            spreder_imgs.bl_image = *img_tr;
             spreder_imgs.br_image = *img_br;
             command_publisher_.publish(spreder_imgs);
         }

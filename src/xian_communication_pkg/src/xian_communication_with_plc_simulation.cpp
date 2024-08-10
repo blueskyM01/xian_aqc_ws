@@ -62,6 +62,9 @@ class xian_CommunicationWithPlcSimulation
 
         int xian_communication_with_plc_simulation_heart_beat = 0;
         double xian_communication_with_plc_simulation_fps = 0.0;
+        
+        int xian_plc_error_clear=0;
+        int xian_plc_error_clear_flag=0;
 
         void command_callback()
         {
@@ -74,6 +77,7 @@ class xian_CommunicationWithPlcSimulation
             
             ros::param::get("/xian_aqc_dynamic_parameters_server/xian_communication_with_plc_simulation_fps", xian_communication_with_plc_simulation_fps);
             ros::param::get("/xian_aqc_dynamic_parameters_server/xian_cell_guide_detect_enable", xian_cell_guide_detect_enable);
+            ros::param::get("/xian_aqc_dynamic_parameters_server/xian_plc_error_clear", xian_plc_error_clear);
 
             // 存储日志使能
             pre_cell_guide_detect_enable = cur_cell_guide_detect_enable;
@@ -84,7 +88,16 @@ class xian_CommunicationWithPlcSimulation
                 ros::param::set("/xian_aqc_dynamic_parameters_server/xian_cell_guide_detect_enable_simulation",                 1);
                 ros::param::set("/xian_aqc_dynamic_parameters_server/xian_cell_guide_detect_enable_data_saving_simulation",     1);
             }
-
+            
+       	    if(1 == xian_plc_error_clear)
+            {
+		            xian_plc_error_clear_flag += 1;
+		            if(xian_plc_error_clear_flag == 20)
+		            {
+		                ros::param::set("/xian_aqc_dynamic_parameters_server/xian_plc_error_clear",                 0);
+		                xian_plc_error_clear_flag = 0;
+		            }
+            }
             
             ros::param::set("/xian_aqc_dynamic_parameters_server/xian_communication_with_plc_simulation_fps",           1000.0 / timediff);
         }   

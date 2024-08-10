@@ -155,7 +155,7 @@ class zpmc_CommunicationWithAccs
             uint16_t Spare1;
             uint16_t Spare2;
             uint16_t Spare3;
-            uint16_t Spare4;
+            uint16_t plc_error_clear;
         };
         AFLS2PLC plc_buffer_send;
        
@@ -184,6 +184,9 @@ class zpmc_CommunicationWithAccs
         int mode1_ = 0;
         int mode2_ = 0;
         int mode3_ = 0; 
+        
+        int xian_plc_error_clear=0;
+        int plc_error_clear_=0;
 
         // int Spreader_Size_ = 0;
         // int test_recv_1 = 0;
@@ -334,6 +337,7 @@ class zpmc_CommunicationWithAccs
                 ros::param::get("/xian_aqc_dynamic_parameters_server/xian_acds_send_to_retrable_box_mode1", xian_acds_send_to_retrable_box_mode1);
                 ros::param::get("/xian_aqc_dynamic_parameters_server/xian_acds_send_to_retrable_box_mode2", xian_acds_send_to_retrable_box_mode2);
                 ros::param::get("/xian_aqc_dynamic_parameters_server/xian_acds_send_to_retrable_box_mode3", xian_acds_send_to_retrable_box_mode3);
+                ros::param::get("/xian_aqc_dynamic_parameters_server/xian_plc_error_clear", xian_plc_error_clear);
                 
                 unsigned char xian_acds_mode0_bytes[2];
                 unsigned char xian_acds_mode0_bytes_inv[2];
@@ -382,6 +386,18 @@ class zpmc_CommunicationWithAccs
                 }
                 uint16_t xian_acds_send_to_retrable_box_mode3_ = ByteToUint8(xian_acds_mode3_bytes_inv);                
                 plc_buffer_send.mode3 = xian_acds_send_to_retrable_box_mode3_;
+                
+                unsigned char xian_plc_error_clear_bytes[2];
+                unsigned char xian_plc_error_clear_bytes_inv[2];
+                Uint8ToByte((int16_t)xian_plc_error_clear, xian_plc_error_clear_bytes);
+                int xian_plc_error_clear_len = sizeof(xian_plc_error_clear_bytes);
+                for(int i=0; i<xian_plc_error_clear_len; i++)
+                {
+                    xian_plc_error_clear_bytes_inv[i] = xian_plc_error_clear_bytes[xian_plc_error_clear_len-1-i];
+                }
+                uint16_t plc_error_clear_ = ByteToUint8(xian_plc_error_clear_bytes_inv);                
+                plc_buffer_send.plc_error_clear = plc_error_clear_;
+
 
 
                 std::cout << "send size:" << plc_buffer_send_t << std::endl;

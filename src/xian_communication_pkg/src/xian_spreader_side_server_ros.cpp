@@ -66,6 +66,7 @@ class Xian_SpreaderSideServerRos
             int mode2;    
             int mode3; 
             int trolley_heart_beat;
+            int xian_plc_error_clear;
         };
 
         struct spreader2trolley {
@@ -78,6 +79,7 @@ class Xian_SpreaderSideServerRos
             int mode2;    
             int mode3; 
             int spreader_heart_beat;
+            int xian_plc_error_clear;
         };
         
         int xian_retrable_box_state0 = 0;
@@ -90,7 +92,7 @@ class Xian_SpreaderSideServerRos
         int xian_from_plc_to_retrable_box_mode3 = 0;
         int xian_spreader_side_server_ros_heart_beat = 0;
         int xian_plc_heart_beat = 0;
-
+        int xian_plc_error_clear = 0;
         
 
         void init()
@@ -170,6 +172,8 @@ class Xian_SpreaderSideServerRos
                 ros::param::get("/xian_aqc_dynamic_parameters_server/xian_from_plc_to_retrable_box_mode2", xian_from_plc_to_retrable_box_mode2);
                 ros::param::get("/xian_aqc_dynamic_parameters_server/xian_from_plc_to_retrable_box_mode3", xian_from_plc_to_retrable_box_mode3);
                 ros::param::get("/xian_aqc_dynamic_parameters_server/xian_plc_heart_beat", xian_plc_heart_beat); 
+                ros::param::get("/xian_aqc_dynamic_parameters_server/xian_plc_error_clear", xian_plc_error_clear); 
+
                 spreader_data.State0 = xian_retrable_box_state0;
                 spreader_data.State1 = xian_retrable_box_state1;
                 spreader_data.State2 = xian_retrable_box_state2;
@@ -179,6 +183,7 @@ class Xian_SpreaderSideServerRos
                 spreader_data.mode2 = xian_from_plc_to_retrable_box_mode2;
                 spreader_data.mode3 = xian_from_plc_to_retrable_box_mode3;
                 spreader_data.spreader_heart_beat = xian_plc_heart_beat;
+                spreader_data.xian_plc_error_clear = xian_plc_error_clear;
 
                 // Send data to client
                 if (send(client_socket, &spreader_data, sizeof(spreader2trolley), 0) < 0) {
@@ -199,7 +204,8 @@ class Xian_SpreaderSideServerRos
                 ros::param::set("/xian_aqc_dynamic_parameters_server/xian_acds_send_to_retrable_box_mode0", trolley_data.mode0);  
                 ros::param::set("/xian_aqc_dynamic_parameters_server/xian_acds_send_to_retrable_box_mode1", trolley_data.mode1);  
                 ros::param::set("/xian_aqc_dynamic_parameters_server/xian_acds_send_to_retrable_box_mode2", trolley_data.mode2);  
-                ros::param::set("/xian_aqc_dynamic_parameters_server/xian_acds_send_to_retrable_box_mode3", trolley_data.mode3);  
+                ros::param::set("/xian_aqc_dynamic_parameters_server/xian_acds_send_to_retrable_box_mode3", trolley_data.mode3); 
+                ros::param::set("/xian_aqc_dynamic_parameters_server/xian_plc_error_clear", trolley_data.xian_plc_error_clear); 
             }
         }
 
