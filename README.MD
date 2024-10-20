@@ -26,6 +26,7 @@
             - 必须在host主机上先运行xhost +local:root
             - 必须在host主机上启动该镜像
             - 必须用sudo docker exec -it xian_aqc /bin/bash进入镜像
+            - 进入home目录：sudo docker exec -it xian_aqc /bin/bash -c "cd /root && exec /bin/bash"
     
     - Start docker (`sender side`, docker visualization)
         - xhost +local:root # 出现non-network local connections being added to access control list说明执行成功
