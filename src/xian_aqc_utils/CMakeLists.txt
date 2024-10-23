@@ -14,7 +14,7 @@ find_package(catkin REQUIRED COMPONENTS
   rospy
   std_msgs
 )
-# set(OpenCV_DIR "/root/opencv_cuda_4.7.0/lib/cmake/opencv4/")
+set(OpenCV_DIR "/root/opencv_cuda_4.7.0/lib/cmake/opencv4/")
 find_package(OpenCV REQUIRED)
 set(LIB_CONTROL_CV_DIR "/root/code/xian_aqc_ws/xian_project_file/include") 
 set(LIB_CONTROL_CV_LINK_DIR "/root/code/xian_aqc_ws/xian_project_file/lib")

@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<launch>
+    <node name ="xian_aqc_dynamic_parameters_server" pkg="xian_aqc_params" type="xian_aqc_dynamic_parameters_server" />
+    <node name ="xian_spreader_cam_rtsp_ubuntu2" pkg="xian_sensor_pkg" type="xian_spreader_cam_rtsp" output="screen">
+        <param name="pipeline0" value="rtspsrc location=rtsp://192.168.1.11:8554/camera0 latency=0 ! rtph264depay ! h264parse config-interval=-1 ! nvv4l2decoder enable-max-performance=true disable-dpb=true ! nvvidconv ! video/x-raw,format=BGRx,width=1920,height=1536 ! videoconvert ! appsink sync=false" />
+        <param name="pipeline1" value="rtspsrc location=rtsp://192.168.1.11:8554/camera1 latency=0 ! rtph264depay ! h264parse config-interval=-1 ! nvv4l2decoder enable-max-performance=true disable-dpb=true ! nvvidconv ! video/x-raw,format=BGRx,width=1920,height=1536 ! videoconvert ! appsink sync=false" />
+        <param name="pipeline2" value="rtspsrc location=rtsp://192.168.1.11:8554/camera2 latency=0 ! rtph264depay ! h264parse config-interval=-1 ! nvv4l2decoder enable-max-performance=true disable-dpb=true ! nvvidconv ! video/x-raw,format=BGRx,width=1920,height=1536 ! videoconvert ! appsink sync=false" />
+        <param name="pipeline3" value="rtspsrc location=rtsp://192.168.1.11:8554/camera3 latency=0 ! rtph264depay ! h264parse config-interval=-1 ! nvv4l2decoder enable-max-performance=true disable-dpb=true ! nvvidconv ! video/x-raw,format=BGRx,width=1920,height=1536 ! videoconvert ! appsink sync=false" />
+        <param name="camera0_topic_name" value="/camera0_0" />
+        <param name="camera1_topic_name" value="/camera1_0" />
+        <param name="camera2_topic_name" value="/camera2_0" />
+        <param name="camera3_topic_name" value="/camera3_0" />
+        <param name="camera_merges_topic_name" value="/xian_aqc_spreader_images" />
+        <param name="node_heart_beat" value="/xian_aqc_dynamic_parameters_server/xian_spreader_cam_rtsp_ubuntu2_heart_beat" />
+        <param name="node_fps" value="/xian_aqc_dynamic_parameters_server/xian_spreader_cam_rtsp_ubuntu2_fps" />
+    </node>
+    <node name ="xian_image_cop_process" pkg="xian_image_process" type="xian_image_cop_process"/>
+    <node name ="xian_keypoints_recognition" pkg="xian_ai_pkg" type="xian_keypoints_recognition.py"/>
+
+    <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch">
+    </include>
+</launch> 

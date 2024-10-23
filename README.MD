@@ -42,11 +42,26 @@
         - 注意：
             - 必须在host主机上先运行xhost +local:root
             - 必须在host主机上启动该镜像
-            - 必须用sudo docker exec -it xian_aqc /bin/bash进入镜像
-
+            - 必须用ssudo docker exec -it xian_aqc /bin/bash -c "cd /root && exec /bin/bash"进入镜像
+    - 双orin docker配置
+        - Ubuntu2
+            ```
+            sudo docker stop xian_aqc
+            sudo docker rm xian_aqc
+            xhost +local:root
+            sudo docker run --name xian_aqc -itd --log-opt max-size=50m --runtime nvidia --privileged --device /dev/video0 --device /dev/video1 --device /dev/video2 --device /dev/video3 --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" -v /media/pegasus/aqc_disk/yangjianbing:/root/code --net host -e NVIDIA_DRIVER_CAPABILITIES=compute,utility --env="DISPLAY" --env="QT_X11_NO_MITSHM=1" --restart=always nvcr.io/nvidia-l4t-jetpack-r35.4.1:v1.7
+            sudo docker exec -it xian_aqc /bin/bash -c "cd /root && exec /bin/bash"
+            ```
+        
+        - Ubuntu3
+            ```
+            xhost +local:root
+            sudo docker run --name xian_aqc -itd --log-opt max-size=50m --runtime nvidia --privileged --device /dev/video0 --device /dev/video1 --device /dev/video2 --device /dev/video3 --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" -v /home/pegasus/yangjianbing:/root/code --net host -e NVIDIA_DRIVER_CAPABILITIES=compute,utility --env="DISPLAY" --env="QT_X11_NO_MITSHM=1" --restart=always nvcr.io/nvidia-l4t-jetpack-r35.4.1:v1.7
+            sudo docker exec -it xian_aqc /bin/bash -c "cd /root && exec /bin/bash"
+            ```
     - Login docker
         ```
-        sudo docker exec -it xian_aqc /bin/bash
+        sudo docker exec -it xian_aqc /bin/bash -c "cd /root && exec /bin/bash"
         ```
     - IP
         - PLC: 10.128.137.21
@@ -65,6 +80,16 @@
         - apt install libgl1-mesa-glx
         - apt install -y build-essential cmake-qt-gui python3-dev python3-numpy python3-flake8 flake8 gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-ugly libgstreamer-plugins-base1.0-dev libgstreamer-plugins-good1.0-dev qt5-default libavresample-dev libavfilter-dev libavformat-dev libavutil-dev libavcodec-dev libhdf5-dev libtesseract-dev libeigen3-dev libtbb-dev libgoogle-glog-dev libgflags-dev liblapacke-dev liblapack-dev libatlas-base-dev 
         - pip install -r requirements.txt
+    
+    - ROS Master and Client Configuration
+        - 从机~/.bashrc
+            export ROS_MASTER_URI=http://192.168.1.15:11311 # 主机的IP地址
+            export ROS_IP=192.168.1.16 # 主机的IP地址
+
+        - 主机~/.bashrc
+            export ROS_MASTER_URI=http://192.168.1.15:11311 # 主机的IP地址
+            export ROS_IP=192.168.1.15 # 主机的IP地址
+    
     - Compile opencv in Jetson
         - Download OpenCV main and contrib repos
             - opencv源码：`https://github.com/opencv/opencv.git`，选择自己需要的版本
@@ -205,12 +230,17 @@
     $ cd /xxxx/xian_aqc_ws
     $ catkin_make
     若编译出现问题，删掉xxxx/xian_aqc_ws/src/CMakeLists.txt，然后再编译试试。
+    若出现：make: warning:  Clock skew detected.  Your build may be incomplete.，解决如下：
+    $ find ./ -type f |xargs touch
     ```
 - vim ~/.bashrc (source ~/.bashrc)
     ```
     加入如下代码
     source /root/code/xian_aqc_ws/devel/setup.bash
     ```
+
+- 前端
+    `cd ~/code/xian_aqc_ws/xian_project_file/html/ && python -m http.server 4040`
 
 - spreader side 做如下修改：
     - 修改`xian_aqc_launch.launch`

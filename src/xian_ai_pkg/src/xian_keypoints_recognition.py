@@ -379,12 +379,14 @@ FPMode = 'FP16'
 class_names = ['cell_guide', 'container_corner_point']
 context, inputs, outputs, bindings, stream = zpmc_onnx2trt(onnxFile, trtFile_save_dir, trtFile_save_name, FPMode)
 
+keypoints_publisher = rospy.Publisher('xian_aqc_keypoints', xian_keypoints, queue_size=1)  # 创建消息发布者
+xian_keypoints_msg = xian_keypoints() # 定义消息
 
 class xian_aqc_keypoints_recognition:
     def __init__(self):
         
         print("start xian_aqc_keypoints_recognition!")
-        self.keypoints_publisher = rospy.Publisher('xian_aqc_keypoints', xian_keypoints, queue_size=1)  # 创建消息发布者
+        # self.keypoints_publisher = rospy.Publisher('xian_aqc_keypoints', xian_keypoints, queue_size=1)  # 创建消息发布者
         # self.rate = rospy.Rate(1)  # 设置消息发布频率为1Hz
         rospy.Subscriber('xian_crop_images', xian_crop_image_msg, self.callback)
 
@@ -393,7 +395,7 @@ class xian_aqc_keypoints_recognition:
         self.timediff = 1
         self.counter = 0
 
-        self.xian_keypoints_msg = xian_keypoints() # 定义消息
+        # self.xian_keypoints_msg = xian_keypoints() # 定义消息
 
         rospy.spin()
 
@@ -489,8 +491,8 @@ class xian_aqc_keypoints_recognition:
                                                                             xian_tl_container_point_x, xian_tl_container_point_y,
                                                                             container_corner_tl_x0, container_corner_tl_y0, 
                                                                             identifed_container_corner_distance) # cls_idx:0-cell_guide_point; 1-container corner  
-        self.xian_keypoints_msg.tl_container_corner_x = tl_identifed_container_corner[0]
-        self.xian_keypoints_msg.tl_container_corner_y = tl_identifed_container_corner[1]
+        xian_keypoints_msg.tl_container_corner_x = tl_identifed_container_corner[0]
+        xian_keypoints_msg.tl_container_corner_y = tl_identifed_container_corner[1]
         
         # tr集装箱箱脚点识别
         tr_container_corner_result = results[1]
@@ -498,8 +500,8 @@ class xian_aqc_keypoints_recognition:
                                                                             xian_tr_container_point_x, xian_tr_container_point_y,
                                                                             container_corner_tr_x0, container_corner_tr_y0, 
                                                                             identifed_container_corner_distance) # cls_idx:0-cell_guide_point; 1-container corner  
-        self.xian_keypoints_msg.tr_container_corner_x = tr_identifed_container_corner[0]
-        self.xian_keypoints_msg.tr_container_corner_y = tr_identifed_container_corner[1]
+        xian_keypoints_msg.tr_container_corner_x = tr_identifed_container_corner[0]
+        xian_keypoints_msg.tr_container_corner_y = tr_identifed_container_corner[1]
         
         # bl集装箱箱脚点识别
         bl_container_corner_result = results[2]
@@ -507,8 +509,8 @@ class xian_aqc_keypoints_recognition:
                                                                             xian_bl_container_point_x, xian_bl_container_point_y,
                                                                             container_corner_bl_x0, container_corner_bl_y0, 
                                                                             identifed_container_corner_distance) # cls_idx:0-cell_guide_point; 1-container corner  
-        self.xian_keypoints_msg.bl_container_corner_x = bl_identifed_container_corner[0]
-        self.xian_keypoints_msg.bl_container_corner_y = bl_identifed_container_corner[1]
+        xian_keypoints_msg.bl_container_corner_x = bl_identifed_container_corner[0]
+        xian_keypoints_msg.bl_container_corner_y = bl_identifed_container_corner[1]
 
         # br集装箱箱脚点识别
         br_container_corner_result = results[3]
@@ -516,102 +518,103 @@ class xian_aqc_keypoints_recognition:
                                                                             xian_br_container_point_x, xian_br_container_point_y,
                                                                             container_corner_br_x0, container_corner_br_y0, 
                                                                             identifed_container_corner_distance) # cls_idx:0-cell_guide_point; 1-container corner  
-        self.xian_keypoints_msg.br_container_corner_x = br_identifed_container_corner[0]
-        self.xian_keypoints_msg.br_container_corner_y = br_identifed_container_corner[1]
+        xian_keypoints_msg.br_container_corner_x = br_identifed_container_corner[0]
+        xian_keypoints_msg.br_container_corner_y = br_identifed_container_corner[1]
         
         #---------------------------------------------------------------------------------------------------------------------------
         # tl导轨crop0（同上面集装箱箱角cropimage）
         tl_cell_guide_crop0_result = results[0]
         tl_identifed_cell_guide0 = get_final_cell_guide_keypoint(tl_cell_guide_crop0_result, image_shape, 0,
                                                                  container_corner_tl_x0, container_corner_tl_y0) # cls_idx:0-cell_guide_point; 1-container corner
-        self.xian_keypoints_msg.tl_cell_guide_crop0_x = tl_identifed_cell_guide0[0]
-        self.xian_keypoints_msg.tl_cell_guide_crop0_y = tl_identifed_cell_guide0[1]
-        
-        # tr导轨crop0（同上面集装箱箱角cropimage）
+        xian_keypoints_msg.tl_cell_guide_crop0_x = tl_identifed_cell_guide0[0]
+        xian_keypoints_msg.tl_cell_guide_crop0_y = tl_identifed_cell_guide0[1]
+                # tr导轨crop0（同上面集装箱箱角cropimage）
         tr_cell_guide_crop0_result = results[1]
         tr_identifed_cell_guide0 = get_final_cell_guide_keypoint(tr_cell_guide_crop0_result, image_shape, 0,
                                                                  container_corner_tr_x0, container_corner_tr_y0) # cls_idx:0-cell_guide_point; 1-container corner
-        self.xian_keypoints_msg.tr_cell_guide_crop0_x = tr_identifed_cell_guide0[0]
-        self.xian_keypoints_msg.tr_cell_guide_crop0_y = tr_identifed_cell_guide0[1]
+        xian_keypoints_msg.tr_cell_guide_crop0_x = tr_identifed_cell_guide0[0]
+        xian_keypoints_msg.tr_cell_guide_crop0_y = tr_identifed_cell_guide0[1]
         
         # bl导轨crop0（同上面集装箱箱角cropimage）
         bl_cell_guide_crop0_result = results[2]
         bl_identifed_cell_guide0 = get_final_cell_guide_keypoint(bl_cell_guide_crop0_result, image_shape, 0,
                                                                  container_corner_bl_x0, container_corner_bl_y0) # cls_idx:0-cell_guide_point; 1-container corner
-        self.xian_keypoints_msg.bl_cell_guide_crop0_x = bl_identifed_cell_guide0[0]
-        self.xian_keypoints_msg.bl_cell_guide_crop0_y = bl_identifed_cell_guide0[1]
+        xian_keypoints_msg.bl_cell_guide_crop0_x = bl_identifed_cell_guide0[0]
+        xian_keypoints_msg.bl_cell_guide_crop0_y = bl_identifed_cell_guide0[1]
         
         # br导轨crop0（同上面集装箱箱角cropimage）
         br_cell_guide_crop0_result = results[3]
         br_identifed_cell_guide0 = get_final_cell_guide_keypoint(br_cell_guide_crop0_result, image_shape, 0,
                                                                  container_corner_br_x0, container_corner_br_y0) # cls_idx:0-cell_guide_point; 1-container corner
-        self.xian_keypoints_msg.br_cell_guide_crop0_x = br_identifed_cell_guide0[0]
-        self.xian_keypoints_msg.br_cell_guide_crop0_y = br_identifed_cell_guide0[1]
+        xian_keypoints_msg.br_cell_guide_crop0_x = br_identifed_cell_guide0[0]
+        xian_keypoints_msg.br_cell_guide_crop0_y = br_identifed_cell_guide0[1]
         
         #---------------------------------------------------------------------------------------------------------------------------
         # tl导轨crop1
         tl_cell_guide_crop1_result = results[4]
         tl_identifed_cell_guide1 = get_final_cell_guide_keypoint(tl_cell_guide_crop1_result, image_shape, 0,
                                                                  clip1_cell_guide_tl_x, clip1_cell_guide_tl_y) # cls_idx:0-cell_guide_point; 1-container corner
-        self.xian_keypoints_msg.tl_cell_guide_crop1_x = tl_identifed_cell_guide1[0]
-        self.xian_keypoints_msg.tl_cell_guide_crop1_y = tl_identifed_cell_guide1[1]
+        xian_keypoints_msg.tl_cell_guide_crop1_x = tl_identifed_cell_guide1[0]
+        xian_keypoints_msg.tl_cell_guide_crop1_y = tl_identifed_cell_guide1[1]
         
         # tr导轨crop1
         tr_cell_guide_crop1_result = results[5]
         tr_identifed_cell_guide1 = get_final_cell_guide_keypoint(tr_cell_guide_crop1_result, image_shape, 0,
                                                                  clip1_cell_guide_tr_x, clip1_cell_guide_tr_y) # cls_idx:0-cell_guide_point; 1-container corner
-        self.xian_keypoints_msg.tr_cell_guide_crop1_x = tr_identifed_cell_guide1[0]
-        self.xian_keypoints_msg.tr_cell_guide_crop1_y = tr_identifed_cell_guide1[1]
+        xian_keypoints_msg.tr_cell_guide_crop1_x = tr_identifed_cell_guide1[0]
+        xian_keypoints_msg.tr_cell_guide_crop1_y = tr_identifed_cell_guide1[1]
         
         # bl导轨crop1
         bl_cell_guide_crop1_result = results[6]
         bl_identifed_cell_guide1 = get_final_cell_guide_keypoint(bl_cell_guide_crop1_result, image_shape, 0,
                                                                  clip1_cell_guide_bl_x, clip1_cell_guide_bl_y) # cls_idx:0-cell_guide_point; 1-container corner
-        self.xian_keypoints_msg.bl_cell_guide_crop1_x = bl_identifed_cell_guide1[0]
-        self.xian_keypoints_msg.bl_cell_guide_crop1_y = bl_identifed_cell_guide1[1]
+        xian_keypoints_msg.bl_cell_guide_crop1_x = bl_identifed_cell_guide1[0]
+        xian_keypoints_msg.bl_cell_guide_crop1_y = bl_identifed_cell_guide1[1]
         
         # br导轨crop1
         br_cell_guide_crop1_result = results[7]
         br_identifed_cell_guide1 = get_final_cell_guide_keypoint(br_cell_guide_crop1_result, image_shape, 0,
                                                                  clip1_cell_guide_br_x, clip1_cell_guide_br_y) # cls_idx:0-cell_guide_point; 1-container corner
-        self.xian_keypoints_msg.br_cell_guide_crop1_x = br_identifed_cell_guide1[0]
-        self.xian_keypoints_msg.br_cell_guide_crop1_y = br_identifed_cell_guide1[1]
+        xian_keypoints_msg.br_cell_guide_crop1_x = br_identifed_cell_guide1[0]
+        xian_keypoints_msg.br_cell_guide_crop1_y = br_identifed_cell_guide1[1]
         
         #---------------------------------------------------------------------------------------------------------------------------
         # tl导轨crop2
         tl_cell_guide_crop2_result = results[8]
         tl_identifed_cell_guide2 = get_final_cell_guide_keypoint(tl_cell_guide_crop2_result, image_shape, 0,
                                                                  clip2_cell_guide_tl_x, clip2_cell_guide_tl_y) # cls_idx:0-cell_guide_point; 1-container corner
-        self.xian_keypoints_msg.tl_cell_guide_crop2_x = tl_identifed_cell_guide2[0]
-        self.xian_keypoints_msg.tl_cell_guide_crop2_y = tl_identifed_cell_guide2[1]
+        xian_keypoints_msg.tl_cell_guide_crop2_x = tl_identifed_cell_guide2[0]
+        xian_keypoints_msg.tl_cell_guide_crop2_y = tl_identifed_cell_guide2[1]
 
         # tr导轨crop2
         tr_cell_guide_crop2_result = results[9]
         tr_identifed_cell_guide2 = get_final_cell_guide_keypoint(tr_cell_guide_crop2_result, image_shape, 0,
                                                                  clip2_cell_guide_tr_x, clip2_cell_guide_tr_y) # cls_idx:0-cell_guide_point; 1-container corner
-        self.xian_keypoints_msg.tr_cell_guide_crop2_x = tr_identifed_cell_guide2[0]
-        self.xian_keypoints_msg.tr_cell_guide_crop2_y = tr_identifed_cell_guide2[1]
+        xian_keypoints_msg.tr_cell_guide_crop2_x = tr_identifed_cell_guide2[0]
+        xian_keypoints_msg.tr_cell_guide_crop2_y = tr_identifed_cell_guide2[1]
         
         # bl导轨crop2
         bl_cell_guide_crop2_result = results[10]
         bl_identifed_cell_guide2 = get_final_cell_guide_keypoint(bl_cell_guide_crop2_result, image_shape, 0,
                                                                  clip2_cell_guide_bl_x, clip2_cell_guide_bl_y) # cls_idx:0-cell_guide_point; 1-container corner
-        self.xian_keypoints_msg.bl_cell_guide_crop2_x = bl_identifed_cell_guide2[0]
-        self.xian_keypoints_msg.bl_cell_guide_crop2_y = bl_identifed_cell_guide2[1]
+        xian_keypoints_msg.bl_cell_guide_crop2_x = bl_identifed_cell_guide2[0]
+        xian_keypoints_msg.bl_cell_guide_crop2_y = bl_identifed_cell_guide2[1]
         
         # br导轨crop2
         br_cell_guide_crop2_result = results[11]
         br_identifed_cell_guide2 = get_final_cell_guide_keypoint(br_cell_guide_crop2_result, image_shape, 0,
                                                                  clip2_cell_guide_br_x, clip2_cell_guide_br_y) # cls_idx:0-cell_guide_point; 1-container corner
-        self.xian_keypoints_msg.br_cell_guide_crop2_x = br_identifed_cell_guide2[0]
-        self.xian_keypoints_msg.br_cell_guide_crop2_y = br_identifed_cell_guide2[1]
+        xian_keypoints_msg.br_cell_guide_crop2_x = br_identifed_cell_guide2[0]
+        xian_keypoints_msg.br_cell_guide_crop2_y = br_identifed_cell_guide2[1]
 
-        self.keypoints_publisher.publish(self.xian_keypoints_msg)
+        # self.keypoints_publisher.publish(self.xian_keypoints_msg)
         
         self.timediff = (self.cur_time - self.pre_time).total_seconds()
         rospy.set_param("/xian_aqc_dynamic_parameters_server/xian_keypoints_recognition_fps", 1.0/self.timediff)
         xian_keypoints_recognition_fps = rospy.get_param("/xian_aqc_dynamic_parameters_server/xian_keypoints_recognition_fps")
         print('FPS {:2.3f}'.format(xian_keypoints_recognition_fps))
+
+        print('Time-Consuming {:3.3f}ms'.format(float((datetime.datetime.now()-self.cur_time).total_seconds())*1000))
         
 class HB:
     def __init__(self):
@@ -624,6 +627,9 @@ class HB:
             self.counter = 0
         self.counter += 1
         print("xian_keypoints_recognition_heart_beat:", xian_keypoints_recognition_heart_beat)
+        
+    def xian_keypoints_msg_publish(self, event):
+        keypoints_publisher.publish(xian_keypoints_msg)
 
 
 
@@ -632,6 +638,7 @@ if __name__ == '__main__':
         tt = HB()
         rospy.init_node('xian_aqc_keypoints_recognition', anonymous=True)  # 初始化ROS节点
         rospy.Timer(rospy.Duration(1), tt.xian_heat_beat_callback, oneshot=False)
+        rospy.Timer(rospy.Duration(0.05), tt.xian_keypoints_msg_publish, oneshot=False)
         publisher = xian_aqc_keypoints_recognition()
 
     except rospy.ROSInterruptException:

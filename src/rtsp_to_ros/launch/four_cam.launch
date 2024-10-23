@@ -1,0 +1,27 @@
+<launch>
+    <!-- 启动第一个节点 -->
+    <node name="rtsp_to_ros_camera0_0" pkg="rtsp_to_ros" type="rtsp_to_ros" output="screen">
+        <param name="pipeline" value="rtspsrc location=rtsp://192.168.1.11:8554/camera0 latency=0 ! rtph264depay ! h264parse config-interval=-1 ! nvv4l2decoder enable-max-performance=true disable-dpb=true ! nvvidconv ! video/x-raw,format=BGRx,width=1920,height=1536 ! videoconvert ! appsink sync=false" />
+        <param name="topic" value="camera0_0/image" />
+    </node>
+
+    <!-- 启动第一个节点 -->
+    <node name="rtsp_to_ros_camera1_0" pkg="rtsp_to_ros" type="rtsp_to_ros" output="screen">
+        <param name="pipeline" value="rtspsrc location=rtsp://192.168.1.11:8554/camera1 latency=0 ! rtph264depay ! h264parse config-interval=-1 ! nvv4l2decoder enable-max-performance=true disable-dpb=true ! nvvidconv ! video/x-raw,format=BGRx,width=1920,height=1536 ! videoconvert ! appsink sync=false" />
+        <param name="topic" value="camera1_0/image" />
+    </node>
+
+    <!-- 启动第一个节点 -->
+    <node name="rtsp_to_ros_camera2_0" pkg="rtsp_to_ros" type="rtsp_to_ros" output="screen">
+        <param name="pipeline" value="rtspsrc location=rtsp://192.168.1.11:8554/camera2 latency=0 ! rtph264depay ! h264parse config-interval=-1 ! nvv4l2decoder enable-max-performance=true disable-dpb=true ! nvvidconv ! video/x-raw,format=BGRx,width=1920,height=1536 ! videoconvert ! appsink sync=false" />
+        <param name="topic" value="camera2_0/image" />
+    </node>
+
+    <!-- 启动第一个节点 -->
+    <node name="rtsp_to_ros_camera3_0" pkg="rtsp_to_ros" type="rtsp_to_ros" output="screen">
+        <param name="pipeline" value="rtspsrc location=rtsp://192.168.1.11:8554/camera3 latency=0 ! rtph264depay ! h264parse config-interval=-1 ! nvv4l2decoder enable-max-performance=true disable-dpb=true ! nvvidconv ! video/x-raw,format=BGRx,width=1920,height=1536 ! videoconvert ! appsink sync=false" />
+        <param name="topic" value="camera3_0/image" />
+    </node>
+
+    
+</launch>

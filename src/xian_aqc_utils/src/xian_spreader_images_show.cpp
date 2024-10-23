@@ -7,9 +7,9 @@
 #include<opencv2/highgui/highgui.hpp>
 #include<opencv2/imgproc/imgproc.hpp>
 
-// #include <opencv2/cudaarithm.hpp>
-// #include <opencv2/cudaimgproc.hpp>
-// #include <opencv2/cudawarping.hpp>
+#include <opencv2/cudaarithm.hpp>
+#include <opencv2/cudaimgproc.hpp>
+#include <opencv2/cudawarping.hpp>
 
 #include<stdio.h>
 #include<sys/types.h>
@@ -66,11 +66,12 @@ class Xian_SpreaderImagesShow
             
             cv::Mat merge_row1 = zpmc::zpmc_images_merge_col(mask_merge_col_0, mask_merge_col_1);
 
-            // cv::cuda::GpuMat merge_row1_gpu, merge_row1_resize_gpu;
-            // merge_row1_gpu.upload(merge_row1);
-            // cv::cuda::resize(merge_row1_gpu, merge_row1_resize_gpu, cv::Size((int)(merge_row1.cols/4), (int)(merge_row1.rows/4)), 2); 
-            // merge_row1_resize_gpu.download(merge_row1_resize);
-            cv::resize(merge_row1, merge_row1_resize, cv::Size((int)(merge_row1.cols/4), (int)(merge_row1.rows/4)), 2);
+            cv::cuda::GpuMat merge_row1_gpu, merge_row1_resize_gpu;
+            merge_row1_gpu.upload(merge_row1);
+            cv::cuda::resize(merge_row1_gpu, merge_row1_resize_gpu, cv::Size((int)(merge_row1.cols/4), (int)(merge_row1.rows/4)), 2); 
+            merge_row1_resize_gpu.download(merge_row1_resize);
+            
+            // cv::resize(merge_row1, merge_row1_resize, cv::Size((int)(merge_row1.cols/4), (int)(merge_row1.rows/4)), 2);
             if (merge_row1_resize.empty()) 
             {
                 std::cerr << "Failed to load image" << std::endl;

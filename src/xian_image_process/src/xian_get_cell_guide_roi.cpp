@@ -30,10 +30,11 @@ class Xian_GetCellGuideROI
             command_publisher_cell_guide_roi = nh.advertise<xian_msg_pkg::xian_cell_guide_roi_msg>("xian_cell_guide_crop_images", 1);
             command_publisher_spreader_image = nh.advertise<xian_msg_pkg::xian_spreader_images_msg>("xian_spreader_image_align_with_cell_guide_crop", 1);
             command_subscribe_ = nh.subscribe<xian_msg_pkg::xian_keypoints>("xian_aqc_keypoints", 1, &Xian_GetCellGuideROI::command_callback_keypoints, this);
-            command_subscribe_spreader_images = nh.subscribe<xian_msg_pkg::xian_spreader_images_msg>("xian_aqc_spreader_images", 1, &Xian_GetCellGuideROI::command_callback_spreader_images, this);
+            command_subscribe_spreader_images = nh.subscribe<xian_msg_pkg::xian_spreader_images_msg>("xian_aqc_spreader_images_ubuntu3", 1, &Xian_GetCellGuideROI::command_callback_spreader_images, this);
         }
 
         ros::WallTimer m_timer_HeartBeat;
+        ros::WallTimer m_timer_MsgPub;
 
         void m_timer_HeartBeat_f(const ros::WallTimerEvent& event)
         {
@@ -41,6 +42,12 @@ class Xian_GetCellGuideROI
             std::cout << "xian_get_cell_guide_roi_heart_beat: " << xian_get_cell_guide_roi_heart_beat << std::endl;
             counter = counter > 1000 ? 0 : (counter + 1);
             ros::param::set("/xian_aqc_dynamic_parameters_server/xian_get_cell_guide_roi_heart_beat", counter);  // 自行替换
+        }
+
+        void m_timer_MsgPub_f(const ros::WallTimerEvent& event)
+        {
+            command_publisher_cell_guide_roi.publish(crop_images);
+            command_publisher_spreader_image.publish(spreader_images);
         }
 
     private:
@@ -148,7 +155,7 @@ class Xian_GetCellGuideROI
             pre_time = cur_time;
             cur_time = std::chrono::high_resolution_clock::now();
             ros::param::get("/xian_aqc_dynamic_parameters_server/xian_get_cell_guide_roi_fps", xian_get_cell_guide_roi_fps);
-            std::cout << "Sub FPS: " << xian_get_cell_guide_roi_fps << std::endl;
+            std::cout << "Sub keypoints FPS: " << xian_get_cell_guide_roi_fps << std::endl;
 
             tl_cell_guide_crop0_cx = data->tl_cell_guide_crop0_x;
             tl_cell_guide_crop0_cy = data->tl_cell_guide_crop0_y;
@@ -189,6 +196,9 @@ class Xian_GetCellGuideROI
             elapsedTimeP = std::chrono::duration_cast<std::chrono::milliseconds>(cur_time - pre_time);
             timediff = elapsedTimeP.count();
             ros::param::set("/xian_aqc_dynamic_parameters_server/xian_get_cell_guide_roi_fps", 1000.0 / timediff);
+            std::cout << "Time-consuming kepoints: " 
+                      << std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - cur_time).count() 
+                      << "ms " << std::endl;
         } 
 
         void command_callback_spreader_images(const xian_msg_pkg::xian_spreader_images_msgConstPtr& data)
@@ -375,11 +385,14 @@ class Xian_GetCellGuideROI
             crop_images.br_cell_guide_crop2_tl_x = clip2_cell_guide_br_xy0.x;
             crop_images.br_cell_guide_crop2_tl_y = clip2_cell_guide_br_xy0.y;
 
-            command_publisher_cell_guide_roi.publish(crop_images);
-            command_publisher_spreader_image.publish(spreader_images);
+            // command_publisher_cell_guide_roi.publish(crop_images);
+            // command_publisher_spreader_image.publish(spreader_images);
             elapsedTimeP2 = std::chrono::duration_cast<std::chrono::milliseconds>(cur_time2 - pre_time2);
             timediff2 = elapsedTimeP2.count();
-            std::cout << "Pub FPS: " << 1000.0 / timediff2 << std::endl;
+            std::cout << "Sub Spreader and crop FPS: " << 1000.0 / timediff2 << std::endl;
+            std::cout << "Time-consuming crop cell guide: " 
+                      << std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - cur_time2).count() 
+                      << "ms " << std::endl;
         }
             
 };
@@ -396,7 +409,7 @@ int main(int argc, char** argv)
     spinner.start();
 
     xian_get_cell_guide_roi.m_timer_HeartBeat = nh_2.createWallTimer(ros::WallDuration(1.0), &Xian_GetCellGuideROI::m_timer_HeartBeat_f, &xian_get_cell_guide_roi);
-
+    xian_get_cell_guide_roi.m_timer_MsgPub = nh_2.createWallTimer(ros::WallDuration(0.05), &Xian_GetCellGuideROI::m_timer_MsgPub_f, &xian_get_cell_guide_roi);
     ros::waitForShutdown();
     
     // ros::spin();

@@ -540,7 +540,7 @@ class xian_cell_guide_recognition:
         rospy.set_param("/xian_aqc_dynamic_parameters_server/xian_cell_guide_recognition_fps", 1.0/self.timediff)
         xian_cell_guide_recognition_fps = rospy.get_param("/xian_aqc_dynamic_parameters_server/xian_cell_guide_recognition_fps")
         print('FPS {:2.3f}'.format(xian_cell_guide_recognition_fps))
-        
+        print('Time-Consuming {:3.3f}ms'.format(float((datetime.datetime.now()-self.cur_time).total_seconds())*1000))
 
 
 class HB:
