@@ -206,6 +206,9 @@ class Xian_CellGuideMaskResizeShow
             elapsedTimeP = std::chrono::duration_cast<std::chrono::milliseconds>(cur_time - pre_time);
             timediff = elapsedTimeP.count();
             std::cout << "FPS: " << 1000.0 / timediff << std::endl;
+            std::cout << "Time-consuming: " 
+                      << std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - cur_time).count() 
+                      << "ms " << std::endl;
         } 
 
         cv::Mat* copy_to_image(cv::Mat tl_crop_image, cv::Mat tr_crop_image, cv::Mat bl_crop_image, cv::Mat br_crop_image, 

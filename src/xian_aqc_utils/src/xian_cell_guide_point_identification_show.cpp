@@ -470,6 +470,9 @@ class Xian_CellGuidePointIdentificationShow
             elapsedTimeP = std::chrono::duration_cast<std::chrono::milliseconds>(cur_time - pre_time);
             timediff = elapsedTimeP.count();
             std::cout << "FPS: " << 1000.0 / timediff << std::endl;
+            std::cout << "Time-consuming: " 
+                      << std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - cur_time).count() 
+                      << "ms " << std::endl;
         } 
 
         cv::Mat draw_cell_guide_point(cv::Point xy0, cv::Point xy1, cv::Point xy2, 

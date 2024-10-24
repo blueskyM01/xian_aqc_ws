@@ -83,12 +83,16 @@
     
     - ROS Master and Client Configuration
         - 从机~/.bashrc
+            ```
             export ROS_MASTER_URI=http://192.168.1.15:11311 # 主机的IP地址
-            export ROS_IP=192.168.1.16 # 主机的IP地址
+            export ROS_IP=192.168.1.16 # 从机的IP地址
+            ```
 
         - 主机~/.bashrc
+            ```
             export ROS_MASTER_URI=http://192.168.1.15:11311 # 主机的IP地址
             export ROS_IP=192.168.1.15 # 主机的IP地址
+            ```
     
     - Compile opencv in Jetson
         - Download OpenCV main and contrib repos

@@ -17,6 +17,5 @@
     <node name ="xian_image_cop_process" pkg="xian_image_process" type="xian_image_cop_process"/>
     <node name ="xian_keypoints_recognition" pkg="xian_ai_pkg" type="xian_keypoints_recognition.py"/>
 
-    <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch">
-    </include>
+    
 </launch> 

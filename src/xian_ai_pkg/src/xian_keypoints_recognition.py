@@ -234,6 +234,11 @@ def xian_display(final_results, image, color=(0,0,255)):
     return image
 
 def get_container_corner_keypoint(final_results, cls_idx, x, y, x0, y0, distance_threshold):
+    '''
+    若检测不到指定类别的点（这里指定的是集装箱箱角），则返回标定的点；
+    若检测到指定类别的点（这里指定的是集装箱箱角），并且距离标定的点的距离小于设定阈值，则返回检测的结果（坐标已从切片图中转到了原图）；
+    若检测到指定类别的点（这里指定的是集装箱箱角），并且距离标定的点的距离大于设定阈值，这时认为检测结果不可靠，返回标定的点；
+    '''
     final_results_np = np.array(final_results)
     cls = final_results_np[:, 2]
     target_idx = (cls == cls_idx)
@@ -253,6 +258,10 @@ def get_container_corner_keypoint(final_results, cls_idx, x, y, x0, y0, distance
         return int(x_decode), int(y_decode)
     
 def get_cell_guide_keypoint(final_results, cls_idx, x0, y0):
+    '''
+    若检测不到cell guide的点，则返回（-1， -1）
+    若检测到cell guide的点，则返回检测到的点（坐标已从切片图中转到了原图）
+    '''
     final_results_np = np.array(final_results)
     cls = final_results_np[:, 2]
     target_idx = (cls == cls_idx)
@@ -638,7 +647,7 @@ if __name__ == '__main__':
         tt = HB()
         rospy.init_node('xian_aqc_keypoints_recognition', anonymous=True)  # 初始化ROS节点
         rospy.Timer(rospy.Duration(1), tt.xian_heat_beat_callback, oneshot=False)
-        rospy.Timer(rospy.Duration(0.05), tt.xian_keypoints_msg_publish, oneshot=False)
+        rospy.Timer(rospy.Duration(0.03), tt.xian_keypoints_msg_publish, oneshot=False)
         publisher = xian_aqc_keypoints_recognition()
 
     except rospy.ROSInterruptException:

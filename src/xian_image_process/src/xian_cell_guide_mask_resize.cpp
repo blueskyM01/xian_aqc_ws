@@ -226,6 +226,9 @@ class Xian_CellGuideMaskResize
             elapsedTimeP = std::chrono::duration_cast<std::chrono::milliseconds>(cur_time - pre_time);
             timediff = elapsedTimeP.count();
             ros::param::set("/xian_aqc_dynamic_parameters_server/xian_cell_guide_mask_resize_fps", 1000.0 / timediff);
+            std::cout << "Time-consuming: " 
+                      << std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - cur_time).count() 
+                      << "ms " << std::endl;
         } 
             
 };
