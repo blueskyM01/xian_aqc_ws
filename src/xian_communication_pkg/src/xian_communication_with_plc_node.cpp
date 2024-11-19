@@ -141,10 +141,10 @@ class zpmc_CommunicationWithAccs
             int16_t Left_Top_Diff_Y;
             int16_t Right_Top_Diff_X;
             int16_t Right_Top_Diff_Y;
-            int16_t Left_Low_Diff_X;
-            int16_t Left_Low_Diff_Y;
-            int16_t Right_Low_Diff_X;
-            int16_t Right_Low_Diff_Y;
+            int16_t Fine_Move0;
+            int16_t Fine_Move1;
+            int16_t Fine_Move2;
+            int16_t Fine_Move3;
             int16_t Diff_X;
             int16_t Diff_Y;
             int16_t Target_Angle;
@@ -168,6 +168,10 @@ class zpmc_CommunicationWithAccs
         int xian_acds_send_to_retrable_box_mode1 = 0;
         int xian_acds_send_to_retrable_box_mode2 = 0;
         int xian_acds_send_to_retrable_box_mode3 = 0;
+        int xian_acds_send_to_retrable_fine_move0 = 0;
+        int xian_acds_send_to_retrable_fine_move1 = 0;
+        int xian_acds_send_to_retrable_fine_move2 = 0;
+        int xian_acds_send_to_retrable_fine_move3 = 0;
 
         // int Gantry_Position_ = 0;
         // int Trolley_Position_ = 0;
@@ -337,6 +341,10 @@ class zpmc_CommunicationWithAccs
                 ros::param::get("/xian_aqc_dynamic_parameters_server/xian_acds_send_to_retrable_box_mode1", xian_acds_send_to_retrable_box_mode1);
                 ros::param::get("/xian_aqc_dynamic_parameters_server/xian_acds_send_to_retrable_box_mode2", xian_acds_send_to_retrable_box_mode2);
                 ros::param::get("/xian_aqc_dynamic_parameters_server/xian_acds_send_to_retrable_box_mode3", xian_acds_send_to_retrable_box_mode3);
+                ros::param::get("/xian_aqc_dynamic_parameters_server/xian_acds_send_to_retrable_fine_move0", xian_acds_send_to_retrable_fine_move0);
+                ros::param::get("/xian_aqc_dynamic_parameters_server/xian_acds_send_to_retrable_fine_move1", xian_acds_send_to_retrable_fine_move1);
+                ros::param::get("/xian_aqc_dynamic_parameters_server/xian_acds_send_to_retrable_fine_move2", xian_acds_send_to_retrable_fine_move2);
+                ros::param::get("/xian_aqc_dynamic_parameters_server/xian_acds_send_to_retrable_fine_move3", xian_acds_send_to_retrable_fine_move3);
                 ros::param::get("/xian_aqc_dynamic_parameters_server/xian_plc_error_clear", xian_plc_error_clear);
                 
                 unsigned char xian_acds_mode0_bytes[2];
@@ -386,6 +394,66 @@ class zpmc_CommunicationWithAccs
                 }
                 uint16_t xian_acds_send_to_retrable_box_mode3_ = ByteToUint8(xian_acds_mode3_bytes_inv);                
                 plc_buffer_send.mode3 = xian_acds_send_to_retrable_box_mode3_;
+
+
+
+
+
+                //-----------------------------------------------------------------------------------------------------------
+
+
+
+                unsigned char xian_fine_move0_bytes[2];
+                unsigned char xian_fine_move0_bytes_inv[2];
+                Uint8ToByte((int16_t)xian_acds_send_to_retrable_fine_move0, xian_fine_move0_bytes);
+                int xian_fine_move0_len = sizeof(xian_fine_move0_bytes);
+                for(int i=0; i<xian_fine_move0_len; i++)
+                {
+                    xian_fine_move0_bytes_inv[i] = xian_fine_move0_bytes[xian_fine_move0_len-1-i];
+                }
+                uint16_t xian_acds_send_to_retrable_fine_move0_ = ByteToUint8(xian_fine_move0_bytes_inv);                
+                plc_buffer_send.Fine_Move0 = xian_acds_send_to_retrable_fine_move0_;
+                
+                
+
+                unsigned char xian_fine_move1_bytes[2];
+                unsigned char xian_fine_move1_bytes_inv[2];
+                Uint8ToByte((int16_t)xian_acds_send_to_retrable_fine_move1, xian_fine_move1_bytes);
+                int xian_fine_move1_len = sizeof(xian_fine_move1_bytes);
+                for(int i=0; i<xian_fine_move1_len; i++)
+                {
+                    xian_fine_move1_bytes_inv[i] = xian_fine_move1_bytes[xian_fine_move1_len-1-i];
+                }
+                uint16_t xian_acds_send_to_retrable_fine_move1_ = ByteToUint8(xian_fine_move1_bytes_inv);                
+                plc_buffer_send.Fine_Move1 = xian_acds_send_to_retrable_fine_move1_;
+                
+                
+
+                unsigned char xian_fine_move2_bytes[2];
+                unsigned char xian_fine_move2_bytes_inv[2];
+                Uint8ToByte((int16_t)xian_acds_send_to_retrable_fine_move2, xian_fine_move2_bytes);
+                int xian_fine_move2_len = sizeof(xian_fine_move2_bytes);
+                for(int i=0; i<xian_fine_move2_len; i++)
+                {
+                    xian_fine_move2_bytes_inv[i] = xian_fine_move2_bytes[xian_fine_move2_len-1-i];
+                }
+                uint16_t xian_acds_send_to_retrable_fine_move2_ = ByteToUint8(xian_fine_move2_bytes_inv);                
+                plc_buffer_send.Fine_Move2 = xian_acds_send_to_retrable_fine_move2_;
+
+
+
+                unsigned char xian_fine_move3_bytes[2];
+                unsigned char xian_fine_move3_bytes_inv[2];
+                Uint8ToByte((int16_t)xian_acds_send_to_retrable_fine_move3, xian_fine_move3_bytes);
+                int xian_fine_move3_len = sizeof(xian_fine_move3_bytes);
+                for(int i=0; i<xian_fine_move3_len; i++)
+                {
+                    xian_fine_move3_bytes_inv[i] = xian_fine_move3_bytes[xian_fine_move3_len-1-i];
+                }
+                uint16_t xian_acds_send_to_retrable_fine_move3_ = ByteToUint8(xian_fine_move3_bytes_inv);                
+                plc_buffer_send.Fine_Move3 = xian_acds_send_to_retrable_fine_move3_;
+
+
                 
                 unsigned char xian_plc_error_clear_bytes[2];
                 unsigned char xian_plc_error_clear_bytes_inv[2];
@@ -405,6 +473,11 @@ class zpmc_CommunicationWithAccs
                 std::cout << "send to retractable box mode1:" << xian_acds_send_to_retrable_box_mode1 << std::endl;
                 std::cout << "send to retractable box mode2:" << xian_acds_send_to_retrable_box_mode2 << std::endl;
                 std::cout << "send to retractable box mode3:" << xian_acds_send_to_retrable_box_mode3 << std::endl;
+
+                std::cout << "send to xian_acds_send_to_retrable_fine_move0:" << xian_acds_send_to_retrable_fine_move0 << std::endl;
+                std::cout << "send to xian_acds_send_to_retrable_fine_move1:" << xian_acds_send_to_retrable_fine_move1 << std::endl;
+                std::cout << "send to xian_acds_send_to_retrable_fine_move2:" << xian_acds_send_to_retrable_fine_move2 << std::endl;
+                std::cout << "send to xian_acds_send_to_retrable_fine_move3:" << xian_acds_send_to_retrable_fine_move3 << std::endl;
 
                 iWriteCount = write(socket_fd, (char*)&plc_buffer_send, sizeof(plc_buffer_send));
                 if (iWriteCount <= 0) 
