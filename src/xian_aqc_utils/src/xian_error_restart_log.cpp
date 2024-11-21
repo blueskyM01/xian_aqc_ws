@@ -136,7 +136,7 @@ class zpmc_ErrorRestartLog
             ros::param::get("/xian_aqc_dynamic_parameters_server/xian_cell_guide_recognition_heat_beat", xian_cell_guide_recognition_heat_beat);
             ros::param::get("/xian_aqc_dynamic_parameters_server/xian_cell_guide_mask_resize_heart_beat", xian_cell_guide_mask_resize_heart_beat);
             ros::param::get("/xian_aqc_dynamic_parameters_server/xian_cell_guide_point_identification_heart_beat", xian_cell_guide_point_identification_heart_beat);
-
+            
             
             xian_plc_heart_beat_pre = xian_plc_heart_beat_cur;
             xian_plc_heart_beat_cur = xian_plc_heart_beat;
@@ -163,6 +163,8 @@ class zpmc_ErrorRestartLog
                 system(command_restart_current_node.c_str());
                 xian_communication_with_plc_node_restart_flag = 0; // 重启后多等20s
             }
+
+
 
             // xian_camera_driver_heat_beat_pre = xian_camera_driver_heat_beat_cur;
             // xian_camera_driver_heat_beat_cur = xian_camera_driver_heat_beat;

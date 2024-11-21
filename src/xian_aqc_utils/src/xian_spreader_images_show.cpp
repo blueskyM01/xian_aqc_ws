@@ -61,35 +61,44 @@ class Xian_SpreaderImagesShow
             bl_image = cv_bridge::toCvShare(data->bl_image, data, "bgr8")->image;
             br_image = cv_bridge::toCvShare(data->br_image, data, "bgr8")->image;
 
-            cv::Mat mask_merge_col_0 = zpmc::zpmc_images_merge_row(tl_image, bl_image);
-            cv::Mat mask_merge_col_1 = zpmc::zpmc_images_merge_row(tr_image, br_image);
-            
-            cv::Mat merge_row1 = zpmc::zpmc_images_merge_col(mask_merge_col_0, mask_merge_col_1);
-
-            cv::cuda::GpuMat merge_row1_gpu, merge_row1_resize_gpu;
-            merge_row1_gpu.upload(merge_row1);
-            cv::cuda::resize(merge_row1_gpu, merge_row1_resize_gpu, cv::Size((int)(merge_row1.cols/4), (int)(merge_row1.rows/4)), 2); 
-            merge_row1_resize_gpu.download(merge_row1_resize);
-            
-            // cv::resize(merge_row1, merge_row1_resize, cv::Size((int)(merge_row1.cols/4), (int)(merge_row1.rows/4)), 2);
-            if (merge_row1_resize.empty()) 
+            if(tl_image.empty() or tr_image.empty() or bl_image.empty() or br_image.empty())
             {
-                std::cerr << "Failed to load image" << std::endl;
+                std::cout << "Capturing images failed...." << std::endl;
             }
             else
             {
+                cv::Mat mask_merge_col_0 = zpmc::zpmc_images_merge_row(tl_image, bl_image);
+                cv::Mat mask_merge_col_1 = zpmc::zpmc_images_merge_row(tr_image, br_image);
+                
+                cv::Mat merge_row1 = zpmc::zpmc_images_merge_col(mask_merge_col_0, mask_merge_col_1);
 
-                // cv::imshow("xian_spreader_images_show01:", merge_row1_resize);
-                // cv::waitKey(10);
-                spreader_images_merge = cv_bridge::CvImage(std_msgs::Header(), "bgr8", merge_row1_resize).toImageMsg();
-                command_publisher_show.publish(spreader_images_merge);
+                cv::cuda::GpuMat merge_row1_gpu, merge_row1_resize_gpu;
+                merge_row1_gpu.upload(merge_row1);
+                cv::cuda::resize(merge_row1_gpu, merge_row1_resize_gpu, cv::Size((int)(merge_row1.cols/4), (int)(merge_row1.rows/4)), 2); 
+                merge_row1_resize_gpu.download(merge_row1_resize);
+                
+                // cv::resize(merge_row1, merge_row1_resize, cv::Size((int)(merge_row1.cols/4), (int)(merge_row1.rows/4)), 2);
+                if (merge_row1_resize.empty()) 
+                {
+                    std::cerr << "Failed to load image" << std::endl;
+                }
+                else
+                {
 
-                //cv::imwrite("/root/code/xian_aqc_ws/xian_project_file/trt/results/"+timeStr+"_tl_.jpg", tl_image);
-                //cv::imwrite("/root/code/xian_aqc_ws/xian_project_file/trt/results/"+timeStr+"tr_.jpg", tr_image);
-                //cv::imwrite("/root/code/xian_aqc_ws/xian_project_file/trt/results/"+timeStr+"bl_.jpg", bl_image);
-                //cv::imwrite("/root/code/xian_aqc_ws/xian_project_file/trt/results/"+timeStr+"br_.jpg", br_image);
-                // std::cerr << "iiiiiiiiiiiiiiiiiiiiii" << std::endl;
+                    // cv::imshow("xian_spreader_images_show01:", merge_row1_resize);
+                    // cv::waitKey(10);
+                    spreader_images_merge = cv_bridge::CvImage(std_msgs::Header(), "bgr8", merge_row1_resize).toImageMsg();
+                    command_publisher_show.publish(spreader_images_merge);
+
+                    //cv::imwrite("/root/code/xian_aqc_ws/xian_project_file/trt/results/"+timeStr+"_tl_.jpg", tl_image);
+                    //cv::imwrite("/root/code/xian_aqc_ws/xian_project_file/trt/results/"+timeStr+"tr_.jpg", tr_image);
+                    //cv::imwrite("/root/code/xian_aqc_ws/xian_project_file/trt/results/"+timeStr+"bl_.jpg", bl_image);
+                    //cv::imwrite("/root/code/xian_aqc_ws/xian_project_file/trt/results/"+timeStr+"br_.jpg", br_image);
+                    // std::cerr << "iiiiiiiiiiiiiiiiiiiiii" << std::endl;
+                }
             }
+
+            
             
 
             elapsedTimeP = std::chrono::duration_cast<std::chrono::milliseconds>(cur_time - pre_time);

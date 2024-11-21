@@ -54,10 +54,10 @@
     | 8 | Left Top Diff_Y | INT | 2 | BYTE12 | unit:mm | 左上角小车方向像素偏差 |
     | 9 | Right Top Diff_X | INT | 2 | BYTE14 | unit:mm | 右上角大车方向像素偏差 |
     | 10 | Right Top Diff_Y | INT | 2 | BYTE16 | unit:mm | 右上角小车方向像素偏差 |
-    | 11 | Left Low Diff_X | INT | 2 | BYTE18 | unit:mm | 左下角大车方向像素偏差 |
-    | 12 | Left Low Diff_Y | INT | 2 | BYTE20 | unit:mm | 左下角小车方向像素偏差 |
-    | 13 | Right Low Diff_X | INT | 2 | BYTE22 | unit:mm | 右下角大车方向像素偏差 |
-    | 14 | Right Low Diff_Y | INT | 2 | BYTE24 | unit:mm | 右下角小车方向像素偏差 |
+    | 11 | Fine_Move0 | INT | 2 | BYTE18 | unit:mm | 左下角大车方向像素偏差 |
+    | 12 | Fine_Move1 | INT | 2 | BYTE20 | unit:mm | 左下角小车方向像素偏差 |
+    | 13 | Fine_Move2 | INT | 2 | BYTE22 | unit:mm | 右下角大车方向像素偏差 |
+    | 14 | Fine_Move3 | INT | 2 | BYTE24 | unit:mm | 右下角小车方向像素偏差 |
     | 15 | Diff X | INT | 2 | BYTE26 | unit:mm | 目标大车偏差 |
     | 16 | Diff Y | INT | 2 | BYTE28 | unit:mm | 目标小车方向 |
     | 17 | Target Angle  | INT | 2 | BYTE30 | unit:0.001度 | 目标旋转角度 |
@@ -68,5 +68,5 @@
     | 22 | Spare1 | WORD | 2 | BYTE40 | spare5 |  |
     | 23 | Spare2 | WORD | 2 | BYTE42 | spare6 |  |
     | 24 | Spare3 | WORD | 2 | BYTE44 | spare7 |  |
-    | 25 | Spare4 | WORD | 2 | BYTE46 | spare8 |  |
+    | 25 | plc_error_clear | WORD | 2 | BYTE46 | spare8 |  |
     |  |  |  | 48 |  |  |  |
