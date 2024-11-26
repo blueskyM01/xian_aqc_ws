@@ -21,14 +21,14 @@
     | 17 | Hoist Speed | INT | 2 | BYTE40 |  | 起升反馈速度 |
     | 18 | Target Hoist Position | INT | 2 | BYTE42 | unit:mm | 目标起升位置 |
     | 19 | Capture Image Flag | INT | 2 | BYTE44 |  |  |
-    | 20 | TDS Left Control_X | INT | 2 | BYTE46 | unit:mm | TDS左侧控制点X坐标 |
-    | 21 | TDS Left Control_Y | INT | 2 | BYTE48 | unit:mm | TDS左侧控制点Y坐标 |
-    | 22 | TDS Right Control_X | INT | 2 | BYTE50 | unit:mm | TDS右侧控制点X坐标 |
-    | 23 | TDS Right Control_Y | INT | 2 | BYTE52 | unit:mm | TDS右侧控制点Y坐标 |
-    | 24 | SDS Left Control_X | INT | 2 | BYTE54 | unit:mm | SDS左侧控制点X坐标 |
-    | 25 | SDS Left Control_Y | INT | 2 | BYTE56 | unit:mm | SDS左侧控制点Y坐标 |
-    | 26 | SDS Right Control_X | INT | 2 | BYTE58 | unit:mm | SDS右侧控制点X坐标 |
-    | 27 | SDS Right Control_Y | INT | 2 | BYTE60 | unit:mm | SDS右侧控制点Y坐标 |
+    | 20 | ultrasonic0_0 | INT | 2 | BYTE46 | unit:mm | TDS左侧控制点X坐标 |
+    | 21 | ultrasonic1_0 | INT | 2 | BYTE48 | unit:mm | TDS左侧控制点Y坐标 |
+    | 22 | ultrasonic2_0 | INT | 2 | BYTE50 | unit:mm | TDS右侧控制点X坐标 |
+    | 23 | ultrasonic3_0 | INT | 2 | BYTE52 | unit:mm | TDS右侧控制点Y坐标 |
+    | 24 | ultrasonic0_1 | INT | 2 | BYTE54 | unit:mm | SDS左侧控制点X坐标 |
+    | 25 | ultrasonic1_1 | INT | 2 | BYTE56 | unit:mm | SDS左侧控制点Y坐标 |
+    | 26 | ultrasonic2_1 | INT | 2 | BYTE58 | unit:mm | SDS右侧控制点X坐标 |
+    | 27 | ultrasonic3_1 | INT | 2 | BYTE60 | unit:mm | SDS右侧控制点Y坐标 |
     | 28 | AFLS Enable | WORD | 2 | BYTE62 | 0-不启用 1-启用 | 系统使能信号，发送一次 |
     | 29 | State0 | WORD | 2 | BYTE64 | 0-None(运动过程中)；1-收回；2-伸出; 3-故障 | 伸缩盒子0的状态 |
     | 30 | State1 | WORD | 2 | BYTE66 | 0-None(运动过程中)；1-收回；2-伸出; 3-故障 | 伸缩盒子1的状态 |

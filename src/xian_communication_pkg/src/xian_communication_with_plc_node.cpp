@@ -102,14 +102,14 @@ class zpmc_CommunicationWithAccs
             int Hoist_Speed=46;
             int Target_Hoist_Position=48;
             int Capture_Image_Flag=50;
-            int TDS_Left_Control_X=52;
-            int TDS_Left_Control_Y=54;
-            int TDS_Right_Control_X=56;
-            int TDS_Right_Control_Y=58;
-            int SDS_Left_Control_X=60;
-            int SDS_Left_Control_Y=62;
-            int SDS_Right_Control_X=64;
-            int SDS_Right_Control_Y=66;
+            int xian_ultrasonic0_0=52;
+            int xian_ultrasonic1_0=54;
+            int xian_ultrasonic2_0=56;
+            int xian_ultrasonic3_0=58;
+            int xian_ultrasonic0_1=60;
+            int xian_ultrasonic1_1=62;
+            int xian_ultrasonic2_1=64;
+            int xian_ultrasonic3_1=66;
             int AFLS_Enable=68;
             int state0=70;
             int state1=72;
@@ -173,6 +173,7 @@ class zpmc_CommunicationWithAccs
         int xian_acds_send_to_retrable_fine_move2 = 0;
         int xian_acds_send_to_retrable_fine_move3 = 0;
 
+
         // int Gantry_Position_ = 0;
         // int Trolley_Position_ = 0;
         // int Hoist_Position_ = 0;
@@ -180,6 +181,14 @@ class zpmc_CommunicationWithAccs
         // int Unload_Enable_ = 0;
         // int Load_Enable_ = 0;
         int Heart_Beat_PLC_ = 0;
+        int xian_ultrasonic0_0_ = 2;
+        int xian_ultrasonic1_0_ = 2;
+        int xian_ultrasonic2_0_ = 2;
+        int xian_ultrasonic3_0_ = 2;
+        int xian_ultrasonic0_1_ = 2;
+        int xian_ultrasonic1_1_ = 2;
+        int xian_ultrasonic2_1_ = 2;
+        int xian_ultrasonic3_1_ = 2;
         int state0_ = 0;
         int state1_ = 0;
         int state2_ = 0;
@@ -548,6 +557,138 @@ class zpmc_CommunicationWithAccs
                     Heart_Beat_PLC_ = HextoDec(Heart_Beat_PLC, sizeof(Heart_Beat_PLC));
                     ros::param::set("/xian_aqc_dynamic_parameters_server/xian_plc_heart_beat", Heart_Beat_PLC_);  
 
+
+
+
+
+
+
+
+
+
+
+                    unsigned char xian_ultrasonic0_0[2];
+                    unsigned char xian_ultrasonic0_0_inv[2];
+                    memcpy(xian_ultrasonic0_0, plc_buffer+recv_plc.xian_ultrasonic0_0, sizeof(xian_ultrasonic0_0));
+                    // int xian_ultrasonic0_0_len = sizeof(xian_ultrasonic0_0)/sizeof(xian_ultrasonic0_0[0]);
+                    // for(int i=0; i<xian_ultrasonic0_0_len; i++)
+                    // {
+                    //     xian_ultrasonic0_0_inv[i] = xian_ultrasonic0_0[xian_ultrasonic0_0_len-1-i];
+                    // }
+                    // xian_ultrasonic0_0_ = HextoDec(xian_ultrasonic0_0_inv, sizeof(xian_ultrasonic0_0_inv));
+                    xian_ultrasonic0_0_ = HextoDec(xian_ultrasonic0_0, sizeof(xian_ultrasonic0_0));
+
+                    unsigned char xian_ultrasonic1_0[2];
+                    unsigned char xian_ultrasonic1_0_inv[2];
+                    memcpy(xian_ultrasonic1_0, plc_buffer+recv_plc.xian_ultrasonic1_0, sizeof(xian_ultrasonic1_0));
+                    // int xian_ultrasonic1_0_len = sizeof(xian_ultrasonic1_0)/sizeof(xian_ultrasonic1_0[0]);
+                    // for(int i=0; i<xian_ultrasonic1_0_len; i++)
+                    // {
+                    //     xian_ultrasonic1_0_inv[i] = xian_ultrasonic1_0[xian_ultrasonic1_0_len-1-i];
+                    // }
+                    // xian_ultrasonic1_0_ = HextoDec(xian_ultrasonic1_0_inv, sizeof(xian_ultrasonic1_0_inv));
+                    xian_ultrasonic1_0_ = HextoDec(xian_ultrasonic1_0, sizeof(xian_ultrasonic1_0));
+
+                    unsigned char xian_ultrasonic2_0[2];
+                    unsigned char xian_ultrasonic2_0_inv[2];
+                    memcpy(xian_ultrasonic2_0, plc_buffer+recv_plc.xian_ultrasonic2_0, sizeof(xian_ultrasonic2_0));
+                    // int xian_ultrasonic2_0_len = sizeof(xian_ultrasonic2_0)/sizeof(xian_ultrasonic2_0[0]);
+                    // for(int i=0; i<xian_ultrasonic2_0_len; i++)
+                    // {
+                    //     xian_ultrasonic2_0_inv[i] = xian_ultrasonic2_0[xian_ultrasonic2_0_len-1-i];
+                    // }
+                    // xian_ultrasonic2_0_ = HextoDec(xian_ultrasonic2_0_inv, sizeof(xian_ultrasonic2_0_inv));
+                    xian_ultrasonic2_0_ = HextoDec(xian_ultrasonic2_0, sizeof(xian_ultrasonic2_0));
+
+                    unsigned char xian_ultrasonic3_0[2];
+                    unsigned char xian_ultrasonic3_0_inv[2];
+                    memcpy(xian_ultrasonic3_0, plc_buffer+recv_plc.xian_ultrasonic3_0, sizeof(xian_ultrasonic3_0));
+                    // int xian_ultrasonic3_0_len = sizeof(xian_ultrasonic3_0)/sizeof(xian_ultrasonic3_0[0]);
+                    // for(int i=0; i<xian_ultrasonic3_0_len; i++)
+                    // {
+                    //     xian_ultrasonic3_0_inv[i] = xian_ultrasonic3_0[xian_ultrasonic3_0_len-1-i];
+                    // }
+                    // xian_ultrasonic3_0_ = HextoDec(xian_ultrasonic3_0_inv, sizeof(xian_ultrasonic3_0_inv));
+                    xian_ultrasonic3_0_ = HextoDec(xian_ultrasonic3_0, sizeof(xian_ultrasonic3_0));
+
+
+
+                    unsigned char xian_ultrasonic0_1[2];
+                    unsigned char xian_ultrasonic0_1_inv[2];
+                    memcpy(xian_ultrasonic0_1, plc_buffer+recv_plc.xian_ultrasonic0_1, sizeof(xian_ultrasonic0_1));
+                    // int xian_ultrasonic0_1_len = sizeof(xian_ultrasonic0_1)/sizeof(xian_ultrasonic0_1[0]);
+                    // for(int i=0; i<xian_ultrasonic0_1_len; i++)
+                    // {
+                    //     xian_ultrasonic0_1_inv[i] = xian_ultrasonic0_1[xian_ultrasonic0_1_len-1-i];
+                    // }
+                    // xian_ultrasonic0_1_ = HextoDec(xian_ultrasonic0_1_inv, sizeof(xian_ultrasonic0_1_inv));
+                    xian_ultrasonic0_1_ = HextoDec(xian_ultrasonic0_1, sizeof(xian_ultrasonic0_1));
+
+                    unsigned char xian_ultrasonic1_1[2];
+                    unsigned char xian_ultrasonic1_1_inv[2];
+                    memcpy(xian_ultrasonic1_1, plc_buffer+recv_plc.xian_ultrasonic1_1, sizeof(xian_ultrasonic1_1));
+                    // int xian_ultrasonic1_1_len = sizeof(xian_ultrasonic1_1)/sizeof(xian_ultrasonic1_1[0]);
+                    // for(int i=0; i<xian_ultrasonic1_1_len; i++)
+                    // {
+                    //     xian_ultrasonic1_1_inv[i] = xian_ultrasonic1_1[xian_ultrasonic1_1_len-1-i];
+                    // }
+                    // xian_ultrasonic1_1_ = HextoDec(xian_ultrasonic1_1_inv, sizeof(xian_ultrasonic1_1_inv));
+                    xian_ultrasonic1_1_ = HextoDec(xian_ultrasonic1_1, sizeof(xian_ultrasonic1_1));
+
+                    unsigned char xian_ultrasonic2_1[2];
+                    unsigned char xian_ultrasonic2_1_inv[2];
+                    memcpy(xian_ultrasonic2_1, plc_buffer+recv_plc.xian_ultrasonic2_1, sizeof(xian_ultrasonic2_1));
+                    // int xian_ultrasonic2_1_len = sizeof(xian_ultrasonic2_1)/sizeof(xian_ultrasonic2_1[0]);
+                    // for(int i=0; i<xian_ultrasonic2_1_len; i++)
+                    // {
+                    //     xian_ultrasonic2_1_inv[i] = xian_ultrasonic2_1[xian_ultrasonic2_1_len-1-i];
+                    // }
+                    // xian_ultrasonic2_1_ = HextoDec(xian_ultrasonic2_1_inv, sizeof(xian_ultrasonic2_1_inv));
+                    xian_ultrasonic2_1_ = HextoDec(xian_ultrasonic2_1, sizeof(xian_ultrasonic2_1));
+
+                    unsigned char xian_ultrasonic3_1[2];
+                    unsigned char xian_ultrasonic3_1_inv[2];
+                    memcpy(xian_ultrasonic3_1, plc_buffer+recv_plc.xian_ultrasonic3_1, sizeof(xian_ultrasonic3_1));
+                    // int xian_ultrasonic3_1_len = sizeof(xian_ultrasonic3_1)/sizeof(xian_ultrasonic3_1[0]);
+                    // for(int i=0; i<xian_ultrasonic3_1_len; i++)
+                    // {
+                    //     xian_ultrasonic3_1_inv[i] = xian_ultrasonic3_1[xian_ultrasonic3_1_len-1-i];
+                    // }
+                    // xian_ultrasonic3_1_ = HextoDec(xian_ultrasonic3_1_inv, sizeof(xian_ultrasonic3_1_inv));
+                    xian_ultrasonic3_1_ = HextoDec(xian_ultrasonic3_1, sizeof(xian_ultrasonic3_1));
+
+                    ros::param::set("/xian_aqc_dynamic_parameters_server/xian_ultrasonic0_0", xian_ultrasonic0_0_); 
+                    ros::param::set("/xian_aqc_dynamic_parameters_server/xian_ultrasonic1_0", xian_ultrasonic1_0_); 
+                    ros::param::set("/xian_aqc_dynamic_parameters_server/xian_ultrasonic2_0", xian_ultrasonic2_0_); 
+                    ros::param::set("/xian_aqc_dynamic_parameters_server/xian_ultrasonic3_0", xian_ultrasonic3_0_); 
+                    ros::param::set("/xian_aqc_dynamic_parameters_server/xian_ultrasonic0_1", xian_ultrasonic0_1_); 
+                    ros::param::set("/xian_aqc_dynamic_parameters_server/xian_ultrasonic1_1", xian_ultrasonic1_1_); 
+                    ros::param::set("/xian_aqc_dynamic_parameters_server/xian_ultrasonic2_1", xian_ultrasonic2_1_); 
+                    ros::param::set("/xian_aqc_dynamic_parameters_server/xian_ultrasonic3_1", xian_ultrasonic3_1_); 
+
+                    // unsigned char Hoist_Position[4];
+                    // unsigned char Hoist_Position_inv[4];
+                    // memcpy(Hoist_Position, plc_buffer+recv_plc.Hoist_Position, sizeof(Hoist_Position));
+                    // // int Hoist_Position_len = sizeof(Hoist_Position)/sizeof(Hoist_Position[0]);
+                    // // for(int i=0; i<Hoist_Position_len; i++)
+                    // // {
+                    // //     Hoist_Position_inv[i] = Hoist_Position[Hoist_Position_len-1-i];
+                    // // }
+                    // // Hoist_Position_ = HextoDec(Hoist_Position_inv, sizeof(Hoist_Position_inv));
+                    // Hoist_Position_ = HextoDec(Hoist_Position, sizeof(Hoist_Position));
+
+
+
+
+
+
+
+
+
+
+
+
+
                     unsigned char state0[2];
                     unsigned char state0_inv[2];
                     memcpy(state0, plc_buffer+recv_plc.state0, sizeof(state0));
@@ -604,6 +745,16 @@ class zpmc_CommunicationWithAccs
                     std::cout << "Read from plc mode1: " << mode1_ << std::endl;
                     std::cout << "Read from plc mode2: " << mode2_ << std::endl;
                     std::cout << "Read from plc mode3: " << mode3_ << std::endl;
+
+                    std::cout << "Read from plcxian_ultrasonic0_0: " << xian_ultrasonic0_0_ << std::endl;
+                    std::cout << "Read from plcxian_ultrasonic1_0: " << xian_ultrasonic1_0_ << std::endl;
+                    std::cout << "Read from plcxian_ultrasonic2_0: " << xian_ultrasonic2_0_ << std::endl;
+                    std::cout << "Read from plcxian_ultrasonic3_0: " << xian_ultrasonic3_0_ << std::endl;
+                    std::cout << "Read from plcxian_ultrasonic0_1: " << xian_ultrasonic0_1_ << std::endl;
+                    std::cout << "Read from plcxian_ultrasonic1_1: " << xian_ultrasonic1_1_ << std::endl;
+                    std::cout << "Read from plcxian_ultrasonic2_1: " << xian_ultrasonic2_1_ << std::endl;
+                    std::cout << "Read from plcxian_ultrasonic3_1: " << xian_ultrasonic3_1_ << std::endl;
+
 
                     
                     // -----------------------------------------------------------------------------------dfdsfd----------------

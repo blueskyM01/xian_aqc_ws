@@ -133,5 +133,13 @@
     "xian_acds_send_to_retrable_fine_move0": 480,
     "xian_acds_send_to_retrable_fine_move1": 500,
     "xian_acds_send_to_retrable_fine_move2": 100,
-    "xian_acds_send_to_retrable_fine_move3": 200
+    "xian_acds_send_to_retrable_fine_move3": 200,
+    "xian_ultrasonic0_0": 2, 
+    "xian_ultrasonic1_0": 2, 
+    "xian_ultrasonic2_0": 2, 
+    "xian_ultrasonic3_0": 2, 
+    "xian_ultrasonic0_1": 2, 
+    "xian_ultrasonic1_1": 2, 
+    "xian_ultrasonic2_1": 2, 
+    "xian_ultrasonic3_1": 2
 }
