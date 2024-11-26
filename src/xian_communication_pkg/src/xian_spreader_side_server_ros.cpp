@@ -78,6 +78,14 @@ class Xian_SpreaderSideServerRos
             int mode1; 
             int mode2;    
             int mode3; 
+            int xian_ultrasonic0_0;
+            int xian_ultrasonic1_0;
+            int xian_ultrasonic2_0;
+            int xian_ultrasonic3_0;
+            int xian_ultrasonic0_1;
+            int xian_ultrasonic1_1;
+            int xian_ultrasonic2_1;
+            int xian_ultrasonic3_1;
             int spreader_heart_beat;
             int xian_plc_error_clear;
         };
@@ -90,6 +98,14 @@ class Xian_SpreaderSideServerRos
         int xian_from_plc_to_retrable_box_mode1 = 0;
         int xian_from_plc_to_retrable_box_mode2 = 0;
         int xian_from_plc_to_retrable_box_mode3 = 0;
+        int xian_ultrasonic0_0 = 0;
+        int xian_ultrasonic1_0 = 0;
+        int xian_ultrasonic2_0 = 0;
+        int xian_ultrasonic3_0 = 0;
+        int xian_ultrasonic0_1 = 0;
+        int xian_ultrasonic1_1 = 0;
+        int xian_ultrasonic2_1 = 0;
+        int xian_ultrasonic3_1 = 0;
         int xian_spreader_side_server_ros_heart_beat = 0;
         int xian_plc_heart_beat = 0;
         int xian_plc_error_clear = 0;
@@ -173,6 +189,14 @@ class Xian_SpreaderSideServerRos
                 ros::param::get("/xian_aqc_dynamic_parameters_server/xian_from_plc_to_retrable_box_mode3", xian_from_plc_to_retrable_box_mode3);
                 ros::param::get("/xian_aqc_dynamic_parameters_server/xian_plc_heart_beat", xian_plc_heart_beat); 
                 ros::param::get("/xian_aqc_dynamic_parameters_server/xian_plc_error_clear", xian_plc_error_clear); 
+                ros::param::get("/xian_aqc_dynamic_parameters_server/xian_ultrasonic0_0", xian_ultrasonic0_0);
+                ros::param::get("/xian_aqc_dynamic_parameters_server/xian_ultrasonic1_0", xian_ultrasonic1_0);
+                ros::param::get("/xian_aqc_dynamic_parameters_server/xian_ultrasonic2_0", xian_ultrasonic2_0);
+                ros::param::get("/xian_aqc_dynamic_parameters_server/xian_ultrasonic3_0", xian_ultrasonic3_0);
+                ros::param::get("/xian_aqc_dynamic_parameters_server/xian_ultrasonic0_1", xian_ultrasonic0_1);
+                ros::param::get("/xian_aqc_dynamic_parameters_server/xian_ultrasonic1_1", xian_ultrasonic1_1);
+                ros::param::get("/xian_aqc_dynamic_parameters_server/xian_ultrasonic2_1", xian_ultrasonic2_1);
+                ros::param::get("/xian_aqc_dynamic_parameters_server/xian_ultrasonic3_1", xian_ultrasonic3_1);
 
                 spreader_data.State0 = xian_retrable_box_state0;
                 spreader_data.State1 = xian_retrable_box_state1;
@@ -184,6 +208,14 @@ class Xian_SpreaderSideServerRos
                 spreader_data.mode3 = xian_from_plc_to_retrable_box_mode3;
                 spreader_data.spreader_heart_beat = xian_plc_heart_beat;
                 spreader_data.xian_plc_error_clear = xian_plc_error_clear;
+                spreader_data.xian_ultrasonic0_0 = xian_ultrasonic0_0;
+                spreader_data.xian_ultrasonic1_0 = xian_ultrasonic1_0;
+                spreader_data.xian_ultrasonic2_0 = xian_ultrasonic2_0;
+                spreader_data.xian_ultrasonic3_0 = xian_ultrasonic3_0;
+                spreader_data.xian_ultrasonic0_1 = xian_ultrasonic0_1;
+                spreader_data.xian_ultrasonic1_1 = xian_ultrasonic1_1;
+                spreader_data.xian_ultrasonic2_1 = xian_ultrasonic2_1;
+                spreader_data.xian_ultrasonic3_1 = xian_ultrasonic3_1;
 
                 // Send data to client
                 if (send(client_socket, &spreader_data, sizeof(spreader2trolley), 0) < 0) {

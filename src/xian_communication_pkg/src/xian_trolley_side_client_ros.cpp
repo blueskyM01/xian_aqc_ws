@@ -70,6 +70,14 @@ class Xian_TrolleySideClientRos
             int mode1; 
             int mode2;    
             int mode3; 
+            int xian_ultrasonic0_0;
+            int xian_ultrasonic1_0;
+            int xian_ultrasonic2_0;
+            int xian_ultrasonic3_0;
+            int xian_ultrasonic0_1;
+            int xian_ultrasonic1_1;
+            int xian_ultrasonic2_1;
+            int xian_ultrasonic3_1;
             int spreader_heart_beat;
             int xian_plc_error_clear;
         };
@@ -153,10 +161,23 @@ class Xian_TrolleySideClientRos
                     close(sock);
                     return;
                 }
-                printf("Trolley Side Received: State0=%d, State1=%d, State2=%d,  State3=%d, mode0=%d, mode1=%d, mode2=%d, mode3=%d, spreader_heart_beat=%d\n",
-                    spreader_data.State0, spreader_data.State1, spreader_data.State2, spreader_data.State3,
-                    spreader_data.mode0, spreader_data.mode1, spreader_data.mode2, spreader_data.mode3,
-                    spreader_data.spreader_heart_beat);
+                printf("Trolley Side Received: State0=%d, State1=%d, State2=%d,  State3=%d, "
+                       "mode0=%d, mode1=%d, mode2=%d, mode3=%d, spreader_heart_beat=%d, "
+                       "xian_ultrasonic0_0=%d, xian_ultrasonic1_0=%d, xian_ultrasonic2_0=%d, xian_ultrasonic3_0=%d "
+                       "xian_ultrasonic0_1=%d, xian_ultrasonic1_1=%d, xian_ultrasonic2_1=%d, xian_ultrasonic3_1=%d \n",
+                       spreader_data.State0, spreader_data.State1, spreader_data.State2, spreader_data.State3,
+                       spreader_data.mode0, spreader_data.mode1, spreader_data.mode2, spreader_data.mode3,
+                       spreader_data.spreader_heart_beat,
+                       spreader_data.xian_ultrasonic0_0,
+                       spreader_data.xian_ultrasonic1_0,
+                       spreader_data.xian_ultrasonic2_0,
+                       spreader_data.xian_ultrasonic3_0,
+                       spreader_data.xian_ultrasonic0_1,
+                       spreader_data.xian_ultrasonic1_1,
+                       spreader_data.xian_ultrasonic2_1,
+                       spreader_data.xian_ultrasonic3_1);
+
+                
                 ros::param::set("/xian_aqc_dynamic_parameters_server/xian_plc_heart_beat", spreader_data.spreader_heart_beat);  
                 ros::param::set("/xian_aqc_dynamic_parameters_server/xian_from_plc_to_retrable_box_mode0", spreader_data.mode0); 
                 ros::param::set("/xian_aqc_dynamic_parameters_server/xian_from_plc_to_retrable_box_mode1", spreader_data.mode1); 
@@ -167,6 +188,15 @@ class Xian_TrolleySideClientRos
                 ros::param::set("/xian_aqc_dynamic_parameters_server/xian_retrable_box_state2", spreader_data.State2);
                 ros::param::set("/xian_aqc_dynamic_parameters_server/xian_retrable_box_state3", spreader_data.State3);
                 ros::param::set("/xian_aqc_dynamic_parameters_server/xian_plc_error_clear", spreader_data.xian_plc_error_clear);
+                ros::param::set("/xian_aqc_dynamic_parameters_server/xian_ultrasonic0_0", spreader_data.xian_ultrasonic0_0);
+                ros::param::set("/xian_aqc_dynamic_parameters_server/xian_ultrasonic1_0", spreader_data.xian_ultrasonic1_0);
+                ros::param::set("/xian_aqc_dynamic_parameters_server/xian_ultrasonic2_0", spreader_data.xian_ultrasonic2_0);
+                ros::param::set("/xian_aqc_dynamic_parameters_server/xian_ultrasonic3_0", spreader_data.xian_ultrasonic3_0);
+                ros::param::set("/xian_aqc_dynamic_parameters_server/xian_ultrasonic0_1", spreader_data.xian_ultrasonic0_1);
+                ros::param::set("/xian_aqc_dynamic_parameters_server/xian_ultrasonic1_1", spreader_data.xian_ultrasonic1_1);
+                ros::param::set("/xian_aqc_dynamic_parameters_server/xian_ultrasonic2_1", spreader_data.xian_ultrasonic2_1);
+                ros::param::set("/xian_aqc_dynamic_parameters_server/xian_ultrasonic3_1", spreader_data.xian_ultrasonic3_1);
+
 
                 // Optionally, you can add a sleep here to control the rate of communication
                 usleep(50 * 1000); // 50 ms
